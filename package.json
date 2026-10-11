@@ -16,7 +16,7 @@
     {
       "name": "likeit",
       "title": "Like Current Track",
-      "description": "Check the current NetEase Music track. Collection is blocked until track identity is verified.",
+      "description": "Like the current playing NetEase Music track without unliking existing favorites.",
       "mode": "no-view",
       "keywords": [
         "like",
