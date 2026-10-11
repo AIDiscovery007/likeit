@@ -49,7 +49,6 @@ private func openAPIPrivateKey(_ pem: String) throws -> SecKey {
         guard try algorithm.read(0x05).isEmpty, algorithm.isEmpty else { throw OpenAPISigningError.invalidPrivateKey }
     }
     let keyData = try info.read(0x04)
-    if !info.isEmpty { _ = try info.read(0xa0) } // Optional PKCS#8 attributes do not enter the signature.
     guard info.isEmpty, let key = SecKeyCreateWithData(keyData as CFData, [
         kSecAttrKeyType: kSecAttrKeyTypeRSA,
         kSecAttrKeyClass: kSecAttrKeyClassPrivate,
