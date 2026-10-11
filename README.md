@@ -65,7 +65,7 @@ npm run lint
 
 Raycast 搜索 **Likeit** 打开新菜单，选择 **沉浸模式**。独立的 Likeit Desktop app 覆盖当前指针所在显示器；右上角 **退出 · Esc**、Esc 或 Cmd+Q 可立即退出，不改变音乐播放。菜单中的 **收藏当前歌曲** 调用原收藏命令，原来的 `like` 快捷路径继续保留。
 
-沉浸桌面要求 macOS 14.2+，原收藏仍支持 macOS 13+。扩展设置的 **沉浸桌面动效** 提供跟随系统、始终播放、关闭三种模式，独立于收藏彩带设置。桌面读取真实曲目信息、播放进度和网易歌词；允许动效及音频权限后，音膜与光环响应网易云实际低中高频能量。歌词按曲名、完整艺人、专辑和时长严格唯一匹配网易公开接口；无可靠匹配、空歌词或网络失败时保留歌曲信息，不展示示例歌词。
+沉浸桌面要求 macOS 14.2+，原收藏仍支持 macOS 13+。扩展设置的 **沉浸桌面动效** 提供跟随系统、始终播放、关闭三种模式，独立于收藏彩带设置。桌面读取真实曲目信息、播放进度和所选来源的歌词；允许动效及音频权限后，音膜与光环响应网易云实际低中高频能量。默认网易来源按曲名、完整艺人、专辑和时长严格唯一匹配网易公开接口；无可靠匹配、空歌词或网络失败时保留歌曲信息，不展示示例歌词。
 
 开发构建：`python3 scripts/build-desktop.py`，只构建桌面 app，不重建收藏 helper；普通用户不需要 Xcode 或运行编译器。产物位于 `assets/native/Likeit Desktop.app`，同时包含 arm64 和 x86_64，采用本地 ad-hoc 签名；双架构编译不代表 Intel 实机已验证。
 
@@ -92,9 +92,29 @@ npm run lint
 
 本轮开发完成只表示产品实现与构建可交付。I1/I2 的实际 Raycast 进入、Esc/Cmd+Q 退出、重复进入单实例，以及一首歌曲的真实歌词、播放推进和暂停冻结已由协调者确认；最终版本音频授权、真实节奏、拖动/换曲、拒绝与撤权、长句、多显示器、设备热切换、Intel/macOS 14.2 和十分钟性能仍需协调者独立验收。未提供这些项目的实测结论。
 
+## 可选：社区歌词（AMLL / LRCLIB）
+
+在 **Raycast Settings → Extensions → Likeit → 沉浸桌面歌词来源** 选择 **社区歌词（AMLL / LRCLIB）**，再从 Likeit 菜单打开沉浸模式。已打开的桌面也会取消旧请求、清空旧歌词并按当前选择重新加载。默认仍为 **网易歌词**；缺失或无效选项按默认处理。社区模式不读取官方配置、token 或私钥，不需要新增系统权限。
+
+社区模式先通过网易公开 search + detail 两次核对完整歌曲信息，确认唯一数字歌曲 ID，再请求 AMLL。不会把播放器 UUID 或曲名当作网易 ID。AMLL 响应必须包含同一网易 ID 和合法 TTML；失败时独立查询 LRCLIB，并再次严格核对完整曲名、艺人字符串、专辑和时长（差值最多 1 秒）。不会移除 Live、Remix 等版本词，也不会采用模糊搜索第一条。
+
+- **AMLL**：支持真实逐词时间、逐行时间和行内中文翻译，保留原文空格；背景人声和音译不混入主句。当前仅显示行内 `x-translation`，暂不展示 Apple `head/metadata` 中按 key 关联的翻译。不支持或无效的结构会进入 LRCLIB 后备。
+- **LRCLIB**：有同步 LRC 时逐行显示；只有纯文本时标注“未同步歌词”，静态显示可滚动全文；明确纯音乐且没有冲突正文时显示“纯音乐”。v1 不消费 LRCLIB 的 YAML `lyricsfile` 逐词数据。
+- 逐词亮度跟随真实词时间，逐行歌词不推算词时间。暂停冻结、seek 重新定位；无有效进度或快照过期时清除同步高亮。关闭装饰动效不关闭歌词高亮。
+
+状态栏标注来源和匹配方式。AMLL 的网易 ID 关联由社区维护，LRCLIB 的元数据匹配也不是声音指纹；成功获取不保证歌词或同步完全准确。两源均不可用时显示暂不可用，不用示例歌词填充，歌曲信息、音频功能和退出仍可用。
+
+请求只使用固定 HTTPS 端点：`music.163.com` 接收曲名和艺人搜索词及已验证 ID；`api.amll.dev` 仅接收已验证网易 ID；`lrclib.net` 接收曲名、完整艺人、专辑和时长。不发送播放器 UUID、音频、账号凭据或 Cookie，不跟随重定向。每请求最长 5 秒、响应最多 1 MiB，整轮加载最多 15 秒。429 按 `Retry-After` 冷却；没有有效冷却值时等待 60 秒，同一桌面进程内重开也不会绕过。不自动轮询或无限重试，可重开或换源发起新一轮加载。
+
+只在内存缓存最近使用的最多 20 份成功文档，区分完整元数据、可信 ID 输入和来源策略；失败不缓存，退出清空，不落盘保存歌词。社区模式不新增 npm / Swift 第三方依赖，不引入 AMLL Web 播放器。
+
+来源与许可：[AMLL 数据库](https://github.com/amll-dev/amll-ttml-db)、[AMLL API](https://github.com/amll-dev/amll-ttml-api)、[LRCLIB](https://github.com/tranxuanthang/lrclib)。AMLL API 软件采用 MIT / Apache-2.0，LRCLIB 软件采用 MIT；AMLL 数据库区分外来数据的原协议和提交者自主编写部分的 CC0。软件许可不等于全部歌词拥有统一的使用授权。
+
+社区功能的真实桌面显示、长句、逐词同步、seek、换源和退出由协调者另行验收，构建通过不能替代这些实测。多任务开发时，可使用 `npx ray build --output ./node_modules/.cache/likeit-community-build --exit-on-error` 将扩展构建留在本 worktree，避免默认构建更新正在验收的 Raycast 安装。
+
 ## 可选：网易官方歌词配置
 
-没有配置时继续使用原公开歌词路径。有自己的应用权限、access token、PKCS#8 RSA 私钥及设备信息后，可自行创建 `~/Library/Application Support/Likeit/netease-openapi.json`。仓库中的 `examples/netease-openapi.example.json` 仅含占位符；不要把真实配置或私钥放进仓库、app 包或聊天记录。
+选择“网易歌词”来源且没有配置时继续使用原公开歌词路径。有自己的应用权限、access token、PKCS#8 RSA 私钥及设备信息后，可自行创建 `~/Library/Application Support/Likeit/netease-openapi.json`。仓库中的 `examples/netease-openapi.example.json` 仅含占位符；不要把真实配置或私钥放进仓库、app 包或聊天记录。
 
 在终端执行以下准备命令，再用本地文本编辑器填写配置；这些命令不申请权限或获取凭据：
 
