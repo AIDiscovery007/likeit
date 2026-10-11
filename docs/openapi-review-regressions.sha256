@@ -1,0 +1,3 @@
+fda3c2d606859a5598c0677d273eab13fbb60a7f30037657cf852aab154e8b6d  docs/openapi-review-regressions.md
+990f8ddb5d6e0968ee929f1365f24fe333bfb8803b5377253fc11b98068c9ef5  acceptance/openapi-review-regressions-driver.swift
+0540eea4774681c33e6d125f9b583c6362ee32c3bfd01cef46bef09cc41cf8ed  acceptance/openapi-review-regressions.test.mjs
