@@ -76,13 +76,20 @@ enum OpenAPIWordLyricResult {
     case malformed
 }
 
+// Keep comparisons in Decimal: NSNumber.compare can round decimal JSON values.
+func openAPIInteger(_ value: Any?) -> Int? {
+    guard let number = value as? NSNumber, CFGetTypeID(number) != CFBooleanGetTypeID(),
+          number.doubleValue.isFinite else { return nil }
+    let decimal = number.decimalValue
+    guard decimal >= Decimal(Int.min), decimal <= Decimal(Int.max),
+          decimal == Decimal(number.intValue) else { return nil }
+    return number.intValue
+}
+
 func decodeOpenAPIWordLyrics(_ data: Data) -> OpenAPIWordLyricResult {
     guard data.count <= 1_048_576,
           let response = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-          let number = response["code"] as? NSNumber,
-          CFGetTypeID(number) != CFBooleanGetTypeID(), number.doubleValue.isFinite else { return .malformed }
-    let code = number.intValue
-    guard number.compare(NSNumber(value: code)) == .orderedSame else { return .malformed }
+          let code = openAPIInteger(response["code"]) else { return .malformed }
     guard code == 200 else { return .apiError(code) }
     guard let value = response["data"] else { return .malformed }
     if value is NSNull { return .noWordLyrics }

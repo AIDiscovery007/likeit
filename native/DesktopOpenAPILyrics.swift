@@ -198,7 +198,7 @@ private struct OpenAPICommand {
             case "string": guard value is String else { throw OpenAPILyricError.manifest }
             case "boolean": guard boolean(value) != nil else { throw OpenAPILyricError.manifest }
             case "number": guard number(value) != nil else { throw OpenAPILyricError.manifest }
-            case "integer": guard let n = number(value), n.compare(NSNumber(value: n.int64Value)) == .orderedSame else { throw OpenAPILyricError.manifest }
+            case "integer": guard openAPIInteger(value) != nil else { throw OpenAPILyricError.manifest }
             default: break
             }
             if method == "GET" && location == "body" {
@@ -337,7 +337,7 @@ final class OpenAPILyrics {
     private static func json(_ data: Data, codeRequired: Bool = true) throws -> [String: Any] {
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { throw OpenAPILyricError.response }
         if let value = json["code"] {
-            guard let code = number(value), code.doubleValue.rounded() == code.doubleValue else { throw OpenAPILyricError.response }
+            guard let code = openAPIInteger(value) else { throw OpenAPILyricError.response }
             guard code == 200 else { throw OpenAPILyricError.api }
         } else if codeRequired { throw OpenAPILyricError.response }
         return json
@@ -356,10 +356,7 @@ final class OpenAPILyrics {
         for row in rows {
             let original: String?
             if let text = row["originalId"] as? String { original = positiveDecimal(text) ? text : nil }
-            else if let value = row["originalId"], let n = number(value),
-                    n.compare(NSNumber(value: 0)) == .orderedDescending,
-                    n.compare(NSNumber(value: Int64(9_007_199_254_740_991))) != .orderedDescending,
-                    n.compare(NSNumber(value: n.int64Value)) == .orderedSame { original = String(n.int64Value) }
+            else if let value = row["originalId"], let id = openAPIInteger(value), id > 0, id <= 9_007_199_254_740_991 { original = String(id) }
             else { original = nil }
             guard original == originalID else { continue }
             var ids = Set<String>()
