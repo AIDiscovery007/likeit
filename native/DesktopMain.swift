@@ -39,6 +39,16 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         applicationMenu.addItem(withTitle: "退出 Likeit Desktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         item.submenu = applicationMenu
         menu.addItem(item)
+        let themes = NSMenuItem(title: "音响主题", action: nil, keyEquivalent: "")
+        let themeMenu = NSMenu(title: "音响主题")
+        for (index, theme) in DesktopTheme.allCases.enumerated() {
+            let choice = themeMenu.addItem(withTitle: theme.title, action: #selector(selectTheme(_:)), keyEquivalent: String(index + 1))
+            choice.target = self
+            choice.representedObject = theme.rawValue
+            choice.keyEquivalentModifierMask = [.command]
+        }
+        themes.submenu = themeMenu
+        menu.addItem(themes)
         NSApp.mainMenu = menu
         motionObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.updateMotion() }
         showWindow()
@@ -79,6 +89,10 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         updateMotion()
         if window != nil { activate() }
+    }
+
+    @objc private func selectTheme(_ sender: NSMenuItem) {
+        model.selectTheme(sender.representedObject as? String)
     }
 
     private func showWindow() {

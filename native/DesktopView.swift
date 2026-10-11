@@ -149,19 +149,19 @@ struct DesktopView: View {
             let size = geometry.size
             let palette = model.glassScene
             let margin = min(40.0, size.width * 0.035)
-            let width = max(1, min((size.width - margin * 2) / 1.024, (size.height - margin * 2 - 230) / (9.0 / 16 + 0.024)))
             ZStack {
-                palette.room.ignoresSafeArea()
+                glassPanel(size: size)
                 VStack(spacing: 20) {
                     HStack {
-                        Text("LIKEIT / GLASS SOUND").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(2)
+                        Text("LIKEIT").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(2)
                             .foregroundStyle(palette.ink.opacity(0.65)).lineLimit(1).minimumScaleFactor(0.7)
                         Spacer(minLength: 16)
                         themeSelector
+                        Picker("透明场景", selection: Binding(get: { model.glassScene }, set: { model.selectGlassScene($0.rawValue) })) {
+                            ForEach(DesktopGlassScene.allCases, id: \.self) { Text($0.title).tag($0) }
+                        }.pickerStyle(.segmented).frame(width: 240).accessibilityLabel("透明音响场景")
                         exitButton
                     }
-                    Spacer(minLength: 0)
-                    glassPanel(width: width)
                     Spacer(minLength: 0)
                     HStack(alignment: .top, spacing: 24) {
                         VStack(alignment: .leading, spacing: 7) {
@@ -170,9 +170,6 @@ struct DesktopView: View {
                             ProgressView(value: model.progress).tint(palette.ink.opacity(0.65)).frame(maxWidth: 300)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         VStack(alignment: .trailing, spacing: 8) {
-                            Picker("透明场景", selection: Binding(get: { model.glassScene }, set: { model.selectGlassScene($0.rawValue) })) {
-                                ForEach(DesktopGlassScene.allCases, id: \.self) { Text($0.title).tag($0) }
-                            }.pickerStyle(.segmented).frame(width: 280).accessibilityLabel("透明音响场景")
                             Text(model.status)
                             Text(model.audioStatus)
                             if model.canRetryAudio {
@@ -187,8 +184,9 @@ struct DesktopView: View {
         }.ignoresSafeArea()
     }
 
-    private func glassPanel(width: Double) -> some View {
-        let height = width * 9 / 16
+    private func glassPanel(size: CGSize) -> some View {
+        let width = size.width, height = size.height
+        let driverSize = min(width * 0.175, height * 0.28)
         let scene = model.glassScene
         return ZStack {
             LinearGradient(colors: scene.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -198,47 +196,46 @@ struct DesktopView: View {
                 LinearGradient(colors: [.clear, Color(red: 0.48, green: 0.34, blue: 0.21).opacity(0.5), Color(red: 0.33, green: 0.22, blue: 0.13).opacity(0.8)], startPoint: .top, endPoint: .bottom)
                     .frame(height: height * 0.09)
             }
-            glassDriver(size: width * 0.175).position(x: width * 0.12, y: height * 0.24)
-            glassDriver(size: width * 0.175).position(x: width * 0.80, y: height * 0.72)
+            glassDriver(size: driverSize).position(x: width * 0.12, y: height * 0.24)
+            glassDriver(size: driverSize).position(x: width * 0.80, y: height * 0.72)
             glassLyrics(size: CGSize(width: width, height: height))
             LinearGradient(stops: [.init(color: .white.opacity(0.17), location: 0), .init(color: .white.opacity(0.17), location: 0.13), .init(color: .clear, location: 0.133), .init(color: .clear, location: 0.37), .init(color: .white.opacity(0.07), location: 0.373), .init(color: .white.opacity(0.07), location: 0.45), .init(color: .clear, location: 0.453)], startPoint: .topLeading, endPoint: .bottomTrailing)
                 .allowsHitTesting(false).accessibilityHidden(true)
         }.frame(width: width, height: height).clipped()
-            .overlay(Rectangle().stroke(.white.opacity(0.16), lineWidth: 1))
-            .padding(max(7, width * 0.012)).background(Color(red: 0.045, green: 0.05, blue: 0.055), in: RoundedRectangle(cornerRadius: 6))
-            .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 18)
+            .overlay(Rectangle().strokeBorder(Color(white: 0.045), lineWidth: max(6, width * 0.005)).allowsHitTesting(false))
     }
 
     private func glassLyrics(size: CGSize) -> some View {
         let ink = model.glassScene.ink
+        let height = size.height * 0.68
         return Group {
             if let plain = model.plainLyrics {
                 ScrollView {
                     Text(plain).font(.system(size: max(19, size.width * 0.028), weight: .semibold)).lineSpacing(10)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 8)
-                }.frame(width: size.width * 0.48, height: size.height * 0.77)
+                }.frame(width: size.width * 0.48, height: height * 0.77)
                     .accessibilityLabel("未同步歌词")
             } else {
-                VStack(alignment: .leading, spacing: size.height * 0.02) {
+                VStack(alignment: .leading, spacing: height * 0.02) {
                     Text(model.previousLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
                         .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
-                        .frame(height: size.height * 0.12, alignment: .bottomLeading)
+                        .frame(height: height * 0.12, alignment: .bottomLeading)
                     (model.timedLyric.map { Text(glassHighlightedText($0, ink: ink)) } ?? Text(model.lyric.isEmpty ? model.title : model.lyric))
                         .font(.system(size: size.width * 0.081, weight: .black, design: .default))
                         .lineLimit(4).minimumScaleFactor(0.22).tracking(-0.5)
-                        .frame(maxWidth: .infinity, alignment: .leading).frame(height: size.height * 0.38)
+                        .frame(maxWidth: .infinity, alignment: .leading).frame(height: height * 0.38)
                     if !model.translation.isEmpty {
                         Text(model.translation).font(.system(size: max(16, size.width * 0.025), weight: .medium))
                             .foregroundStyle(ink.opacity(0.85)).lineLimit(3).minimumScaleFactor(0.55)
-                            .frame(maxHeight: size.height * 0.14)
+                            .frame(maxHeight: height * 0.14)
                     }
                     Text(model.nextLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
                         .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
-                        .frame(height: size.height * 0.12, alignment: .topLeading)
-                }.frame(width: size.width * 0.48, height: size.height * 0.82)
+                        .frame(height: height * 0.12, alignment: .topLeading)
+                }.frame(width: size.width * 0.48, height: height * 0.82)
             }
         }.foregroundStyle(ink).multilineTextAlignment(.leading)
-            .position(x: size.width * 0.46, y: size.height * 0.49)
+            .position(x: size.width * 0.46, y: size.height * 0.47)
     }
 
     private func glassScenery(size: CGSize) -> some View {
@@ -340,14 +337,7 @@ private extension DesktopGlassScene {
         case .paper: return Color(red: 0.102, green: 0.086, blue: 0.071)
         }
     }
-    var room: Color {
-        switch self {
-        case .celadon: return Color(red: 0.906, green: 0.922, blue: 0.914)
-        case .dusk: return Color(red: 0.961, green: 0.886, blue: 0.863)
-        case .night: return Color(red: 0.045, green: 0.075, blue: 0.11)
-        case .paper: return Color(red: 0.957, green: 0.937, blue: 0.882)
-        }
-    }
+
 }
 
 // Recolor a presentation copy; timing, text and the session's attributes stay intact.
