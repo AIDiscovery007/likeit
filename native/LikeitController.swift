@@ -54,20 +54,21 @@ func mediaData() throws -> [String: Any] {
     defer { for pointer in argv + envp { free(pointer) } }
     var pid: pid_t = 0
     // No spawn attributes: the reader inherits this controller's process group.
-    guard posix_spawn(&pid, "/usr/bin/perl", &actions, nil, &argv, &envp) == 0 else { throw ControllerError.unavailable }
+    childLock.lock()
+    let spawnResult = posix_spawn(&pid, "/usr/bin/perl", &actions, nil, &argv, &envp)
+    if spawnResult == 0 { mediaPID = pid }
+    childLock.unlock()
+    guard spawnResult == 0 else { throw ControllerError.unavailable }
     close(output[1]); output[1] = -1
     close(errors[1]); errors[1] = -1
-    childLock.lock()
-    mediaPID = pid
-    childLock.unlock()
     var reaped = false
     var status: Int32 = 0
     defer {
+        childLock.lock()
         if !reaped {
             kill(pid, SIGKILL)
             while waitpid(pid, &status, 0) < 0 && errno == EINTR {}
         }
-        childLock.lock()
         mediaPID = 0
         childLock.unlock()
     }
@@ -80,9 +81,12 @@ func mediaData() throws -> [String: Any] {
     while descriptors.contains(where: { $0.fd >= 0 }) || !reaped {
         if ProcessInfo.processInfo.systemUptime >= deadline { throw ControllerError.timeout }
         if !reaped {
+            childLock.lock()
             let result = waitpid(pid, &status, WNOHANG)
-            if result == pid { reaped = true }
-            else if result < 0 && errno != EINTR { throw ControllerError.unavailable }
+            let waitError = errno
+            if result == pid { reaped = true; mediaPID = 0 }
+            childLock.unlock()
+            if result < 0 && waitError != EINTR { throw ControllerError.unavailable }
         }
         let polled = poll(&descriptors, nfds_t(descriptors.count), 50)
         if polled < 0 && errno != EINTR { throw ControllerError.unavailable }

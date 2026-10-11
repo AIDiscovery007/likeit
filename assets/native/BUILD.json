@@ -4,7 +4,7 @@
     "arm64",
     "x86_64"
   ],
-  "controllerSourceSHA256": "391ce9eb661c6bd45b5188010e090c9326a8e7586fbc63a3dc5738b4af6847f2",
+  "controllerSourceSHA256": "617d59c873603aacf9fa558369ae5aa9c04435c43a80dfe570f2b82d4e487b6d",
   "buildScriptSHA256": "1cc8dd4549aac097e57cad2f44d4b461bfe92ab0c8f70c6c2aaf7abaedfc2156",
   "compiler": "Apple clang version 17.0.0 (clang-1700.4.4.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
   "commands": [
@@ -28,7 +28,7 @@
     "MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist": "599acb89ed048dedc60d9257e7f320195d418a5494ca8c81e79fc03bedcd6b1e",
     "MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources": "5da1dac59eb6395e0e488df225718f360336a6a6da2f08dcd6c49a021bbe68ee",
-    "likeit-controller": "9d19fabf46e224861143978cd7cb7924523c4def9703308c9199e075a2389b07",
+    "likeit-controller": "62c301c52afcf15a4ea0006e0f67620dc37b5f375ec5eac91cb0393eec025953",
     "mediaremote-adapter.pl": "d97802e46db9535e2549e178c105ebf417a0254b3929fc32f08ecfd14d49a85f"
   }
 }
