@@ -15,6 +15,7 @@ func parseLRC(_ text: String) -> [LyricLine] {
     let offset = offsetPattern.matches(in: text, range: NSRange(location: 0, length: source.length)).last.flatMap { Double(source.substring(with: $0.range(at: 1))) }.map { $0 / 1000 } ?? 0
     guard offset.isFinite else { return [] }
     var entries: [Double: [String]] = [:]
+    var seen: [Double: Set<String>] = [:]
     for raw in text.components(separatedBy: .newlines) {
         let line = raw as NSString
         let matches = timestamp.matches(in: raw, range: NSRange(location: 0, length: line.length))
@@ -25,7 +26,7 @@ func parseLRC(_ text: String) -> [LyricLine] {
             let fraction = match.range(at: 3).location == NSNotFound ? 0 : (Double("0." + line.substring(with: match.range(at: 3))) ?? 0)
             let time = max(0, minutes * 60 + seconds + fraction + offset)
             guard time.isFinite else { continue }
-            if !(entries[time] ?? []).contains(words) { entries[time, default: []].append(words) }
+            if seen[time, default: []].insert(words).inserted { entries[time, default: []].append(words) }
         }
     }
     return entries.keys.sorted().map { LyricLine(time: $0, text: entries[$0]!.joined(separator: "\n")) }

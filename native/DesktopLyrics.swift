@@ -1,8 +1,9 @@
 import Foundation
 
-private enum LyricError: Error { case unavailable }
+private let lyricParsing = DispatchQueue(label: "com.likeit.desktop.lyric-parsing", qos: .userInitiated)
 
-// One bounded request, with no credentials, cookies, cache, or cross-host redirects.
+// Lifecycle and delegate callbacks stay on main; parsing runs separately.
+// No credentials, cookies, cache, or cross-host redirects.
 private final class LyricRequest: NSObject, URLSessionDataDelegate {
     private var session: URLSession?
     private var task: URLSessionDataTask?
@@ -18,7 +19,7 @@ private final class LyricRequest: NSObject, URLSessionDataDelegate {
         config.urlCache = nil
         config.timeoutIntervalForRequest = 5
         config.timeoutIntervalForResource = 5
-        session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
+        session = URLSession(configuration: config, delegate: self, delegateQueue: .main)
         task = session!.dataTask(with: url)
         task!.resume()
     }
@@ -78,8 +79,12 @@ final class DesktopLyrics {
                 guard let self, let songs = json?["songs"] as? [[String: Any]], songs.count == 1, let candidate = Self.candidate(songs[0]), candidate.id == id, matchedSongID(for: metadata, candidates: [candidate]) == id else { finish([], "暂无可用歌词 · 详情未匹配"); return }
                 self.fetch("/api/song/lyric", ["id": id, "lv": "-1", "kv": "-1", "tv": "-1"], token: token) { json in
                     guard let lrc = json?["lrc"] as? [String: Any], let text = lrc["lyric"] as? String else { finish([], "暂无可用歌词 · 空歌词或网络不可用"); return }
-                    let lines = parseLRC(text)
-                    finish(lines, lines.contains(where: { !$0.text.isEmpty }) ? "歌词按歌曲信息匹配" : "暂无可用歌词 · 无同步歌词")
+                    lyricParsing.async {
+                        let lines = parseLRC(text)
+                        DispatchQueue.main.async {
+                            finish(lines, lines.contains(where: { !$0.text.isEmpty }) ? "歌词按歌曲信息匹配" : "暂无可用歌词 · 无同步歌词")
+                        }
+                    }
                 }
             }
         }
@@ -94,10 +99,13 @@ final class DesktopLyrics {
         let request = LyricRequest()
         self.request = request
         request.start(address) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self, self.generation == token else { return }
-                guard let data = try? result.get(), let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any], jsonNumber(json["code"]) == 200 else { completion(nil); return }
-                completion(json)
+            guard let self, self.generation == token else { return }
+            lyricParsing.async {
+                let json = (try? result.get()).flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }
+                DispatchQueue.main.async { [weak self] in
+                    guard let self, self.generation == token else { return }
+                    completion(jsonNumber(json?["code"]) == 200 ? json : nil)
+                }
             }
         }
     }
