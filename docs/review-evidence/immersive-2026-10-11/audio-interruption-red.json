@@ -1,0 +1,16 @@
+[
+  {
+    "initialPCM" : true,
+    "message" : "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开",
+    "recovers" : false,
+    "scenario" : "pcm-gap",
+    "taps" : 1
+  },
+  {
+    "initialPCM" : true,
+    "message" : "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开",
+    "recovers" : false,
+    "scenario" : "route-glitch",
+    "taps" : 2
+  }
+]
