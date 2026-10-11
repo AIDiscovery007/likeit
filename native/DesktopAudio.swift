@@ -1,8 +1,10 @@
 import AppKit
 import CoreAudio
 import AudioToolbox
+import os
 
-private enum CaptureError: Error { case unavailable(OSStatus), format, cancelled }
+private enum CaptureError: Error { case unavailable(String, OSStatus), invalid(String), cancelled }
+private let audioLog = Logger(subsystem: "com.likeit.desktop", category: "audio")
 
 final class DesktopAudio {
     private let queue = DispatchQueue(label: "com.likeit.desktop.capture", qos: .userInitiated)
@@ -28,6 +30,7 @@ final class DesktopAudio {
     private var sampleRate = 0.0
     private var currentPID: pid_t?
     private var failed = false
+    private var failureMessage = ""
     private var lastRebuild = 0.0
     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
     var output: ((AudioFeatures, String) -> Void)?
@@ -75,7 +78,7 @@ final class DesktopAudio {
                     if let pid = request.pid, !failed { start(pid) }
                 }
                 if request.pid == nil || failed {
-                    publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开" : request.reason)
+                    publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? failureMessage : request.reason)
                 }
             }
             intentLock.lock()
@@ -98,50 +101,50 @@ final class DesktopAudio {
         return !stopped && captureEpoch == epoch
     }
 
-    private func checked(_ status: OSStatus) throws { if status != noErr { throw CaptureError.unavailable(status) } }
+    private func checked(_ status: OSStatus, stage: String) throws { if status != noErr { throw CaptureError.unavailable(stage, status) } }
     private func address(_ selector: AudioObjectPropertySelector) -> AudioObjectPropertyAddress {
         AudioObjectPropertyAddress(mSelector: selector, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMain)
     }
-    private func read<T>(_ object: AudioObjectID, _ selector: AudioObjectPropertySelector, into value: inout T) throws {
+    private func read<T>(_ object: AudioObjectID, _ selector: AudioObjectPropertySelector, stage: String, into value: inout T) throws {
         var property = address(selector)
         var size = UInt32(MemoryLayout<T>.size)
         try withUnsafeMutablePointer(to: &value) { pointer in
-            try checked(AudioObjectGetPropertyData(object, &property, 0, nil, &size, pointer))
+            try checked(AudioObjectGetPropertyData(object, &property, 0, nil, &size, pointer), stage: stage)
         }
     }
 
     private func start(_ pid: pid_t) {
         do {
             try checkIntent(pid)
-            guard neteasePID() == pid else { throw CaptureError.format }
+            guard neteasePID() == pid else { throw CaptureError.invalid("verify-source") }
             var process = AudioObjectID(kAudioObjectUnknown)
             var qualifier = pid
             var property = address(kAudioHardwarePropertyTranslatePIDToProcessObject)
             var size = UInt32(MemoryLayout<AudioObjectID>.size)
-            try checked(AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &property, UInt32(MemoryLayout<pid_t>.size), &qualifier, &size, &process))
+            try checked(AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &property, UInt32(MemoryLayout<pid_t>.size), &qualifier, &size, &process), stage: "resolve-process")
             try checkIntent(pid)
-            guard process != kAudioObjectUnknown else { throw CaptureError.format }
+            guard process != kAudioObjectUnknown else { throw CaptureError.invalid("resolve-process-handle") }
             var actualPID: pid_t = 0
             var bundle: CFString = "" as CFString
-            try read(process, kAudioProcessPropertyPID, into: &actualPID)
+            try read(process, kAudioProcessPropertyPID, stage: "read-process-pid", into: &actualPID)
             try checkIntent(pid)
-            try read(process, kAudioProcessPropertyBundleID, into: &bundle)
+            try read(process, kAudioProcessPropertyBundleID, stage: "read-process-bundle", into: &bundle)
             try checkIntent(pid)
-            guard actualPID == pid, bundle as String == neteaseBundle else { throw CaptureError.format }
+            guard actualPID == pid, bundle as String == neteaseBundle else { throw CaptureError.invalid("verify-process-identity") }
             let description = CATapDescription(stereoMixdownOfProcesses: [process])
             description.name = "Likeit NetEase visualization"
             description.isPrivate = true
             description.muteBehavior = .unmuted
-            try checked(AudioHardwareCreateProcessTap(description, &tap))
+            try checked(AudioHardwareCreateProcessTap(description, &tap), stage: "create-tap")
             try checkIntent(pid)
-            guard tap != kAudioObjectUnknown else { throw CaptureError.format }
+            guard tap != kAudioObjectUnknown else { throw CaptureError.invalid("create-tap-handle") }
             var format = AudioStreamBasicDescription()
-            try read(tap, kAudioTapPropertyFormat, into: &format)
+            try read(tap, kAudioTapPropertyFormat, stage: "read-tap-format", into: &format)
             try checkIntent(pid)
             guard format.mFormatID == kAudioFormatLinearPCM, format.mFormatFlags & kAudioFormatFlagIsFloat != 0,
                   format.mFormatFlags & kAudioFormatFlagIsBigEndian == 0, format.mBitsPerChannel == 32,
                   format.mChannelsPerFrame > 0, format.mChannelsPerFrame <= 2, format.mSampleRate.isFinite, format.mSampleRate > 0,
-                  format.mBytesPerFrame == (format.mFormatFlags & kAudioFormatFlagIsNonInterleaved != 0 ? 4 : 4 * format.mChannelsPerFrame) else { throw CaptureError.format }
+                  format.mBytesPerFrame == (format.mFormatFlags & kAudioFormatFlagIsNonInterleaved != 0 ? 4 : 4 * format.mChannelsPerFrame) else { throw CaptureError.invalid("validate-pcm-format") }
             sampleRate = format.mSampleRate
             let composition: [String: Any] = [
                 kAudioAggregateDeviceNameKey: "Likeit Private Audio",
@@ -150,17 +153,17 @@ final class DesktopAudio {
                 kAudioAggregateDeviceTapAutoStartKey: false,
                 kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: description.uuid.uuidString, kAudioSubTapDriftCompensationKey: true]]
             ]
-            try checked(AudioHardwareCreateAggregateDevice(composition as CFDictionary, &device))
+            try checked(AudioHardwareCreateAggregateDevice(composition as CFDictionary, &device), stage: "create-aggregate")
             try checkIntent(pid)
-            guard device != kAudioObjectUnknown else { throw CaptureError.format }
+            guard device != kAudioObjectUnknown else { throw CaptureError.invalid("create-aggregate-handle") }
             try checked(AudioDeviceCreateIOProcIDWithBlock(&ioProc, device, ioQueue) { [weak self] _, input, _, _, _ in
                 self?.receive(input)
-            })
+            }, stage: "create-io-proc")
             try checkIntent(pid)
-            guard ioProc != nil else { throw CaptureError.format }
+            guard ioProc != nil else { throw CaptureError.invalid("create-io-proc-handle") }
             currentPID = pid
             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 如有系统音频授权提示，请由你选择")
-            try checked(AudioDeviceStart(device, ioProc))
+            try checked(AudioDeviceStart(device, ioProc), stage: "start-device")
             try checkIntent(pid)
             for (object, selector) in [
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice),
@@ -187,8 +190,16 @@ final class DesktopAudio {
             releaseCapture()
         } catch {
             failed = true
+            failureMessage = "音频启动失败 · 可重试音频"
+            switch error {
+            case CaptureError.unavailable(let stage, let status):
+                audioLog.error("Capture failed: stage=\(stage, privacy: .public) OSStatus=\(status, privacy: .public)")
+            case CaptureError.invalid(let stage):
+                audioLog.error("Capture failed: stage=\(stage, privacy: .public) reason=invalid-result")
+            default: audioLog.error("Capture failed: stage=start reason=unexpected-error")
+            }
             releaseCapture()
-            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "实时律动不可用 · 系统音频访问或输出设备未就绪")
+            publish(.init(rms: 0, low: 0, mid: 0, high: 0), failureMessage)
         }
     }
 
@@ -227,13 +238,12 @@ final class DesktopAudio {
         let samples = filled == 2048 && age < 0.15 ? (0..<2048).map { buffer[(cursor + $0) % 2048] } : []
         bufferLock.unlock()
         if !receivedPCM {
-            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云音频 · 可检查系统音频权限或直接退出")
+            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频")
             return
         }
         if age > 2 {
-            failed = true
-            releaseCapture()
-            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "未收到音频 · 可能未授权、静音或设备不可用；退出后可重试")
+            smoothed = .init(rms: 0, low: 0, mid: 0, high: 0)
+            publish(smoothed, "音频暂时中断 · 等待恢复")
             return
         }
         let value = analyzeAudio(samples: samples, sampleRate: sampleRate)
@@ -249,7 +259,7 @@ final class DesktopAudio {
             guard let self, self.isCurrent(epoch) else { return }
             self.routeChanged()
         }
-        try checked(AudioObjectAddPropertyListenerBlock(object, &property, queue, callback))
+        try checked(AudioObjectAddPropertyListenerBlock(object, &property, queue, callback), stage: "listen-\(selector)")
         listeners.append((object, property, callback))
     }
 
