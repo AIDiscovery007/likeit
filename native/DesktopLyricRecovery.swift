@@ -5,6 +5,11 @@ struct DesktopLyricRecoveryResult: Codable {
     let community: CommunityLyricDocument?
     let message: String
 
+    var valid: Bool {
+        if let community { return lines.isEmpty && CommunityLyrics.validCachedDocument(community) }
+        return DesktopLyrics.validCachedLines(lines)
+    }
+
     var readableText: String? {
         if let community {
             if community.instrumental { return "纯音乐" }
@@ -34,6 +39,8 @@ final class DesktopLyricRecovery {
     private let community: CommunityLyrics
     private let sessionConfiguration: URLSessionConfiguration
     private let configurationURL: URL
+    private let diskCache: LyricDiskCache?
+    private var diskKey: String?
     private var official: OpenAPILyrics?
     private var configurationInvalid = false
     private var generation = UUID(), phase = UUID(), requestID = UUID()
@@ -49,9 +56,12 @@ final class DesktopLyricRecovery {
         self.sessionConfiguration = sessionConfiguration.copy() as! URLSessionConfiguration
         self.sessionConfiguration.httpAdditionalHeaders = nil
         self.configurationURL = configurationURL
+        diskCache = cacheDirectory.map { LyricDiskCache(directory: $0, now: cacheNow) }
     }
 
     func cancel() {
+        guard Thread.isMainThread else { DispatchQueue.main.async { self.cancel() }; return }
+        diskKey = nil
         generation = UUID()
         clearPhase()
         deadline?.cancel(); deadline = nil
@@ -59,7 +69,10 @@ final class DesktopLyricRecovery {
         verified = []
     }
 
-    func stop() { cancel(); lyrics.stop(); community.stop() }
+    func stop() {
+        guard Thread.isMainThread else { DispatchQueue.main.async { self.stop() }; return }
+        cancel(); lyrics.stop(); community.stop()
+    }
 
     private func clearPhase() {
         phase = UUID(); requestID = UUID()
@@ -70,14 +83,24 @@ final class DesktopLyricRecovery {
     }
 
     func load(key: String, metadata: TrackMetadata, preferredSource: String, completion: @escaping (DesktopLyricRecoveryResult) -> Void) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { self.load(key: key, metadata: metadata, preferredSource: preferredSource, completion: completion) }; return
+        }
         cancel()
         self.completion = completion
         guard !normalized(metadata.title).isEmpty else { unavailable(); return }
+        let configurationIdentity: String
         do {
             let configuration = try OpenAPILyricConfiguration.load(from: configurationURL)
             official = configuration.map { OpenAPILyrics(configuration: $0, sessionConfiguration: sessionConfiguration) }
+            configurationIdentity = try DesktopLyrics.namespace(for: configuration)
             configurationInvalid = false
-        } catch { official = nil; configurationInvalid = true }
+        } catch { official = nil; configurationInvalid = true; configurationIdentity = "invalid-official" }
+        diskKey = LyricDiskCache.key(metadata: metadata, namespace: "recovery-v1-netease-amll-lrclib:" + configurationIdentity, allowsIncomplete: true)
+        if let diskCache, let diskKey, let result = diskCache.load(DesktopLyricRecoveryResult.self, key: diskKey), result.valid {
+            cancel()
+            completion(DesktopLyricRecoveryResult(lines: result.lines, community: result.community, message: result.message + " · 本地缓存")); return
+        }
         expires = ProcessInfo.processInfo.systemUptime + 20
         let token = generation
         let timeout = DispatchWorkItem { [weak self] in
@@ -94,7 +117,7 @@ final class DesktopLyricRecovery {
         lyrics.load(key: key, metadata: metadata) { [weak self] lines, message in
             guard let self, self.generation == token, self.phase == exactPhase else { return }
             if DesktopLyrics.validCachedLines(lines) {
-                self.finish(DesktopLyricRecoveryResult(lines: lines, community: nil, message: self.neteaseSource + " · 精确匹配 · " + message))
+                self.finish(DesktopLyricRecoveryResult(lines: lines, community: nil, message: self.neteaseSource + " · 精确匹配 · " + message), persist: false)
             } else { self.search(metadata) }
         }
     }
@@ -211,10 +234,11 @@ final class DesktopLyricRecovery {
 
     private func unavailable() { finish(DesktopLyricRecoveryResult(lines: [], community: nil, message: "暂时没有匹配的歌词")) }
 
-    private func finish(_ result: DesktopLyricRecoveryResult) {
-        let callback = completion
+    private func finish(_ result: DesktopLyricRecoveryResult, persist: Bool = true) {
+        guard let callback = completion else { return }
+        if persist, result.valid, let diskCache, let diskKey { diskCache.store(result, key: diskKey) }
         cancel()
-        callback?(result)
+        callback(result)
     }
 
     private func fetch<Value>(_ endpoint: Endpoint, query: [String: String], decode: @escaping (Any) -> Value?, completion: @escaping (Value?) -> Void) {

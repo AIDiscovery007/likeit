@@ -142,7 +142,7 @@ final class CommunityLyrics {
         let artists = metadata.artists.joined(separator: " / ")
         fetch(host: "lrclib.net", path: "/api/get", query: ["track_name": metadata.title, "artist_name": artists, "album_name": metadata.album, "duration": String(metadata.duration)], token: token, decode: { json -> CommunityLyricDocument? in
             guard let title = json["trackName"] as? String, let artist = json["artistName"] as? String, let album = json["albumName"] as? String,
-                  let duration = jsonNumber(json["duration"]), let flag = json["instrumental"] as? NSNumber, CFGetTypeID(flag) == CFBooleanGetTypeID() else { return nil }
+                  let duration = jsonNumber(json["duration"]) else { return nil }
             let current = TrackMetadata(title: metadata.title, artists: [artists], album: metadata.album, duration: metadata.duration)
             let candidate = SongCandidate(id: "1", metadata: TrackMetadata(title: title, artists: [artist], album: album, duration: duration))
             guard matchedSongID(for: current, candidates: [candidate]) != nil else { return nil }
@@ -181,26 +181,26 @@ final class CommunityLyrics {
     }
 
     static func amllDocument(_ json: [String: Any], id: String) -> CommunityLyricDocument? {
-            guard jsonNumber(json["status"]) == 200, let data = json["data"] as? [String: Any], data["format"] as? String == "ttml",
-                  let ids = data["ncmMusicIds"] as? [String], ids.contains(id), let text = data["lyrics"] as? String else { return nil }
-            let lines = parseCommunityTTML(text)
-            return lines.isEmpty ? nil : CommunityLyricDocument(source: .amll, lines: lines, plainText: nil, instrumental: false)
+        guard jsonNumber(json["status"]) == 200, let data = json["data"] as? [String: Any], data["format"] as? String == "ttml",
+              let ids = data["ncmMusicIds"] as? [String], ids.contains(id), let text = data["lyrics"] as? String else { return nil }
+        let lines = parseCommunityTTML(text)
+        return lines.isEmpty ? nil : CommunityLyricDocument(source: .amll, lines: lines, plainText: nil, instrumental: false)
     }
 
     static func lrclibDocument(_ json: [String: Any], duration: Double) -> CommunityLyricDocument? {
         guard let flag = json["instrumental"] as? NSNumber, CFGetTypeID(flag) == CFBooleanGetTypeID() else { return nil }
-            for field in ["syncedLyrics", "plainLyrics"] {
-                if let value = json[field], !(value is NSNull), !(value is String) { return nil }
-            }
-            let synced = json["syncedLyrics"] as? String ?? "", plain = json["plainLyrics"] as? String ?? ""
-            let hasSynced = !synced.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let hasPlain = !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            if flag.boolValue {
-                return hasSynced || hasPlain ? nil : CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
-            }
-            let lines = communityLRCLines(synced, duration: duration)
-            if !lines.isEmpty { return CommunityLyricDocument(source: .lrclib, lines: lines, plainText: nil, instrumental: false) }
-            return hasPlain ? CommunityLyricDocument(source: .lrclib, lines: [], plainText: plain, instrumental: false) : nil
+        for field in ["syncedLyrics", "plainLyrics"] {
+            if let value = json[field], !(value is NSNull), !(value is String) { return nil }
+        }
+        let synced = json["syncedLyrics"] as? String ?? "", plain = json["plainLyrics"] as? String ?? ""
+        let hasSynced = !synced.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasPlain = !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        if flag.boolValue {
+            return hasSynced || hasPlain ? nil : CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+        }
+        let lines = communityLRCLines(synced, duration: duration)
+        if !lines.isEmpty { return CommunityLyricDocument(source: .lrclib, lines: lines, plainText: nil, instrumental: false) }
+        return hasPlain ? CommunityLyricDocument(source: .lrclib, lines: [], plainText: plain, instrumental: false) : nil
     }
 
     static func validCachedDocument(_ document: CommunityLyricDocument) -> Bool {
