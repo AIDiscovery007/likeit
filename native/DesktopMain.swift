@@ -15,8 +15,11 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var previousApp = NSWorkspace.shared.frontmostApplication
     private let model = DesktopModel()
     private var session: DesktopSession?
-    private var mode = "system"
-    private var receivedOpen = false
+    private let audio = DesktopAudio()
+    private var snapshot: DesktopSnapshot?
+    private var terminating = false
+    private var allowAudio = false
+    private var mode = "off"
     private var motionObserver: NSObjectProtocol?
     private var lock: Int32 = -1
 
@@ -39,16 +42,27 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         motionObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.updateMotion() }
         showWindow()
         session = DesktopSession(model: model)
+        audio.output = { [weak self] features, message in
+            guard let self, !self.terminating, self.allowAudio else { return }
+            self.model.low = features.low
+            self.model.mid = features.mid
+            self.model.high = features.high
+            self.model.audioStatus = message
+        }
+        session?.sourceChanged = { [weak self] value in
+            self?.snapshot = value
+            self?.updateMotion()
+        }
         session?.start()
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
         guard let url = urls.last, url.scheme == "likeit-desktop", url.host == "open", let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
         mode = components.queryItems?.first(where: { $0.name == "mode" })?.value ?? "system"
-        if !receivedOpen, let bundle = components.queryItems?.first(where: { $0.name == "returnBundle" })?.value, bundle != "com.likeit.desktop" {
-            previousApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundle).first
+        if let bundle = components.queryItems?.first(where: { $0.name == "returnBundle" })?.value, bundle != "com.likeit.desktop",
+           let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundle).first, !app.isTerminated {
+            previousApp = app
         }
-        receivedOpen = true
         updateMotion()
         if window != nil { activate() }
     }
@@ -68,9 +82,21 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     private func updateMotion() {
+        guard !terminating else { return }
         let enabled = desktopMotionEnabled(mode: mode, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
-        model.audioStatus = enabled ? "实时律动尚未接入" : "桌面动效已关闭 · 不采集音频"
+        let visible = NSApp.isActive && window?.occlusionState.contains(.visible) == true
+        allowAudio = enabled && visible && snapshot?.playing == true
+        let reason = !enabled ? "桌面动效已关闭 · 不采集音频" : !visible ? "桌面不可见 · 采集已停止" : "等待网易云播放 · 保持静态"
+        if !allowAudio {
+            model.low = 0; model.mid = 0; model.high = 0
+            model.audioStatus = reason
+        }
+        audio.update(pid: allowAudio ? snapshot?.pid : nil, reason: reason)
     }
+
+    func applicationDidBecomeActive(_ notification: Notification) { updateMotion() }
+    func applicationDidResignActive(_ notification: Notification) { updateMotion() }
+    func windowDidChangeOcclusionState(_ notification: Notification) { updateMotion() }
 
     private func activate() {
         NSApp.presentationOptions = [.autoHideDock, .autoHideMenuBar]
@@ -80,16 +106,28 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { activate(); return false }
     func windowShouldClose(_ sender: NSWindow) -> Bool { NSApp.terminate(nil); return false }
-    func applicationWillTerminate(_ notification: Notification) {
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard !terminating else { return .terminateLater }
+        terminating = true
         let restore = NSApp.isActive
+        allowAudio = false
         session?.stop(); session = nil
         if let motionObserver { NSWorkspace.shared.notificationCenter.removeObserver(motionObserver) }
         window?.orderOut(nil)
         window?.close()
         window = nil
-        if lock >= 0 { Darwin.close(lock); lock = -1 }
         if restore, let previousApp, !previousApp.isTerminated { previousApp.activate(options: []) }
+        // Hide immediately, allow orderly HAL teardown, and never let a pending system prompt trap exit.
+        let deadline = DispatchWorkItem { sender.reply(toApplicationShouldTerminate: true) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: deadline)
+        audio.stop { deadline.cancel(); sender.reply(toApplicationShouldTerminate: true) }
+        return .terminateLater
     }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        if lock >= 0 { Darwin.close(lock); lock = -1 }
+    }
+
 }
 
 @main

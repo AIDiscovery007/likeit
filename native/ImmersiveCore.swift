@@ -1,4 +1,5 @@
 import Foundation
+import Accelerate
 
 func desktopMotionEnabled(mode: String, reduceMotion: Bool?) -> Bool {
     mode == "always" || (mode == "system" && reduceMotion == false)
@@ -79,5 +80,66 @@ struct LyricState {
         guard trackKey == key else { return false }
         self.lines = lines
         return true
+    }
+}
+
+struct AudioFeatures { let rms: Double; let low: Double; let mid: Double; let high: Double }
+
+private let spectrumLock = NSLock()
+private var spectrumAnalyzers: [Int: SpectrumAnalyzer] = [:]
+
+func analyzeAudio(samples: [Float], sampleRate: Double) -> AudioFeatures {
+    let zero = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
+    guard !samples.isEmpty, sampleRate.isFinite, sampleRate > 0, samples.allSatisfy(\.isFinite) else { return zero }
+    let rms = min(1, sqrt(samples.reduce(0.0) { $0 + Double($1) * Double($1) } / Double(samples.count)))
+    guard rms > 0 else { return zero }
+    var count = 2
+    while count < min(samples.count, 16_384) { count *= 2 }
+    spectrumLock.lock(); defer { spectrumLock.unlock() }
+    if spectrumAnalyzers[count] == nil { spectrumAnalyzers[count] = SpectrumAnalyzer(count: count) }
+    return spectrumAnalyzers[count]?.analyze(samples, sampleRate: sampleRate, rms: rms) ?? zero
+}
+
+private final class SpectrumAnalyzer {
+    let count: Int
+    let log2Count: vDSP_Length
+    let setup: FFTSetup
+    var real: [Float]
+    var imaginary: [Float]
+    var window: [Float]
+
+    init?(count: Int) {
+        self.count = count
+        log2Count = vDSP_Length(log2(Double(count)))
+        guard let setup = vDSP_create_fftsetup(log2Count, FFTRadix(kFFTRadix2)) else { return nil }
+        self.setup = setup
+        real = [Float](repeating: 0, count: count)
+        imaginary = real
+        window = real
+        vDSP_hann_window(&window, vDSP_Length(count), Int32(vDSP_HANN_NORM))
+    }
+    deinit { vDSP_destroy_fftsetup(setup) }
+
+    func analyze(_ samples: [Float], sampleRate: Double, rms: Double) -> AudioFeatures {
+        for index in 0..<count {
+            real[index] = index < samples.count ? samples[index] * window[index] : 0
+            imaginary[index] = 0
+        }
+        real.withUnsafeMutableBufferPointer { real in
+            imaginary.withUnsafeMutableBufferPointer { imaginary in
+                var split = DSPSplitComplex(realp: real.baseAddress!, imagp: imaginary.baseAddress!)
+                vDSP_fft_zip(setup, &split, 1, log2Count, FFTDirection(FFT_FORWARD))
+            }
+        }
+        var low = 0.0, mid = 0.0, high = 0.0
+        for bin in 1..<(count / 2) {
+            let frequency = Double(bin) * sampleRate / Double(count)
+            let energy = Double(real[bin]) * Double(real[bin]) + Double(imaginary[bin]) * Double(imaginary[bin])
+            if frequency >= 20 && frequency < 250 { low += energy }
+            else if frequency >= 250 && frequency < 2000 { mid += energy }
+            else if frequency >= 2000 && frequency <= min(12000, sampleRate / 2) { high += energy }
+        }
+        func response(_ energy: Double) -> Double { min(1, sqrt(energy) * 4 / Double(count)) }
+        return AudioFeatures(rms: rms, low: response(low), mid: response(mid), high: response(high))
     }
 }
