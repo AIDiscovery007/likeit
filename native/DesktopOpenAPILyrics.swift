@@ -169,6 +169,14 @@ private struct OpenAPICommand {
                 return value.merging(["name": key]) { _, new in new }
             }
         } else { throw OpenAPILyricError.manifest }
+        let fixed: [String: Any]
+        if let value = descriptor["fixed_params"] {
+            guard let values = value as? [String: Any], values.values.allSatisfy(Self.scalar), method != "GET" || values.isEmpty else { throw OpenAPILyricError.manifest }
+            fixed = values
+        } else { fixed = [:] }
+        for (name, value) in fixed {
+            if let input = provided[name], !(value as AnyObject).isEqual(input) { throw OpenAPILyricError.manifest }
+        }
         var names = Set<String>(), business: [String: Any] = [:]
         for parameter in parameters {
             guard let name = parameter["name"] as? String, nonblank(name), names.insert(name).inserted,
@@ -181,7 +189,7 @@ private struct OpenAPICommand {
                 guard let flag = boolean(value) else { throw OpenAPILyricError.manifest }
                 required = flag
             }
-            guard let value = provided[name] else {
+            guard let value = fixed[name] ?? provided[name] else {
                 if required { throw OpenAPILyricError.manifest }
                 continue
             }
@@ -190,7 +198,7 @@ private struct OpenAPICommand {
             case "string": guard value is String else { throw OpenAPILyricError.manifest }
             case "boolean": guard boolean(value) != nil else { throw OpenAPILyricError.manifest }
             case "number": guard number(value) != nil else { throw OpenAPILyricError.manifest }
-            case "integer": guard let n = number(value), n.doubleValue.rounded() == n.doubleValue else { throw OpenAPILyricError.manifest }
+            case "integer": guard let n = number(value), n.compare(NSNumber(value: n.int64Value)) == .orderedSame else { throw OpenAPILyricError.manifest }
             default: break
             }
             if method == "GET" && location == "body" {
@@ -200,14 +208,8 @@ private struct OpenAPICommand {
             business[name] = value
         }
         // Required identity must come from a declared, transmitted input.
-        guard business[identity] != nil else { throw OpenAPILyricError.manifest }
-        if let fixed = descriptor["fixed_params"] {
-            guard let values = fixed as? [String: Any], values.values.allSatisfy(Self.scalar), method != "GET" || values.isEmpty else { throw OpenAPILyricError.manifest }
-            for (name, value) in values {
-                if let input = provided[name], !(value as AnyObject).isEqual(input) { throw OpenAPILyricError.manifest }
-                business[name] = value
-            }
-        }
+        guard provided[identity] != nil, business[identity] != nil else { throw OpenAPILyricError.manifest }
+        business.merge(fixed) { _, value in value }
         return OpenAPICommand(path: path, method: method, authenticated: authenticated, business: business)
     }
 
@@ -354,7 +356,10 @@ final class OpenAPILyrics {
         for row in rows {
             let original: String?
             if let text = row["originalId"] as? String { original = positiveDecimal(text) ? text : nil }
-            else if let value = row["originalId"], let n = number(value), n.doubleValue > 0, n.doubleValue <= 9_007_199_254_740_991, n.doubleValue.rounded() == n.doubleValue { original = String(format: "%.0f", n.doubleValue) }
+            else if let value = row["originalId"], let n = number(value),
+                    n.compare(NSNumber(value: 0)) == .orderedDescending,
+                    n.compare(NSNumber(value: Int64(9_007_199_254_740_991))) != .orderedDescending,
+                    n.compare(NSNumber(value: n.int64Value)) == .orderedSame { original = String(n.int64Value) }
             else { original = nil }
             guard original == originalID else { continue }
             var ids = Set<String>()
@@ -376,14 +381,15 @@ final class OpenAPILyrics {
         guard let value = json["data"] else { throw OpenAPILyricError.response }
         if value is NSNull { return .noSynchronizedLyrics }
         guard let lyrics = value as? [String: Any] else { throw OpenAPILyricError.response }
-        let original: Any?
-        if let lyric = lyrics["lyric"] { original = lyric }
-        else if let lrc = lyrics["lrc"] {
+        let original = lyrics["lyric"]
+        guard original == nil || original is NSNull || original is String else { throw OpenAPILyricError.response }
+        var text = original as? String ?? ""
+        if text.isEmpty, let lrc = lyrics["lrc"], !(lrc is NSNull) {
             guard let nested = lrc as? [String: Any] else { throw OpenAPILyricError.response }
-            original = nested["lyric"]
-        } else { original = nil }
-        guard let original else { return .noSynchronizedLyrics }
-        guard let text = original as? String else { throw OpenAPILyricError.response }
+            let fallback = nested["lyric"]
+            guard fallback == nil || fallback is NSNull || fallback is String else { throw OpenAPILyricError.response }
+            text = fallback as? String ?? ""
+        }
         let lines = parseLRC(text)
         return lines.contains(where: { !$0.text.isEmpty }) ? .lines(lines) : .noSynchronizedLyrics
     }
