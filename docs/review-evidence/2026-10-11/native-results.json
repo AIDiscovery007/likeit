@@ -1,0 +1,70 @@
+[
+  {
+    "name": "native read and exclusive busy lock",
+    "pass": true,
+    "evidence": {
+      "state": "playing",
+      "title": "Antisocial",
+      "liked": false
+    }
+  },
+  {
+    "name": "normal close releases same lock inode",
+    "pass": true,
+    "evidence": {
+      "inode": 143121752
+    }
+  },
+  {
+    "name": "media-timeout",
+    "pass": true,
+    "evidence": {
+      "elapsedMs": 4040,
+      "lockRecovered": true
+    }
+  },
+  {
+    "name": "output-limit",
+    "pass": true,
+    "evidence": {
+      "elapsedMs": 24,
+      "lockRecovered": true
+    }
+  },
+  {
+    "name": "invalid-json",
+    "pass": true,
+    "evidence": {
+      "elapsedMs": 128,
+      "lockRecovered": true
+    }
+  },
+  {
+    "name": "nonzero-exit",
+    "pass": true,
+    "evidence": {
+      "elapsedMs": 77,
+      "lockRecovered": true
+    }
+  },
+  {
+    "name": "SIGKILL controller",
+    "pass": true,
+    "evidence": {
+      "pidsBefore": "93243 93051 93051 S   \n93244 93243 93244 Ss  \n93262 93244 93244 S",
+      "controllerAndPerlGone": true,
+      "lockRecovered": true,
+      "workerOutput": "READY\nNative controller closed\n"
+    }
+  },
+  {
+    "name": "SIGKILL node-parent",
+    "pass": true,
+    "evidence": {
+      "pidsBefore": "93267 93051 93051 S   \n93268 93267 93268 Ss  \n93269 93268 93268 S",
+      "controllerAndPerlGone": true,
+      "lockRecovered": true,
+      "workerOutput": "READY\n"
+    }
+  }
+]

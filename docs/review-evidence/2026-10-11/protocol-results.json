@@ -1,0 +1,32 @@
+[
+  {
+    "name": "startup-timeout",
+    "pass": true,
+    "elapsedMs": 2012
+  },
+  {
+    "name": "request-timeout",
+    "pass": true,
+    "elapsedMs": 9391
+  },
+  {
+    "name": "malformed-response",
+    "pass": true,
+    "elapsedMs": 390
+  },
+  {
+    "name": "oversize-response",
+    "pass": true,
+    "elapsedMs": 692
+  },
+  {
+    "name": "invalid-snapshot",
+    "pass": true,
+    "elapsedMs": 591
+  },
+  {
+    "name": "close-grace-timeout",
+    "pass": true,
+    "elapsedMs": 1125
+  }
+]
