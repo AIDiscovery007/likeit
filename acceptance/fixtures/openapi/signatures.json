@@ -1,0 +1,30 @@
+[
+  {
+    "parameters": {
+      "timestamp": "1791700000000",
+      "device": "{\"deviceId\":\"fixture-device\",\"os\":\"macOS\"}",
+      "appId": "fixture-app",
+      "accessToken": "fixture-token",
+      "bizContent": "{\"songId\":\"0123456789abcdef0123456789abcdef\",\"text\":\"原创 & + / 词\"}",
+      "signType": "RSA_SHA256",
+      "sign": "must-be-excluded",
+      "empty": ""
+    },
+    "canonical": "accessToken=fixture-token&appId=fixture-app&bizContent={\"songId\":\"0123456789abcdef0123456789abcdef\",\"text\":\"原创 & + / 词\"}&device={\"deviceId\":\"fixture-device\",\"os\":\"macOS\"}&signType=RSA_SHA256&timestamp=1791700000000",
+    "signature": "KWLv/NLNulC8ClwlxfG5GkUWJssdtaf2SwGO1+8IU+hOcVSYU7+lT2S3Ul+BuVVke+ByLP5/G3Jtz1XMELVDP4uQES4+BjFSrRvw8CKE5eCTWVaGJ34k+Xch9UZrLSDqrseu3D0ajlaN8jXMqfg5KdMijky38i6uMakN1L49quRsA/PCnvTaDZI3MYzZfLaQ4v+8fHQZZJZAK2CzawzBbpjjCYN2ae4khXdXrUyQ0Ow3hzHObYQ4lZEPcw823369eWWHCDKrBNsxzuy42citePCDViXGkNnB/2PRge97V+MV/coFhASwTT+adXl6hX3HDF4XwAEpL7TjUSm3/BrwUQ=="
+  },
+  {
+    "parameters": {
+      "empty": "",
+      "sign": "ignored-again",
+      "appId": "fixture-two",
+      "accessToken": "",
+      "device": "{\"deviceId\":\"第二设备\",\"model\":\"A+B/C\"}",
+      "signType": "RSA_SHA256",
+      "bizContent": "{\"songId\":\"ABCDEF0123456789ABCDEF0123456789\"}",
+      "timestamp": "1791700000001"
+    },
+    "canonical": "appId=fixture-two&bizContent={\"songId\":\"ABCDEF0123456789ABCDEF0123456789\"}&device={\"deviceId\":\"第二设备\",\"model\":\"A+B/C\"}&signType=RSA_SHA256&timestamp=1791700000001",
+    "signature": "crKEvVWiYaueFqZW7g94z06vysIPPPErBmbkbFkYs4E5WW7X56Ky3ZP9cvQj9IFgp4r7Vpy6xMvt/losGsTuau2cVzZRC0r9iUCWaHOrdgqXe8h5sN5OFUbPWLVJnwamb873fQC3wHMGn3uxR4FAgQiPGlmUT5MwCRfG3Lk9qIN2Nv/a7i7AKsuXSblDO6li+JLvmnDRm5H2dZ6cuIUZhSkU81hsonlFNioZbHpDUk+2ae6BNSlHyzU9Sf/9yEs01vJOcmm1VRSl+i7hCGq3nFPd/UFFauIa5HC4RuOKHJSYfkIm0F593qZH6u1ws7SzEiMUFeRjTWcu+EYnebEVww=="
+  }
+]
