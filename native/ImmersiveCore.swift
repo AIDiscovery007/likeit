@@ -51,7 +51,7 @@ func playbackPosition(elapsed: Double, rate: Double, sampledAt: Double, now: Dou
 struct TrackMetadata { let title: String; let artists: [String]; let album: String; let duration: Double }
 struct SongCandidate { let id: String; let metadata: TrackMetadata }
 
-private func normalized(_ text: String) -> String {
+func normalized(_ text: String) -> String {
     text.precomposedStringWithCanonicalMapping.lowercased().split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
 }
 

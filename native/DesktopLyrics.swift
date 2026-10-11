@@ -126,7 +126,7 @@ final class DesktopLyrics {
         }
     }
 
-    private static func validCachedLines(_ lines: [LyricLine]) -> Bool {
+    static func validCachedLines(_ lines: [LyricLine]) -> Bool {
         !lines.isEmpty && lines.count <= 20_000 && lines.contains { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             && lines.allSatisfy { $0.time.isFinite && $0.time >= 0 }
             && zip(lines, lines.dropFirst()).allSatisfy { $0.time <= $1.time }

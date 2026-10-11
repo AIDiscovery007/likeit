@@ -4,6 +4,9 @@ import Darwin
 // Lifecycle and delegate callbacks stay on main; parsing runs separately.
 // No credential storage, cookies, cache, or redirects.
 final class LyricRequest: NSObject, URLSessionDataDelegate {
+    private static var cooldowns: [String: Date] = [:]
+    static func isCoolingDown(_ host: String) -> Bool { (cooldowns[host] ?? .distantPast) > Date() }
+
     private var session: URLSession?
     private var task: URLSessionDataTask?
     private var data = Data()
@@ -35,10 +38,23 @@ final class LyricRequest: NSObject, URLSessionDataDelegate {
     func cancel() { task?.cancel() }
     func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) { completionHandler(nil) }
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        if let http = response as? HTTPURLResponse { responseReceived?(http) }
+        if let http = response as? HTTPURLResponse {
+            if http.statusCode == 429, let host = http.url?.host {
+                Self.cooldowns[host] = Self.retryDate(http.value(forHTTPHeaderField: "Retry-After"))
+            }
+            responseReceived?(http)
+        }
         let valid = (response as? HTTPURLResponse)?.statusCode == 200 && response.expectedContentLength <= 1_048_576
         rejected = !valid
         completionHandler(valid ? .allow : .cancel)
+    }
+    static func retryDate(_ value: String?) -> Date {
+        if let value, let seconds = Double(value), seconds.isFinite, seconds >= 0 { return Date().addingTimeInterval(seconds) }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+        return value.flatMap(formatter.date(from:)).map { max(Date(), $0) } ?? Date().addingTimeInterval(60)
     }
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive chunk: Data) {
         if data.count + chunk.count > 1_048_576 { rejected = true; dataTask.cancel() } else { data.append(chunk) }
