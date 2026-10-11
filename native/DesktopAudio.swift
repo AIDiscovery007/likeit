@@ -230,7 +230,10 @@ final class DesktopAudio {
     private func receive(_ input: UnsafePointer<AudioBufferList>, epoch: UInt64) {
         guard bufferLock.try() else { return }
         defer { bufferLock.unlock() }
-        guard isCurrent(epoch) else { return }
+        guard intentLock.try() else { return }
+        let current = !stopped && captureEpoch == epoch
+        intentLock.unlock()
+        guard current else { return }
         let buffers = UnsafeMutableAudioBufferListPointer(UnsafeMutablePointer(mutating: input))
         guard let first = buffers.first, first.mNumberChannels > 0, first.mData != nil else { return }
         let frames = min(8192, Int(first.mDataByteSize) / (4 * Int(first.mNumberChannels)))
