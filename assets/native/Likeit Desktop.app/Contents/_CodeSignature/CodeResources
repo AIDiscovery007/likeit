@@ -8,23 +8,23 @@
 		<data>
 		WYU9Pt+QSH0eqL6CYsCDpU3ca9k=
 		</data>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h</key>
+		<key>Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h</key>
 		<data>
 		GnkSSw394Khe7u3RKlvPrVfF68Y=
 		</data>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter</key>
+		<key>Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter</key>
 		<data>
-		w7qYHa+ulph0SvE1dIi1Fb0z5qU=
+		l2ms3zsC3RulRqwRqpyrmYRN7EM=
 		</data>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist</key>
+		<key>Resources/MediaRemoteAdapter.framework/Resources/Info.plist</key>
 		<data>
 		D30Kz5Q0sOcBsDFKe++/M3VtUJY=
 		</data>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE</key>
+		<key>Resources/MediaRemoteAdapter.framework/Resources/LICENSE</key>
 		<data>
 		WYU9Pt+QSH0eqL6CYsCDpU3ca9k=
 		</data>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources</key>
+		<key>Resources/MediaRemoteAdapter.framework/_CodeSignature/CodeResources</key>
 		<data>
 		2A99hAl2Ujcm0sxpJRpjf/WAh0Q=
 		</data>
@@ -42,60 +42,40 @@
 			pInBamvhlVhPoLNeKPylSryEkusMwF2FHdJPUi9JAKI=
 			</data>
 		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Headers</key>
-		<dict>
-			<key>symlink</key>
-			<string>Versions/Current/Headers</string>
-		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter</key>
-		<dict>
-			<key>symlink</key>
-			<string>Versions/Current/MediaRemoteAdapter</string>
-		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Resources</key>
-		<dict>
-			<key>symlink</key>
-			<string>Versions/Current/Resources</string>
-		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h</key>
+		<key>Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			wDOaHx7HH/KN9R+yOc0eRlgOvK+970svMsj0lAnaK0k=
 			</data>
 		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter</key>
+		<key>Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dl0wW8SAtaCL/9wxmFYlHvwnsKU2c3poO7GBWYuBETo=
+			GNzKxedJYMe6/UJ7YynsZIDUcbkQ14hAhlXEvooDfyI=
 			</data>
 		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist</key>
+		<key>Resources/MediaRemoteAdapter.framework/Resources/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			WZrLie0Eje3GDZJX5/MgGV1BilSUyoyB55/AO+3Nax4=
 			</data>
 		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE</key>
+		<key>Resources/MediaRemoteAdapter.framework/Resources/LICENSE</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			pInBamvhlVhPoLNeKPylSryEkusMwF2FHdJPUi9JAKI=
 			</data>
 		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources</key>
+		<key>Resources/MediaRemoteAdapter.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			XaHaxZ62OV4OSI3yJXGPNgM2pqbaLwjc1sSaAhu+aO4=
 			</data>
-		</dict>
-		<key>Resources/MediaRemoteAdapter.framework/Versions/Current</key>
-		<dict>
-			<key>symlink</key>
-			<string>A</string>
 		</dict>
 		<key>Resources/mediaremote-adapter.pl</key>
 		<dict>

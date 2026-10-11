@@ -86,7 +86,7 @@ npm run build
 npm run lint
 ```
 
-原生脚本先核对已固定 adapter 的摘要，再编译桌面；版本、源码及包内文件摘要记录于 `assets/native/DESKTOP-BUILD.json`。app 自带只读 adapter 与许可证，通过实际 bundle 位置寻找资源，不依赖开发目录。`npm run build` 会更新本机 Raycast 的扩展产物，应避免与另一个验收会话同时运行。项目尚未 push、发布或公证。
+原生脚本先核对已固定 adapter 的摘要，再编译桌面；版本、源码及包内文件摘要记录于 `assets/native/DESKTOP-BUILD.json`。app 自带只读 adapter 与许可证，通过实际 bundle 位置寻找资源，不依赖开发目录。桌面内的 framework 使用无符号链接的平铺布局，构建阶段调整库标识并签名，避免 Raycast 复制时把版本链接改成开发目录的绝对链接；安装后无需重签名。`npm run build` 会更新本机 Raycast 的扩展产物，应避免与另一个验收会话同时运行。项目尚未 push、发布或公证。
 
 歌词搜索会将当前曲名及完整艺人字符串发送给 `music.163.com`，随后仅请求唯一匹配候选的详情和歌词；不发送音频、账号数据或播放器 UUID。多艺人只接受完整集合或完整精确的 ` / ` 拼接，不猜 `/` 的含义，不删版本后缀；因此部分歌曲会显示暂无可用歌词。搜索结果内唯一不等于全曲库原曲身份的保证。
 
