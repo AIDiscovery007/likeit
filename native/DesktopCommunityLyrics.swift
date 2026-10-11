@@ -192,7 +192,8 @@ final class CommunityLyrics {
               document.lines.contains(where: { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
               zip(document.lines, document.lines.dropFirst()).allSatisfy({ $0.start <= $1.start }) else { return false }
         return document.lines.allSatisfy { line in
-            guard line.start.isFinite, line.end.isFinite, line.start >= 0, line.end >= line.start else { return false }
+            guard line.start.isFinite, line.end.isFinite, line.start >= 0, line.end >= line.start,
+                  zip(line.words, line.words.dropFirst()).allSatisfy({ $0.start <= $1.start }) else { return false }
             var previousEnd = 0
             return line.words.allSatisfy { word in
                 guard document.source == .amll, word.start.isFinite, word.end.isFinite, word.start >= line.start,

@@ -210,9 +210,10 @@ final class LyricDiskCache {
         guard directory >= 0 else { return }
         defer { Darwin.close(directory) }
         let temporary = "." + UUID().uuidString + ".tmp"
-        let file = openat(directory, temporary, O_CREAT | O_EXCL | O_WRONLY | O_NOFOLLOW | O_CLOEXEC, 0o600)
+        // Acquire the writer lock during open, without an unlocked create-to-flock gap.
+        let file = openat(directory, temporary, O_CREAT | O_EXCL | O_WRONLY | O_NOFOLLOW | O_CLOEXEC | O_EXLOCK | O_NONBLOCK, 0o600)
         guard file >= 0 else { return }
-        defer { Darwin.close(file); unlinkat(directory, temporary, 0) }
+        defer { unlinkat(directory, temporary, 0); Darwin.close(file) }
         let written = bytes.withUnsafeBytes { buffer -> Bool in
             var offset = 0
             while offset < buffer.count {
@@ -247,6 +248,18 @@ final class LyricDiskCache {
         _ = futimes(file, &times)
     }
 
+    private func removeAbandonedTemporary(_ name: String, in directory: Int32) {
+        let file = openat(directory, name, O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC)
+        guard file >= 0 else { return }
+        defer { Darwin.close(file) }
+        var opened = stat(), current = stat()
+        guard fstat(file, &opened) == 0, opened.st_mode & S_IFMT == S_IFREG, opened.st_uid == getuid(),
+              flock(file, LOCK_EX | LOCK_NB) == 0,
+              fstatat(directory, name, &current, AT_SYMLINK_NOFOLLOW) == 0,
+              current.st_dev == opened.st_dev, current.st_ino == opened.st_ino else { return }
+        unlinkat(directory, name, 0)
+    }
+
     private func prune(_ directory: Int32) {
         let copy = dup(directory)
         guard copy >= 0 else { return }
@@ -256,6 +269,11 @@ final class LyricDiskCache {
         while let entry = readdir(stream) {
             let name = withUnsafePointer(to: &entry.pointee.d_name) {
                 $0.withMemoryRebound(to: CChar.self, capacity: Int(entry.pointee.d_namlen) + 1) { String(cString: $0) }
+            }
+            if name.count == 41, name.hasPrefix("."), name.hasSuffix(".tmp"),
+               UUID(uuidString: String(name.dropFirst().dropLast(4))) != nil {
+                removeAbandonedTemporary(name, in: directory)
+                continue
             }
             guard name.count == 69, name.hasSuffix(".json"), name.prefix(64).utf8.allSatisfy({ (48...57).contains($0) || (97...102).contains($0) }) else { continue }
             var info = stat()
