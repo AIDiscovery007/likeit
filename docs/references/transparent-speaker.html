@@ -1,0 +1,575 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>透明歌词音响</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;900&display=swap">
+<style>
+/* Layout: one large glass-front speaker on top (16:9 screen in a black bezel, two transparent drivers set on the diagonal), with a control strip below that stacks on phones. */
+:root {
+  --bg: #e7ebe9;
+  --fg: #141d1b;
+  --muted: #566763;
+  --panel: #f4f7f6;
+  --line: #c8d3d0;
+  --accent: #2b6b60;
+  --accent-fg: #ffffff;
+  --frame: #0c0d0e;
+  --frame-edge: rgba(0, 0, 0, 0.35);
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-body: "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1312;
+    --fg: #e2ebe8;
+    --muted: #8da29d;
+    --panel: #151d1c;
+    --line: #28363a;
+    --accent: #7fc4b5;
+    --accent-fg: #0a1412;
+    --frame-edge: rgba(255, 255, 255, 0.1);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1312;
+  --fg: #e2ebe8;
+  --muted: #8da29d;
+  --panel: #151d1c;
+  --line: #28363a;
+  --accent: #7fc4b5;
+  --accent-fg: #0a1412;
+  --frame-edge: rgba(255, 255, 255, 0.1);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 15px/1.65 var(--font-body);
+  padding-inline: 16px;
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 32px; }
+header { display: grid; gap: 10px; }
+.eyebrow { margin: 0; font: 500 12px/1.4 var(--font-mono); letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+h1 { margin: 0; font: 900 clamp(30px, 5.4vw, 48px)/1.1 var(--font-body); text-wrap: balance; }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); }
+
+/* ---------- the speaker ---------- */
+.device {
+  position: relative;
+  background: var(--frame);
+  padding: clamp(8px, 1.6vw, 18px);
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px var(--frame-edge), 0 40px 60px -28px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.glass {
+  --g1: #8db1a9; --g2: #668b85; --ink: #121718; --e: 0;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 2px;
+  background: linear-gradient(160deg, var(--g1), var(--g2));
+}
+.glass canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.shelf {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 9%; z-index: 1;
+  background: linear-gradient(to bottom, rgba(122, 86, 54, 0), rgba(122, 86, 54, 0.5) 45%, rgba(84, 55, 32, 0.78));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.glass::after {
+  content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0.17) 0 13%, rgba(255, 255, 255, 0) 13.3% 37%, rgba(255, 255, 255, 0.07) 37.3% 45%, rgba(255, 255, 255, 0) 45.3%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 0 40px rgba(0, 0, 0, 0.12);
+}
+
+.text { position: absolute; inset: 6% 4% 8% 4%; z-index: 2; }
+.page { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.page.out .line { opacity: 0; transition: opacity 0.35s ease; }
+.line {
+  display: block; width: max-content; white-space: nowrap;
+  font-family: var(--font-display); font-weight: 400; font-synthesis: none;
+  text-transform: uppercase; line-height: 0.95; letter-spacing: -0.005em;
+  color: var(--ink);
+  opacity: 0; transform: translateX(-2.5%);
+  transition: opacity 0.22s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-size: 40px;
+}
+.line.cjk { font-family: var(--font-body); font-weight: 900; line-height: 1; letter-spacing: 0; }
+.line.on { opacity: 1; transform: none; }
+
+/* transparent drivers */
+.drv { position: absolute; width: 17.5%; aspect-ratio: 1; z-index: 3; }
+.drv.a { left: 2.5%; top: 7%; }
+.drv.b { left: 64%; top: 47%; }
+.surround {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, transparent 0 53%, #0b0c0d 54% 60%, #212527 61% 63%, #0b0c0d 64% 80%, #1d2022 81% 83%, #08090a 84% 100%);
+  box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.35);
+  transform: scale(calc(1 + var(--e) * 0.012));
+}
+.dome {
+  position: absolute; inset: 19%; border-radius: 50%; overflow: hidden;
+  -webkit-backdrop-filter: blur(2px) brightness(0.92);
+  backdrop-filter: blur(2px) brightness(0.92);
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.06) 38%, rgba(255, 255, 255, 0) 58%),
+    radial-gradient(circle, rgba(255, 255, 255, 0) 52%, rgba(0, 0, 0, 0.3) 100%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2), inset 0 0 1.4em rgba(0, 0, 0, 0.4);
+  transform: scale(calc(1 + var(--e) * 0.06));
+}
+.rings {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: repeating-radial-gradient(circle, rgba(255, 255, 255, 0) 0 9%, rgba(255, 255, 255, 0.12) 9.6% 10.4%);
+}
+.hl {
+  position: absolute; left: 33%; top: 56%; width: 28%; height: 18%; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92); filter: blur(0.6px); transform: rotate(-22deg);
+}
+
+/* ---------- controls ---------- */
+.console { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 36px; }
+.col { display: grid; gap: 24px; align-content: start; min-width: 0; }
+.group { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; min-width: 0; }
+.label { font: 500 11px/1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+.transport { display: flex; align-items: center; gap: 16px; }
+#play {
+  flex: none; width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center; background: var(--accent); color: var(--accent-fg);
+}
+#play svg { width: 22px; height: 22px; fill: currentColor; }
+#play .i-pause { display: none; }
+#play[aria-pressed="true"] .i-play { display: none; }
+#play[aria-pressed="true"] .i-pause { display: block; }
+.readout { display: grid; gap: 2px; min-width: 0; }
+#status { color: var(--fg); overflow-wrap: anywhere; }
+#clock { font: 500 13px/1.4 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+
+.vh { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+.scenes { display: flex; flex-wrap: wrap; gap: 8px; }
+.scenes label {
+  display: flex; align-items: center; gap: 8px; padding: 5px 14px 5px 5px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--panel);
+}
+.sw { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(160deg, var(--g1), var(--g2)); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); }
+.scenes input:checked + label { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.scenes input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.row { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: end; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.grow { flex: 1 1 220px; }
+output.val { font: 500 13px/1 var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+.field .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+select, textarea, .btn {
+  font: 400 14px/1.5 var(--font-body); color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px;
+}
+select { padding: 7px 10px; }
+.btn { padding: 8px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.btn:hover { border-color: var(--accent); }
+.files { display: flex; flex-wrap: wrap; gap: 10px; }
+textarea { width: 100%; min-height: 300px; padding: 12px 14px; resize: vertical; font: 500 14px/1.7 var(--font-mono); }
+.hint { margin: 0; color: var(--muted); font-size: 13px; }
+button:focus-visible, select:focus-visible, textarea:focus-visible, input[type="range"]:focus-visible, label.btn:focus-within {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+@media (max-width: 760px) { .console { grid-template-columns: 1fr; gap: 28px; } }
+@media (prefers-reduced-motion: reduce) {
+  .line { transition: none; transform: none; }
+  .dome, .surround { transform: none; }
+}
+</style>
+
+<main class="wrap">
+  <header>
+    <p class="eyebrow">界面复刻 · 21.5 英寸透明屏</p>
+    <h1>透明歌词音响</h1>
+    <p class="lede">参考 MORROR ART A2 的玻璃歌词屏。点击播放后，歌词随节拍逐行出现，两个透明喇叭跟着低频起伏。右侧可以改歌词，也可以载入自己的音频。</p>
+  </header>
+
+  <section class="device" aria-label="音响预览">
+    <div class="glass" id="glass">
+      <canvas id="cv"></canvas>
+      <div class="shelf"></div>
+      <div class="text" id="text" aria-live="off"></div>
+      <div class="drv a"><div class="surround"></div><div class="dome"><i class="rings"></i><i class="hl"></i></div></div>
+      <div class="drv b"><div class="surround"></div><div class="dome"><i class="rings"></i><i class="hl"></i></div></div>
+    </div>
+  </section>
+
+  <section class="console">
+    <div class="col">
+      <div class="group">
+        <span class="label">播放</span>
+        <div class="transport">
+          <button id="play" type="button" aria-pressed="false" aria-label="播放">
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="4" width="4.5" height="16" rx="1"/><rect x="14" y="4" width="4.5" height="16" rx="1"/></svg>
+          </button>
+          <div class="readout">
+            <span id="status">点击播放，歌词会跟着节拍出现</span>
+            <span id="clock">第 1 / 4 页 · 小节 01 · 拍 1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <span class="label">画面场景</span>
+        <div class="scenes" role="radiogroup" aria-label="画面场景">
+          <input class="vh" type="radio" name="scene" id="sc0" value="0" checked><label for="sc0" style="--g1:#8db1a9;--g2:#668b85"><span class="sw"></span>青瓷</label>
+          <input class="vh" type="radio" name="scene" id="sc1" value="1"><label for="sc1" style="--g1:#f5a368;--g2:#cf4a6b"><span class="sw"></span>落日</label>
+          <input class="vh" type="radio" name="scene" id="sc2" value="2"><label for="sc2" style="--g1:#102a47;--g2:#1d4f73"><span class="sw"></span>夜航</label>
+          <input class="vh" type="radio" name="scene" id="sc3" value="3"><label for="sc3" style="--g1:#e9dec4;--g2:#d2c29d"><span class="sw"></span>纸页</label>
+        </div>
+      </div>
+
+      <div class="group">
+        <span class="label">节奏</span>
+        <div class="row">
+          <div class="field grow">
+            <div class="head"><label for="bpm">速度</label><output class="val" id="bpmVal" for="bpm">92 BPM</output></div>
+            <input id="bpm" type="range" min="60" max="140" step="1" value="92">
+          </div>
+          <div class="field">
+            <label for="bpp">每页长度</label>
+            <select id="bpp"><option value="4">4 拍（约 2.6 秒）</option><option value="8" selected>8 拍（约 5 秒）</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <span class="label">音源</span>
+        <div class="files">
+          <label class="btn" for="file">载入音频文件<input class="vh" id="file" type="file" accept="audio/*"></label>
+          <button class="btn" id="useDemo" type="button">使用内置节拍</button>
+        </div>
+        <p class="hint">载入自己的歌曲后，把速度调到和歌曲一致，歌词翻页和喇叭起伏就会对上。音频只在你的浏览器里处理，不会上传。</p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="group">
+        <label class="label" for="lyrics">歌词（空行分页，每页最多 4 行）</label>
+        <textarea id="lyrics" spellcheck="false"></textarea>
+        <p class="hint">英文会自动撑满屏宽，中文使用粗黑体。默认歌词是为这个演示写的原创内容。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var glass = $('#glass'), textEl = $('#text'), cv = $('#cv'), c2 = cv.getContext('2d');
+  var statusEl = $('#status'), clockEl = $('#clock'), playBtn = $('#play');
+  var CJK = /[぀-ヿ㐀-鿿가-힯]/;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var DEFAULT_LYRICS = [
+    'LIGHTS GO LOW', 'THE GLASS STAYS CLEAR', 'EVERY WORD', 'FLOATS RIGHT HERE', '',
+    'CAN YOU SEE IT', 'IN THE AIR', 'SOUND TURNS INTO', 'LIGHT TONIGHT', '',
+    'TURN IT UP', 'LET THE ROOM', 'HOLD EVERY LINE', 'UNTIL MORNING', '',
+    '把声音', '变成光', '留在', '玻璃上'
+  ].join('\n');
+
+  /* ---------- scenes ---------- */
+  var stars = [];
+  (function () { var s = 7; function r() { s = (s * 16807) % 2147483647; return s / 2147483647; } for (var i = 0; i < 70; i++) stars.push([r(), r() * 0.8, r() * 6.28, 0.6 + r() * 1.6]); })();
+
+  function drawCeladon(c, w, h, t, e) {
+    var blobs = [[0.2, 0.3, 0.35], [0.75, 0.65, 0.4], [0.5, 0.1, 0.25]];
+    blobs.forEach(function (b, i) {
+      var cx = (b[0] + Math.sin(t * 0.0002 + i * 2) * 0.06) * w, cy = (b[1] + Math.cos(t * 0.00017 + i) * 0.05) * h;
+      var rr = b[2] * h * (1 + e * 0.07);
+      var g = c.createRadialGradient(cx, cy, 0, cx, cy, rr);
+      g.addColorStop(0, 'rgba(255,255,255,0.24)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(cx, cy, rr, 0, 6.2832); c.fill();
+    });
+  }
+  function drawDusk(c, w, h, t, e) {
+    var cx = w * 0.72, cy = h * 0.6, r = h * 0.27 * (1 + e * 0.08);
+    c.fillStyle = 'rgba(255,232,180,0.6)'; c.beginPath(); c.arc(cx, cy, r, 0, 6.2832); c.fill();
+    c.globalCompositeOperation = 'destination-out';
+    for (var i = 0; i < 5; i++) { c.fillRect(cx - r - 4, cy + r * 0.05 + i * r * 0.2, r * 2 + 8, r * (0.03 + i * 0.022)); }
+    c.globalCompositeOperation = 'source-over';
+  }
+  function drawNight(c, w, h, t, e) {
+    stars.forEach(function (s) {
+      var a = 0.35 + 0.35 * Math.sin(t * 0.0015 * s[3] + s[2]);
+      c.fillStyle = 'rgba(214,240,255,' + a.toFixed(3) + ')';
+      c.beginPath(); c.arc(s[0] * w, s[1] * h, 0.8 + s[3] * 0.5, 0, 6.2832); c.fill();
+    });
+    c.lineWidth = Math.max(1, h * 0.003);
+    for (var k = 0; k < 3; k++) {
+      c.strokeStyle = 'rgba(214,240,255,' + (0.35 - k * 0.09) + ')'; c.beginPath();
+      for (var x = 0; x <= w; x += 8) {
+        var y = h * (0.86 + k * 0.03) + Math.sin(x * 0.012 + t * 0.0015 * (1 + k * 0.3)) * h * (0.012 + e * 0.04);
+        if (x === 0) c.moveTo(x, y); else c.lineTo(x, y);
+      }
+      c.stroke();
+    }
+  }
+  function drawPaper(c, w, h, t, e, fd) {
+    var n = 40, bw = w / n;
+    c.fillStyle = 'rgba(26,22,18,0.1)';
+    for (var i = 0; i < n; i++) {
+      var v = fd ? fd[Math.min(fd.length - 1, 1 + Math.floor(i * 0.6))] / 255 : 0;
+      if (v < 0.02) v = 0.04 + 0.03 * Math.sin(t * 0.002 + i * 0.7);
+      var bh = Math.pow(v, 1.4) * h * 0.55;
+      c.fillRect(i * bw + bw * 0.12, h - bh, bw * 0.76, bh);
+    }
+  }
+  var SCENES = [
+    { g1: '#8db1a9', g2: '#668b85', ink: '#121718', draw: drawCeladon },
+    { g1: '#f5a368', g2: '#cf4a6b', ink: '#3b0d1c', draw: drawDusk },
+    { g1: '#102a47', g2: '#1d4f73', ink: '#d6f0ff', draw: drawNight },
+    { g1: '#e9dec4', g2: '#d2c29d', ink: '#1a1612', draw: drawPaper }
+  ];
+  var sceneIdx = 0;
+  function setScene(i) {
+    sceneIdx = i; var s = SCENES[i];
+    glass.style.setProperty('--g1', s.g1); glass.style.setProperty('--g2', s.g2); glass.style.setProperty('--ink', s.ink);
+  }
+
+  /* ---------- lyrics pages ---------- */
+  var pages = [], pageIdx = 0, curPage = null, curLines = [], shown = 0;
+  function parse(txt) {
+    var out = [];
+    txt.replace(/\r/g, '').split(/\n\s*\n/).forEach(function (b) {
+      var ls = b.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+      for (var i = 0; i < ls.length; i += 4) out.push(ls.slice(i, i + 4));
+    });
+    return out.length ? out : [['…']];
+  }
+  function fit(p) {
+    var W = textEl.clientWidth, H = textEl.clientHeight;
+    if (!W || !H) return;
+    var ls = Array.prototype.slice.call(p.children);
+    ls.forEach(function (l) { l.style.fontSize = '100px'; });
+    var sizes = ls.map(function (l) { var w = l.offsetWidth || 1; return Math.min(100 * W / w, H * 0.34); });
+    var total = sizes.reduce(function (a, s, i) { return a + s * (ls[i].classList.contains('cjk') ? 1 : 0.95); }, 0);
+    var k = total > H ? H / total : 1;
+    ls.forEach(function (l, i) { l.style.fontSize = (sizes[i] * k).toFixed(1) + 'px'; });
+  }
+  function fitAll() { Array.prototype.forEach.call(textEl.querySelectorAll('.page:not(.out)'), fit); }
+  function renderPage(i, instant) {
+    pageIdx = i;
+    if (curPage) { var old = curPage; old.classList.add('out'); setTimeout(function () { old.remove(); }, 400); }
+    var p = document.createElement('div'); p.className = 'page';
+    curLines = pages[i].map(function (t) {
+      var s = document.createElement('span'); s.className = 'line' + (CJK.test(t) ? ' cjk' : ''); s.textContent = t; p.appendChild(s); return s;
+    });
+    textEl.appendChild(p); curPage = p; shown = 0; fit(p);
+    void p.offsetWidth;
+    if (instant) { curLines.forEach(function (l) { l.classList.add('on'); }); shown = curLines.length; }
+    updateClock(0, 0);
+  }
+  var lastClock = '';
+  function updateClock(bar, beat) {
+    var s = '第 ' + (pageIdx + 1) + ' / ' + pages.length + ' 页 · 小节 ' + String(bar + 1).padStart(2, '0') + ' · 拍 ' + (beat + 1);
+    if (s !== lastClock) { clockEl.textContent = s; lastClock = s; }
+  }
+
+  /* ---------- audio ---------- */
+  var S = { ctx: null, playing: false, started: false, bpm: 92, bpp: 8, mode: 'demo', t0: 0, b0: 0, nextStep: 0, analyser: null, fd: null, master: null, noise: null, timer: null, src: null, buffer: null, fileName: '', e: 0, peak: 0.1 };
+  var CHORDS = [[220, 261.63, 329.63], [174.61, 220, 261.63], [261.63, 329.63, 392], [196, 246.94, 293.66]];
+  var ROOTS = [55, 43.65, 65.41, 49];
+
+  function ensureCtx() {
+    if (S.ctx) return S.ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var ctx = new AC(); S.ctx = ctx;
+    S.master = ctx.createGain(); S.master.gain.value = 0.8;
+    var comp = ctx.createDynamicsCompressor();
+    S.analyser = ctx.createAnalyser(); S.analyser.fftSize = 1024; S.analyser.smoothingTimeConstant = 0.6;
+    S.fd = new Uint8Array(S.analyser.frequencyBinCount);
+    S.master.connect(comp); comp.connect(S.analyser); S.analyser.connect(ctx.destination);
+    var nb = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate), d = nb.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    S.noise = nb;
+    return ctx;
+  }
+  function beatNow() { return S.ctx ? Math.max(0, S.b0 + (S.ctx.currentTime - S.t0) * S.bpm / 60) : 0; }
+  function env(g, t, peak, dur) {
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  }
+  function kick(t, v) {
+    var o = S.ctx.createOscillator(), g = S.ctx.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    env(g, t, 0.95 * v, 0.38); o.connect(g); g.connect(S.master); o.start(t); o.stop(t + 0.4);
+  }
+  function noiseHit(t, type, freq, q, peak, dur) {
+    var n = S.ctx.createBufferSource(), f = S.ctx.createBiquadFilter(), g = S.ctx.createGain();
+    n.buffer = S.noise; f.type = type; f.frequency.value = freq; f.Q.value = q;
+    env(g, t, peak, dur); n.connect(f); f.connect(g); g.connect(S.master); n.start(t, Math.random() * 0.5); n.stop(t + dur + 0.02);
+  }
+  function bassNote(t, f, beats) {
+    var o = S.ctx.createOscillator(), lp = S.ctx.createBiquadFilter(), g = S.ctx.createGain();
+    o.type = 'triangle'; o.frequency.value = f; lp.type = 'lowpass'; lp.frequency.value = 420;
+    var d = beats * 60 / S.bpm; env(g, t, 0.42, d); o.connect(lp); lp.connect(g); g.connect(S.master); o.start(t); o.stop(t + d + 0.05);
+  }
+  function pad(t, freqs, len) {
+    freqs.forEach(function (f) {
+      var o = S.ctx.createOscillator(), g = S.ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.04, t + 0.35); g.gain.linearRampToValueAtTime(0.0001, t + len + 0.5);
+      o.connect(g); g.connect(S.master); o.start(t); o.stop(t + len + 0.6);
+    });
+  }
+  function playStep(s, t) {
+    var pos = s % 8, bar = Math.floor(s / 8) % 4;
+    if (pos === 0 || pos === 4) kick(t, pos === 0 ? 1 : 0.8);
+    if (pos === 6) kick(t, 0.45);
+    if (pos === 2 || pos === 6) noiseHit(t, 'bandpass', 1800, 0.8, 0.32, 0.14);
+    noiseHit(t, 'highpass', 7000, 0.7, pos % 2 ? 0.14 : 0.07, 0.04);
+    if (pos === 0 || pos === 3 || pos === 6) bassNote(t, ROOTS[bar], pos === 0 ? 1.2 : 0.7);
+    if (pos === 0) pad(t, CHORDS[bar], 4 * 60 / S.bpm);
+  }
+  function stepTime(s) { return S.t0 + (s / 2 - S.b0) * 60 / S.bpm; }
+  function sched() {
+    if (!S.ctx) return;
+    while (stepTime(S.nextStep) < S.ctx.currentTime + 0.12) {
+      var t = stepTime(S.nextStep);
+      if (t >= S.ctx.currentTime - 0.02) playStep(S.nextStep, t);
+      S.nextStep++;
+    }
+  }
+  function startScheduler() { stopScheduler(); S.timer = setInterval(sched, 25); sched(); }
+  function stopScheduler() { if (S.timer) { clearInterval(S.timer); S.timer = null; } }
+  function stopSource() { if (S.src) { try { S.src.onended = null; S.src.stop(); } catch (e) {} S.src = null; } }
+  function startFile() {
+    var src = S.ctx.createBufferSource(); src.buffer = S.buffer; src.connect(S.master);
+    src.onended = function () { if (S.mode === 'file' && S.playing) { S.playing = false; S.started = false; S.ctx.suspend(); renderPage(0, true); ui('播放结束，点击播放可以重新开始'); } };
+    src.start(S.t0); S.src = src;
+  }
+
+  function ui(msg) {
+    playBtn.setAttribute('aria-pressed', S.playing ? 'true' : 'false');
+    playBtn.setAttribute('aria-label', S.playing ? '暂停' : '播放');
+    if (msg) { statusEl.textContent = msg; return; }
+    if (S.playing) statusEl.textContent = (S.mode === 'demo' ? '内置节拍' : S.fileName) + ' · ' + S.bpm + ' BPM';
+    else statusEl.textContent = S.started ? '已暂停' : '点击播放，歌词会跟着节拍出现';
+  }
+  async function play() {
+    var ctx = ensureCtx();
+    try { await ctx.resume(); } catch (e) {}
+    if (ctx.state !== 'running') { ui('浏览器暂时不允许播放声音，请再点一次播放'); return; }
+    if (!S.started) {
+      S.started = true; S.t0 = ctx.currentTime + 0.05; S.b0 = 0; S.nextStep = 0; S.peak = 0.1;
+      renderPage(0, false);
+      if (S.mode === 'file') startFile();
+    }
+    S.playing = true;
+    if (S.mode === 'demo') startScheduler();
+    ui();
+  }
+  function pause() {
+    S.playing = false; stopScheduler();
+    if (S.ctx) S.ctx.suspend();
+    ui();
+  }
+  playBtn.addEventListener('click', function () { if (S.playing) pause(); else play(); });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.code !== 'Space') return;
+    var tag = (ev.target && ev.target.tagName) || '';
+    if (tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT' || tag === 'BUTTON') return;
+    ev.preventDefault(); if (S.playing) pause(); else play();
+  });
+
+  /* ---------- controls ---------- */
+  var bpmIn = $('#bpm'), bpmVal = $('#bpmVal'), bppSel = $('#bpp'), ta = $('#lyrics'), fileIn = $('#file');
+  bpmIn.addEventListener('input', function () {
+    var v = +bpmIn.value;
+    if (S.ctx && S.started) { S.b0 = beatNow(); S.t0 = S.ctx.currentTime; }
+    S.bpm = v; bpmVal.textContent = v + ' BPM';
+    bppSel.options[0].textContent = '4 拍（约 ' + (240 / v).toFixed(1) + ' 秒）';
+    bppSel.options[1].textContent = '8 拍（约 ' + Math.round(480 / v) + ' 秒）';
+    if (S.playing) ui();
+  });
+  bppSel.addEventListener('change', function () { S.bpp = +bppSel.value; });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="scene"]'), function (r) {
+    r.addEventListener('change', function () { if (r.checked) setScene(+r.value); });
+  });
+  ta.value = DEFAULT_LYRICS;
+  ta.addEventListener('input', function () {
+    pages = parse(ta.value);
+    renderPage(Math.min(pageIdx, pages.length - 1), !S.playing);
+  });
+  fileIn.addEventListener('click', function () { try { ensureCtx(); } catch (e) {} });
+  fileIn.addEventListener('change', async function () {
+    var f = fileIn.files && fileIn.files[0]; if (!f) return;
+    try {
+      var ctx = ensureCtx();
+      var buf = await ctx.decodeAudioData(await f.arrayBuffer());
+      stopSource(); stopScheduler();
+      S.buffer = buf; S.mode = 'file'; S.fileName = f.name; S.started = false; S.playing = false;
+      await play();
+    } catch (err) { ui('这个音频文件无法解码，请换成 MP3、WAV 或 M4A'); }
+    fileIn.value = '';
+  });
+  $('#useDemo').addEventListener('click', function () {
+    stopSource(); S.mode = 'demo'; S.started = false; S.playing = false; stopScheduler(); play();
+  });
+
+  /* ---------- render loop ---------- */
+  function resizeCanvas() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), w = glass.clientWidth, h = glass.clientHeight;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  }
+  function frame(now) {
+    var b = 0, target = 0;
+    if (S.ctx && S.playing) {
+      b = beatNow();
+      var bar = Math.floor(b / S.bpp), pi = bar % pages.length;
+      if (pi !== pageIdx || !curPage) renderPage(pi, false);
+      var inb = b - bar * S.bpp, step = Math.max(1, Math.floor(S.bpp / 4));
+      var want = Math.min(curLines.length, Math.floor(inb / step) + 1);
+      if (want > shown) { for (var k = shown; k < want; k++) curLines[k].classList.add('on'); shown = want; }
+      updateClock(bar, Math.floor(b) % 4);
+      S.analyser.getByteFrequencyData(S.fd);
+      if (S.mode === 'demo') {
+        var ph = b % 1, bi = Math.floor(b) % 4;
+        target = (bi % 2 === 0 ? 1 : 0.4) * Math.exp(-ph * 5);
+      } else {
+        var sum = 0; for (var i = 1; i <= 6; i++) sum += S.fd[i];
+        var low = sum / 6 / 255; S.peak = Math.max(S.peak * 0.998, low, 0.05);
+        target = Math.pow(low / S.peak, 3);
+      }
+    }
+    S.e = Math.max(target, S.e * 0.9);
+    glass.style.setProperty('--e', reduce ? '0' : S.e.toFixed(3));
+    var w = cv.width, h = cv.height;
+    c2.clearRect(0, 0, w, h);
+    c2.save();
+    SCENES[sceneIdx].draw(c2, w, h, now, S.e, S.playing ? S.fd : null);
+    c2.restore();
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- boot ---------- */
+  pages = parse(DEFAULT_LYRICS);
+  setScene(0);
+  resizeCanvas();
+  renderPage(0, true);
+  if (window.ResizeObserver) new ResizeObserver(function () { resizeCanvas(); fitAll(); }).observe(glass);
+  else window.addEventListener('resize', function () { resizeCanvas(); fitAll(); });
+  if (document.fonts) {
+    document.fonts.ready.then(fitAll);
+    document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', fitAll);
+  }
+  ui();
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,116 @@
+✖ T01–T05: theme selection preserves the current desktop and survives restart (2421.669125ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2472.0685
+
+✖ failing tests:
+
+test at acceptance/transparent-speaker.test.mjs:15:1
+✖ T01–T05: theme selection preserves the current desktop and survives restart (2421.669125ms)
+  Error: Command failed: xcrun swiftc native/ImmersiveCore.swift native/DesktopCommunityLyricsCore.swift native/DesktopView.swift acceptance/transparent-speaker-driver.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-theme-bdd-WKeA9O/acceptance
+  acceptance/transparent-speaker-driver.swift:10:53: error: argument passed to call that takes no arguments
+   8 |         let action = CommandLine.arguments[2]
+   9 |         if action == "write" {
+  10 |             let model = DesktopModel(themeDefaults: defaults)
+     |                                                     `- error: argument passed to call that takes no arguments
+  11 |             model.selectTheme("glass")
+  12 |             model.selectGlassScene("paper")
+  
+  acceptance/transparent-speaker-driver.swift:17:53: error: argument passed to call that takes no arguments
+  15 |         }
+  16 |         if action == "read" {
+  17 |             let model = DesktopModel(themeDefaults: defaults)
+     |                                                     `- error: argument passed to call that takes no arguments
+  18 |             print("\(model.theme.rawValue)/\(model.glassScene.rawValue)")
+  19 |             return
+  
+  acceptance/transparent-speaker-driver.swift:25:49: error: argument passed to call that takes no arguments
+  23 |         defer { defaults.removePersistentDomain(forName: suite) }
+  24 |         var results: [String: Bool] = [:]
+  25 |         let model = DesktopModel(themeDefaults: defaults)
+     |                                                 `- error: argument passed to call that takes no arguments
+  26 |         results["T01 default classic/celadon"] = model.theme.rawValue == "classic" && model.glassScene.rawValue == "celadon"
+  27 |         model.selectTheme("glass")
+  
+  acceptance/transparent-speaker-driver.swift:29:67: error: argument passed to call that takes no arguments
+  27 |         model.selectTheme("glass")
+  28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"
+  29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"
+     |                                                                   `- error: argument passed to call that takes no arguments
+  30 |         model.selectTheme(nil)
+  31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"
+  
+  acceptance/transparent-speaker-driver.swift:29:77: error: value of type 'DesktopModel' has no member 'theme'
+  27 |         model.selectTheme("glass")
+  28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"
+  29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"
+     |                                                                             `- error: value of type 'DesktopModel' has no member 'theme'
+  30 |         model.selectTheme(nil)
+  31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"
+  
+  acceptance/transparent-speaker-driver.swift:30:27: error: 'nil' requires a contextual type
+  28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"
+  29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"
+  30 |         model.selectTheme(nil)
+     |                           `- error: 'nil' requires a contextual type
+  31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"
+  32 |         model.selectTheme("classic")
+  
+  acceptance/transparent-speaker-driver.swift:33:82: error: argument passed to call that takes no arguments
+  31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"
+  32 |         model.selectTheme("classic")
+  33 |         results["T03 explicit classic remembered"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "classic"
+     |                                                                                  `- error: argument passed to call that takes no arguments
+  34 |         for raw in ["", "GLASS", "unknown", " glass "] {
+  35 |             model.selectTheme("glass")
+  
+  acceptance/transparent-speaker-driver.swift:33:92: error: value of type 'DesktopModel' has no member 'theme'
+  31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"
+  32 |         model.selectTheme("classic")
+  33 |         results["T03 explicit classic remembered"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "classic"
+     |                                                                                            `- error: value of type 'DesktopModel' has no member 'theme'
+  34 |         for raw in ["", "GLASS", "unknown", " glass "] {
+  35 |             model.selectTheme("glass")
+  
+  acceptance/transparent-speaker-driver.swift:41:53: error: argument passed to call that takes no arguments
+  39 |         defaults.set("retired-theme", forKey: "desktopTheme")
+  40 |         defaults.set(42, forKey: "desktopGlassScene")
+  41 |         let recovered = DesktopModel(themeDefaults: defaults)
+     |                                                     `- error: argument passed to call that takes no arguments
+  42 |         results["T03 corrupt preferences recover"] = recovered.theme.rawValue == "classic" && recovered.glassScene.rawValue == "celadon"
+  43 |         for scene in ["celadon", "dusk", "night", "paper"] {
+  
+  acceptance/transparent-speaker-driver.swift:48:36: error: 'nil' requires a contextual type
+  46 |             model.selectTheme("classic")
+  47 |             model.selectTheme("glass")
+  48 |             model.selectGlassScene(nil)
+     |                                    `- error: 'nil' requires a contextual type
+  49 |             let reopened = DesktopModel(themeDefaults: defaults)
+  50 |             results["T04 scene \(scene) survives round trip"] = model.glassScene.rawValue == scene && reopened.glassScene.rawValue == scene && defaults.string(forKey: "desktopGlassScene") == scene
+  
+  acceptance/transparent-speaker-driver.swift:49:56: error: argument passed to call that takes no arguments
+  47 |             model.selectTheme("glass")
+  48 |             model.selectGlassScene(nil)
+  49 |             let reopened = DesktopModel(themeDefaults: defaults)
+     |                                                        `- error: argument passed to call that takes no arguments
+  50 |             results["T04 scene \(scene) survives round trip"] = model.glassScene.rawValue == scene && reopened.glassScene.rawValue == scene && defaults.string(forKey: "desktopGlassScene") == scene
+  51 |         }
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at ChildProcess.exithandler (node:child_process:417:12)
+      at ChildProcess.emit (node:events:509:28)
+      at maybeClose (node:internal/child_process:1141:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:306:5) {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: 'xcrun swiftc native/ImmersiveCore.swift native/DesktopCommunityLyricsCore.swift native/DesktopView.swift acceptance/transparent-speaker-driver.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-theme-bdd-WKeA9O/acceptance',
+    stdout: '',
+    stderr: 'acceptance/transparent-speaker-driver.swift:10:53: error: argument passed to call that takes no arguments\n 8 |         let action = CommandLine.arguments[2]\n 9 |         if action == "write" {\n10 |             let model = DesktopModel(themeDefaults: defaults)\n   |                                                     `- error: argument passed to call that takes no arguments\n11 |             model.selectTheme("glass")\n12 |             model.selectGlassScene("paper")\n\nacceptance/transparent-speaker-driver.swift:17:53: error: argument passed to call that takes no arguments\n15 |         }\n16 |         if action == "read" {\n17 |             let model = DesktopModel(themeDefaults: defaults)\n   |                                                     `- error: argument passed to call that takes no arguments\n18 |             print("\\(model.theme.rawValue)/\\(model.glassScene.rawValue)")\n19 |             return\n\nacceptance/transparent-speaker-driver.swift:25:49: error: argument passed to call that takes no arguments\n23 |         defer { defaults.removePersistentDomain(forName: suite) }\n24 |         var results: [String: Bool] = [:]\n25 |         let model = DesktopModel(themeDefaults: defaults)\n   |                                                 `- error: argument passed to call that takes no arguments\n26 |         results["T01 default classic/celadon"] = model.theme.rawValue == "classic" && model.glassScene.rawValue == "celadon"\n27 |         model.selectTheme("glass")\n\nacceptance/transparent-speaker-driver.swift:29:67: error: argument passed to call that takes no arguments\n27 |         model.selectTheme("glass")\n28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"\n29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"\n   |                                                                   `- error: argument passed to call that takes no arguments\n30 |         model.selectTheme(nil)\n31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"\n\nacceptance/transparent-speaker-driver.swift:29:77: error: value of type \'DesktopModel\' has no member \'theme\'\n27 |         model.selectTheme("glass")\n28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"\n29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"\n   |                                                                             `- error: value of type \'DesktopModel\' has no member \'theme\'\n30 |         model.selectTheme(nil)\n31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"\n\nacceptance/transparent-speaker-driver.swift:30:27: error: \'nil\' requires a contextual type\n28 |         results["T02 select glass"] = model.theme.rawValue == "glass" && defaults.string(forKey: "desktopTheme") == "glass"\n29 |         results["T02 reopen glass"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "glass"\n30 |         model.selectTheme(nil)\n   |                           `- error: \'nil\' requires a contextual type\n31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"\n32 |         model.selectTheme("classic")\n\nacceptance/transparent-speaker-driver.swift:33:82: error: argument passed to call that takes no arguments\n31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"\n32 |         model.selectTheme("classic")\n33 |         results["T03 explicit classic remembered"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "classic"\n   |                                                                                  `- error: argument passed to call that takes no arguments\n34 |         for raw in ["", "GLASS", "unknown", " glass "] {\n35 |             model.selectTheme("glass")\n\nacceptance/transparent-speaker-driver.swift:33:92: error: value of type \'DesktopModel\' has no member \'theme\'\n31 |         results["T03 omitted selection retains glass"] = model.theme.rawValue == "glass"\n32 |         model.selectTheme("classic")\n33 |         results["T03 explicit classic remembered"] = DesktopModel(themeDefaults: defaults).theme.rawValue == "classic"\n   |                                                                                            `- error: value of type \'DesktopModel\' has no member \'theme\'\n34 |         for raw in ["", "GLASS", "unknown", " glass "] {\n35 |             model.selectTheme("glass")\n\nacceptance/transparent-speaker-driver.swift:41:53: error: argument passed to call that takes no arguments\n39 |         defaults.set("retired-theme", forKey: "desktopTheme")\n40 |         defaults.set(42, forKey: "desktopGlassScene")\n41 |         let recovered = DesktopModel(themeDefaults: defaults)\n   |                                                     `- error: argument passed to call that takes no arguments\n42 |         results["T03 corrupt preferences recover"] = recovered.theme.rawValue == "classic" && recovered.glassScene.rawValue == "celadon"\n43 |         for scene in ["celadon", "dusk", "night", "paper"] {\n\nacceptance/transparent-speaker-driver.swift:48:36: error: \'nil\' requires a contextual type\n46 |             model.selectTheme("classic")\n47 |             model.selectTheme("glass")\n48 |             model.selectGlassScene(nil)\n   |                                    `- error: \'nil\' requires a contextual type\n49 |             let reopened = DesktopModel(themeDefaults: defaults)\n50 |             results["T04 scene \\(scene) survives round trip"] = model.glassScene.rawValue == scene && reopened.glassScene.rawValue == scene && defaults.string(forKey: "desktopGlassScene") == scene\n\nacceptance/transparent-speaker-driver.swift:49:56: error: argument passed to call that takes no arguments\n47 |             model.selectTheme("glass")\n48 |             model.selectGlassScene(nil)\n49 |             let reopened = DesktopModel(themeDefaults: defaults)\n   |                                                        `- error: argument passed to call that takes no arguments\n50 |             results["T04 scene \\(scene) survives round trip"] = model.glassScene.rawValue == scene && reopened.glassScene.rawValue == scene && defaults.string(forKey: "desktopGlassScene") == scene\n51 |         }\n'
+  }
