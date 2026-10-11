@@ -6,14 +6,17 @@
   "minimumMacOS": "14.2",
   "signing": "ad-hoc, hardened runtime",
   "sources": {
-    "native/DesktopMain.swift": "da39b4201a970bc46dda0617ffd5cc3153939b7a6c4ac9eba9807b38c7846913",
-    "native/DesktopView.swift": "b0523b3b7caa32d731d69e4d5247c7187ac33f3a60f8d711511a95bd9c99510a",
-    "native/ImmersiveCore.swift": "c50d344b56051c6bd9aee67e42f1d5aad103bf53c589cc0fcd471fd1ba13e2b0",
+    "native/DesktopLyrics.swift": "563660fc0fcd28b61334ee7408e907ff211c9ecd60351a44991f45e06fb2dd52",
+    "native/DesktopMain.swift": "1c391084dc543936daa99ebfddba2fc457db5ed4c5b3e0b476838cb7dde4b564",
+    "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
+    "native/DesktopSession.swift": "74e6f92400d6ccd50f8c9861ea35ab75aa934cf611eeb66eb6f200c12323016d",
+    "native/DesktopView.swift": "8c576bdb0ba4a0e140f565c624fae1f265086bf85dd06c834531e0e6e1d7e46b",
+    "native/ImmersiveCore.swift": "66920a1b49455076630c93eeda1c33de53ef2915ad8edbd7a2be665f948f73f9",
     "scripts/build-desktop.py": "6bd4504790f38ab8d668f7ca2d5eb51f90b5c30f19e1d75cec963d4ca9f770d4"
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "0c457328a786d01ed98b3717d59fbc994588297d564b15937087aa0b5706dc10",
+    "Contents/MacOS/Likeit Desktop": "8a18f371d6de5c2f65581584c43755c2fe912462f1954fe84bf2ca3f4ce3e4ad",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter": "765d305bc480b5a08bffdc319856251efc27b0a536737a683bb181598b81113a",

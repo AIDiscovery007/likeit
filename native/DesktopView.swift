@@ -6,7 +6,7 @@ final class DesktopModel: ObservableObject {
     @Published var lyric = ""
     @Published var previousLine = ""
     @Published var nextLine = ""
-    @Published var status = "静态桌面 · 歌词与实时音频尚未接入"
+    @Published var status = "等待网易云歌曲信息"
     @Published var audioStatus = ""
     @Published var progress = 0.0
     @Published var low = 0.0

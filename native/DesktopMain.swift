@@ -14,6 +14,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var window: NSWindow?
     private var previousApp = NSWorkspace.shared.frontmostApplication
     private let model = DesktopModel()
+    private var session: DesktopSession?
     private var mode = "system"
     private var receivedOpen = false
     private var motionObserver: NSObjectProtocol?
@@ -37,6 +38,8 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         NSApp.mainMenu = menu
         motionObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.updateMotion() }
         showWindow()
+        session = DesktopSession(model: model)
+        session?.start()
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
@@ -79,6 +82,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool { NSApp.terminate(nil); return false }
     func applicationWillTerminate(_ notification: Notification) {
         let restore = NSApp.isActive
+        session?.stop(); session = nil
         if let motionObserver { NSWorkspace.shared.notificationCenter.removeObserver(motionObserver) }
         window?.orderOut(nil)
         window?.close()
