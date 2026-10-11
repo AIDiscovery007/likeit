@@ -1,6 +1,47 @@
 import SwiftUI
 
+enum DesktopTheme: String, CaseIterable {
+    case classic, glass
+    var title: String { self == .classic ? "经典音响" : "透明音响" }
+}
+
+enum DesktopGlassScene: String, CaseIterable {
+    case celadon, dusk, night, paper
+    var title: String {
+        switch self {
+        case .celadon: return "青瓷"
+        case .dusk: return "落日"
+        case .night: return "夜航"
+        case .paper: return "纸页"
+        }
+    }
+}
+
 final class DesktopModel: ObservableObject {
+    @Published private(set) var theme: DesktopTheme
+    @Published private(set) var glassScene: DesktopGlassScene
+    private let themeDefaults: UserDefaults
+
+    init(themeDefaults: UserDefaults = .standard) {
+        self.themeDefaults = themeDefaults
+        theme = DesktopTheme(rawValue: themeDefaults.string(forKey: "desktopTheme") ?? "") ?? .classic
+        glassScene = DesktopGlassScene(rawValue: themeDefaults.string(forKey: "desktopGlassScene") ?? "") ?? .celadon
+    }
+
+    func selectTheme(_ rawValue: String?) {
+        guard let rawValue else { return }
+        let selection = DesktopTheme(rawValue: rawValue) ?? .classic
+        if theme != selection { theme = selection }
+        themeDefaults.set(selection.rawValue, forKey: "desktopTheme")
+    }
+
+    func selectGlassScene(_ rawValue: String?) {
+        guard let rawValue else { return }
+        let selection = DesktopGlassScene(rawValue: rawValue) ?? .celadon
+        if glassScene != selection { glassScene = selection }
+        themeDefaults.set(selection.rawValue, forKey: "desktopGlassScene")
+    }
+
     @Published var title = "Likeit"
     @Published var artist = "网易云音乐 · 沉浸桌面"
     @Published var lyric = ""
@@ -27,7 +68,7 @@ struct DesktopView: View {
         GeometryReader { geometry in
             let size = geometry.size
             ZStack {
-                LinearGradient(colors: [Color(red: 0.025, green: 0.035, blue: 0.055), Color(red: 0.065, green: 0.095, blue: 0.13), .black], startPoint: .topLeading, endPoint: .bottomTrailing)
+                LinearGradient(colors: [Color(red: model.theme == .glass ? 0.12 : 0.025, green: 0.035, blue: 0.055), Color(red: 0.065, green: 0.095, blue: 0.13), .black], startPoint: .topLeading, endPoint: .bottomTrailing)
                 HStack {
                     speaker(size: min(size.width * 0.34, size.height * 0.65))
                     Spacer(minLength: size.width * 0.18)
@@ -58,6 +99,9 @@ struct DesktopView: View {
                     HStack {
                         Text("LIKEIT / MUSIC ROOM").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(3).foregroundStyle(.white.opacity(0.55))
                         Spacer()
+                        Picker("音响主题", selection: Binding(get: { model.theme }, set: { model.selectTheme($0.rawValue) })) {
+                            ForEach(DesktopTheme.allCases, id: \.self) { Text($0.title).tag($0) }
+                        }.pickerStyle(.segmented).frame(width: 210).accessibilityLabel("音响主题")
                         Button(action: exit) { Text("退出 · Esc").font(.system(size: 14, weight: .medium)).padding(.horizontal, 20).padding(.vertical, 12) }
                             .buttonStyle(.plain).background(.white.opacity(0.12), in: Capsule()).overlay(Capsule().stroke(.white.opacity(0.2))).accessibilityLabel("退出沉浸桌面")
                     }

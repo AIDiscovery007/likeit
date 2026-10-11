@@ -60,8 +60,12 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func application(_ application: NSApplication, open urls: [URL]) {
         guard let url = urls.last, url.scheme == "likeit-desktop", url.host == "open", let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-        lyricsSource = components.queryItems?.first(where: { $0.name == "lyricsSource" })?.value == "community" ? "community" : "netease"
-        session?.setLyricsSource(lyricsSource)
+        model.selectTheme(components.queryItems?.first(where: { $0.name == "theme" })?.value)
+        let source = components.queryItems?.first(where: { $0.name == "lyricsSource" })?.value == "community" ? "community" : "netease"
+        if source != lyricsSource {
+            lyricsSource = source
+            session?.setLyricsSource(source)
+        }
         mode = components.queryItems?.first(where: { $0.name == "mode" })?.value ?? "system"
         if let bundle = components.queryItems?.first(where: { $0.name == "returnBundle" })?.value, bundle != "com.likeit.desktop",
            let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundle).first, !app.isTerminated {

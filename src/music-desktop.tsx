@@ -16,13 +16,14 @@ import { execFile } from "node:child_process";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
-async function openDesktop() {
+async function openDesktop(theme?: "classic" | "glass") {
   try {
     const previous = await getFrontmostApplication();
     const preferences = getPreferenceValues<Preferences>();
     const mode = preferences.desktopMotionMode ?? "system";
     const url = new URL("likeit-desktop://open");
     url.searchParams.set("mode", mode);
+    if (theme) url.searchParams.set("theme", theme);
     url.searchParams.set("lyricsSource", preferences.desktopLyricsSource === "community" ? "community" : "netease");
     if (previous.bundleId) url.searchParams.set("returnBundle", previous.bundleId);
     await closeMainWindow();
@@ -49,7 +50,9 @@ export default function Command() {
         icon={Icon.Music}
         actions={
           <ActionPanel>
-            <Action title="打开沉浸模式" onAction={openDesktop} />
+            <Action title="打开沉浸模式" onAction={() => openDesktop()} />
+            <Action title="打开经典音响" onAction={() => openDesktop("classic")} />
+            <Action title="打开透明音响" onAction={() => openDesktop("glass")} />
           </ActionPanel>
         }
       />
