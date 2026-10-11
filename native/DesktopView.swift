@@ -17,7 +17,16 @@ enum DesktopGlassScene: String, CaseIterable {
     }
 }
 
+struct DesktopLyricCue: Hashable {
+    let trackKey: String
+    let index: Int
+    let start: Double
+}
+
 final class DesktopModel: ObservableObject {
+    @Published var lyricCue: DesktopLyricCue?
+    @Published var lyricPosition: Double?
+    @Published var motionEnabled = false
     @Published private(set) var theme: DesktopTheme
     @Published private(set) var glassScene: DesktopGlassScene
     private let themeDefaults: UserDefaults
@@ -63,6 +72,7 @@ struct DesktopView: View {
     @ObservedObject var model: DesktopModel
     let retryAudio: () -> Void
     let exit: () -> Void
+    @State private var lyricArrival: (cue: DesktopLyricCue, position: Double)?
 
     var body: some View {
         if model.theme == .glass {
@@ -181,6 +191,16 @@ struct DesktopView: View {
                 }.padding(margin)
             }.foregroundStyle(palette.ink)
                 .preferredColorScheme(palette == .night ? .dark : .light)
+                .onAppear { lyricArrival = nil }
+                .onDisappear { lyricArrival = nil }
+                .onChange(of: model.lyricCue) { _, cue in
+                    lyricArrival = model.motionEnabled ? cue.flatMap { cue in model.lyricPosition.map { (cue, $0) } } : nil
+                }
+                .onChange(of: model.lyricPosition) { old, position in
+                    guard let position else { lyricArrival = nil; return }
+                    if let old, position < old, lyricArrival?.position != position { lyricArrival = nil }
+                }
+                .onChange(of: model.motionEnabled) { _, _ in lyricArrival = nil }
         }.ignoresSafeArea()
     }
 
@@ -208,6 +228,7 @@ struct DesktopView: View {
     private func glassLyrics(size: CGSize) -> some View {
         let ink = model.glassScene.ink
         let height = size.height * 0.68
+        let elapsed = lyricEntranceElapsed
         return Group {
             if let plain = model.plainLyrics {
                 ScrollView {
@@ -220,15 +241,21 @@ struct DesktopView: View {
                     Text(model.previousLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
                         .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
                         .frame(height: height * 0.12, alignment: .bottomLeading)
-                    (model.timedLyric.map { Text(glassHighlightedText($0, ink: ink)) } ?? Text(model.lyric.isEmpty ? model.title : model.lyric))
-                        .font(.system(size: size.width * 0.081, weight: .black, design: .default))
-                        .lineLimit(4).minimumScaleFactor(0.22).tracking(-0.5)
-                        .frame(maxWidth: .infinity, alignment: .leading).frame(height: height * 0.38)
-                    if !model.translation.isEmpty {
-                        Text(model.translation).font(.system(size: max(16, size.width * 0.025), weight: .medium))
-                            .foregroundStyle(ink.opacity(0.85)).lineLimit(3).minimumScaleFactor(0.55)
-                            .frame(maxHeight: height * 0.14)
-                    }
+                    VStack(alignment: .leading, spacing: height * 0.02) {
+                        (model.timedLyric.map { Text(glassHighlightedText($0, ink: ink)) } ?? Text(model.lyric.isEmpty ? model.title : model.lyric))
+                            .font(.system(size: size.width * 0.081, weight: .black, design: .default))
+                            .lineLimit(4).minimumScaleFactor(0.22).tracking(-0.5)
+                            .frame(maxWidth: .infinity, alignment: .leading).frame(height: height * 0.38)
+                        if !model.translation.isEmpty {
+                            Text(model.translation).font(.system(size: max(16, size.width * 0.025), weight: .medium))
+                                .foregroundStyle(ink.opacity(0.85)).lineLimit(3).minimumScaleFactor(0.55)
+                                .frame(maxHeight: height * 0.14)
+                        }
+                    }.opacity(min(1, elapsed / 0.22))
+                        .offset(x: -size.width * 0.48 * 0.025 * pow(1 - min(1, elapsed / 0.5), 3))
+                        .animation(model.motionEnabled && lyricArrival != nil ? .linear(duration: 0.1) : nil, value: model.lyricPosition)
+                        .transaction { if !model.motionEnabled { $0.disablesAnimations = true } }
+                        .id(model.lyricCue)
                     Text(model.nextLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
                         .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
                         .frame(height: height * 0.12, alignment: .topLeading)
@@ -236,6 +263,12 @@ struct DesktopView: View {
             }
         }.foregroundStyle(ink).multilineTextAlignment(.leading)
             .position(x: size.width * 0.46, y: size.height * 0.47)
+    }
+
+    private var lyricEntranceElapsed: Double {
+        guard model.motionEnabled, let arrival = lyricArrival, arrival.cue == model.lyricCue,
+              let position = model.lyricPosition, position >= arrival.position else { return 1 }
+        return position - arrival.position
     }
 
     private func glassScenery(size: CGSize) -> some View {

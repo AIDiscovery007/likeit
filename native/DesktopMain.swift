@@ -18,7 +18,9 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private let audio = DesktopAudio()
     private var snapshot: DesktopSnapshot?
     private var terminating = false
-    private var allowAudio = false
+    private var allowAudio = false {
+        didSet { model.motionEnabled = allowAudio }
+    }
     private var mode = "off"
     private var lyricsSource = "netease"
     private var motionObserver: NSObjectProtocol?
