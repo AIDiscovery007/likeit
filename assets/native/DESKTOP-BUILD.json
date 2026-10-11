@@ -12,8 +12,8 @@
   "signing": "ad-hoc, hardened runtime",
   "designatedRequirements": {
     "app": {
-      "arm64": "cdhash H\"7ac13e7cc153a663fb05fe9d967a381bebb21ff3\"",
-      "x86_64": "cdhash H\"2d257fbc625619ce0161a5eb1c8ce8ac6f217eae\""
+      "arm64": "cdhash H\"6e002e876bbb21061ef0f7ce4f8b4accd08b68b2\"",
+      "x86_64": "cdhash H\"4485ce953f447c5c3f807d7dce4b5a239be8563e\""
     },
     "framework": {
       "arm64": "cdhash H\"a7a5d506ef57bd15d5c22640f4f6fd05c54dd1cb\"",
@@ -22,21 +22,21 @@
   },
   "sources": {
     "native/DesktopAudio.swift": "462fcaa46f1ff463fdca24ebac79abb8e0f6b3ebd122115d7dcbe17c21c3260e",
-    "native/DesktopCommunityLyrics.swift": "3ec44cb1eaa116c6be22cb0d7f1089e0e3239a79d4ce25b79acd3866f96ab587",
-    "native/DesktopCommunityLyricsCore.swift": "6ccde797de73e7f0683740ce2d460bf3d6563ca527083cb56b67b10719158ea3",
-    "native/DesktopLyrics.swift": "29f6b4574a4b629ee13820bdedbfa62ed903ee3715e51bc3a01a276f8288a7e8",
+    "native/DesktopCommunityLyrics.swift": "9ed882358765d3aab9d6f9aa451ebaa6ec06949af626e4fb6bcb86101a40b767",
+    "native/DesktopCommunityLyricsCore.swift": "67a99a5e13421eb1412d27c257ab3f1286e41e97c3f167293d5ea2b6c209ea66",
+    "native/DesktopLyrics.swift": "44383e1ebaf36abd37cd2e054c25816af33016009b510c046941a7d610cd4436",
     "native/DesktopMain.swift": "ec8cd92b29c99631aee827abd8e57276d70a4ec78e88488727758c31a3dad2b9",
     "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
     "native/DesktopOpenAPILyrics.swift": "f860cfc40e9852a5532e09419faf7828054f72dc80deeecb8cd045fa1f8e2044",
-    "native/DesktopSession.swift": "3b3152d9352603b35cce3108950be33942040fbfaeb6b8e489785ff8f70c8909",
+    "native/DesktopSession.swift": "90c287d552b21a12f28750f316523ef7f40b4ed8a2d2cbb9dac79f21a16dffba",
     "native/DesktopView.swift": "0711ac3c82b01744ba948343d7d33a1946cc18b8beef97f54c67968e31109b80",
-    "native/ImmersiveCore.swift": "3241339575b4674f000e49d6ff77c83e940f15d787f3dbd139f0ddb458e64fd1",
+    "native/ImmersiveCore.swift": "1bb2fa564a9b99feb350def18503a5b2a3dc8a2ecb2d1900995ee77dd93dbd3c",
     "native/OpenAPILyricCore.swift": "fd41a47516ac1b59cce173e11ef9d0b3ad5f7a7dbdf6e8c54d4f06dfb9c7b845",
     "scripts/build-desktop.py": "29239519f9d062a32508b64cd2bbfd42eae609fe59617f42d539f3af6e0942bb"
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "1dea97a256288902226fab1a60ba1ee8a35c2de4cb400f4dd54240a4300ac0ff",
+    "Contents/MacOS/Likeit Desktop": "25acf0762975b8c99d8442ef3718669fc62040e6552b38a576bfd5c794d07a95",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter": "18dccac5e74960c7bafd427b6329ec6480d471b910d788408655c4be8a037f22",

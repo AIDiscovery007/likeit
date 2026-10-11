@@ -3,7 +3,7 @@ import AppKit
 final class DesktopSession {
     let model: DesktopModel
     private var lyrics: DesktopLyrics?
-    private let communityLyrics = CommunityLyrics()
+    private let communityLyrics = CommunityLyrics(cacheDirectory: LyricDiskCache.defaultDirectory)
     private var lyricsSource: String
     private var communityDocument: CommunityLyricDocument?
     private var lyricGeneration = UUID()
@@ -62,7 +62,7 @@ final class DesktopSession {
                 self.render()
             }
         } else {
-            if lyrics == nil { lyrics = DesktopLyrics() }
+            if lyrics == nil { lyrics = DesktopLyrics(cacheDirectory: LyricDiskCache.defaultDirectory) }
             lyrics?.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in
                 guard let self, self.running, self.lyricGeneration == token, self.state.accept(lines, for: value.key) else { return }
                 self.lyricStatus = message
