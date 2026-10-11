@@ -216,7 +216,7 @@ struct DesktopView: View {
                 ScrollView {
                     Text(plain).font(.system(size: max(19, size.width * 0.028), weight: .semibold)).lineSpacing(10)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 8)
-                }.frame(width: size.width * 0.58, height: size.height * 0.77)
+                }.frame(width: size.width * 0.48, height: size.height * 0.77)
                     .accessibilityLabel("未同步歌词")
             } else {
                 VStack(alignment: .leading, spacing: size.height * 0.02) {
@@ -235,10 +235,10 @@ struct DesktopView: View {
                     Text(model.nextLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
                         .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
                         .frame(height: size.height * 0.12, alignment: .topLeading)
-                }.frame(width: size.width * 0.58, height: size.height * 0.82)
+                }.frame(width: size.width * 0.48, height: size.height * 0.82)
             }
         }.foregroundStyle(ink).multilineTextAlignment(.leading)
-            .position(x: size.width * 0.49, y: size.height * 0.49)
+            .position(x: size.width * 0.46, y: size.height * 0.49)
     }
 
     private func glassScenery(size: CGSize) -> some View {
