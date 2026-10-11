@@ -95,7 +95,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private func updateMotion() {
         guard !terminating else { return }
         let enabled = desktopMotionEnabled(mode: mode, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
-        let visible = NSApp.isActive && window?.occlusionState.contains(.visible) == true
+        let visible = window?.occlusionState.contains(.visible) == true
         session?.setVisible(visible)
         allowAudio = enabled && visible && snapshot?.playing == true && snapshot.map { ProcessInfo.processInfo.systemUptime - $0.sampledAt <= 5 } == true
         let reason = !enabled ? "桌面动效已关闭 · 不采集音频" : !visible ? "桌面不可见 · 采集已停止" : "等待网易云播放 · 保持静态"

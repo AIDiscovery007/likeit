@@ -12,8 +12,8 @@
   "signing": "ad-hoc, hardened runtime",
   "designatedRequirements": {
     "app": {
-      "arm64": "cdhash H\"37baff6b1341354e5d25861f8d71b34cdb32d17c\"",
-      "x86_64": "cdhash H\"aad3754122a845831b5b3cee8a4ad5fecf4b2671\""
+      "arm64": "cdhash H\"7ac13e7cc153a663fb05fe9d967a381bebb21ff3\"",
+      "x86_64": "cdhash H\"2d257fbc625619ce0161a5eb1c8ce8ac6f217eae\""
     },
     "framework": {
       "arm64": "cdhash H\"a7a5d506ef57bd15d5c22640f4f6fd05c54dd1cb\"",
@@ -25,7 +25,7 @@
     "native/DesktopCommunityLyrics.swift": "3ec44cb1eaa116c6be22cb0d7f1089e0e3239a79d4ce25b79acd3866f96ab587",
     "native/DesktopCommunityLyricsCore.swift": "6ccde797de73e7f0683740ce2d460bf3d6563ca527083cb56b67b10719158ea3",
     "native/DesktopLyrics.swift": "29f6b4574a4b629ee13820bdedbfa62ed903ee3715e51bc3a01a276f8288a7e8",
-    "native/DesktopMain.swift": "ea35c430ffbf38aadcf9adfd26febe175ae90794f995330fb8fb0aaeb58b9ee6",
+    "native/DesktopMain.swift": "ec8cd92b29c99631aee827abd8e57276d70a4ec78e88488727758c31a3dad2b9",
     "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
     "native/DesktopOpenAPILyrics.swift": "f860cfc40e9852a5532e09419faf7828054f72dc80deeecb8cd045fa1f8e2044",
     "native/DesktopSession.swift": "3b3152d9352603b35cce3108950be33942040fbfaeb6b8e489785ff8f70c8909",
@@ -36,7 +36,7 @@
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "5ba207bc7469151edf059267abf8181d89aafa274eb9b675228a9053f750f4e5",
+    "Contents/MacOS/Likeit Desktop": "1dea97a256288902226fab1a60ba1ee8a35c2de4cb400f4dd54240a4300ac0ff",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter": "18dccac5e74960c7bafd427b6329ec6480d471b910d788408655c4be8a037f22",
