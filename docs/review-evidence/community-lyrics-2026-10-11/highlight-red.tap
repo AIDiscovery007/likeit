@@ -1,0 +1,294 @@
+▶ R2: word highlighting uses original text positions
+  ✖ duplicate actual word waits (0.862166ms)
+  ✖ Unicode actual word advances (0.133875ms)
+  ✖ substring actual word waits (0.103833ms)
+  ✔ duplicate preserves text (0.279875ms)
+  ✔ Chinese preserves text (0.107292ms)
+  ✖ duplicate actual word advances (0.098458ms)
+  ✖ Chinese untimed prefix unchanged (0.082125ms)
+  ✖ Chinese actual word waits (0.106667ms)
+  ✖ Chinese actual word advances (0.101292ms)
+  ✔ substring preserves text (0.109167ms)
+  ✔ Unicode preserves text (0.054959ms)
+  ✖ Unicode untimed prefix unchanged (0.073583ms)
+  ✖ Unicode actual word waits (0.073ms)
+  ✖ duplicate untimed prefix unchanged (0.224959ms)
+  ✖ substring untimed prefix unchanged (0.072375ms)
+  ✖ substring actual word advances (0.061667ms)
+✖ R2: word highlighting uses original text positions (2516.772917ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 4
+ℹ fail 13
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2572.666208
+
+✖ failing tests:
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ duplicate actual word waits (0.862166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Unicode actual word advances (0.133875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ substring actual word waits (0.103833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ duplicate actual word advances (0.098458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Chinese untimed prefix unchanged (0.082125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Chinese actual word waits (0.106667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Chinese actual word advances (0.101292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Unicode untimed prefix unchanged (0.073583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ Unicode actual word waits (0.073ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ duplicate untimed prefix unchanged (0.224959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ substring untimed prefix unchanged (0.072375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/community-lyrics-highlight-regression.test.mjs:16:67
+✖ substring actual word advances (0.061667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/community-lyrics-highlight-regression.test.mjs:16:67)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

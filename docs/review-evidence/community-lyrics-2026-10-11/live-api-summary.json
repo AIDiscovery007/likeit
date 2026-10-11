@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-11",
+  "amll": {
+    "url": "https://api.amll.dev/v1/lyrics/get?ncmMusicId=442867526",
+    "http": 200,
+    "mainLines": 59,
+    "timedMainWords": 505,
+    "inlineTranslations": 58,
+    "scope": "production parser compatibility; no audio sync validation"
+  },
+  "automaticPipeline": {
+    "title": "Die For You",
+    "artist": "The Weeknd",
+    "album": "Starboy",
+    "duration": 260,
+    "trustedIDProvided": false,
+    "source": "lrclib",
+    "lines": 60,
+    "words": 0,
+    "scope": "real provider flow accepted strict metadata fallback"
+  },
+  "commercialLyricsSaved": false
+}
