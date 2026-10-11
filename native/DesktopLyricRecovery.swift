@@ -101,6 +101,10 @@ final class DesktopLyricRecovery {
             cancel()
             completion(DesktopLyricRecoveryResult(lines: result.lines, community: result.community, message: result.message + " · 本地缓存")); return
         }
+        if let cached = lyrics.cachedLyrics(metadata: metadata) {
+            finish(DesktopLyricRecoveryResult(lines: cached.lines, community: nil, message: neteaseSource + " · 精确匹配 · " + cached.message), persist: false)
+            return
+        }
         expires = ProcessInfo.processInfo.systemUptime + 20
         let token = generation
         let timeout = DispatchWorkItem { [weak self] in

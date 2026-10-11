@@ -54,13 +54,25 @@ final class DesktopLyrics {
     }
     func stop() { cancel(); cache.removeAll() }
 
+    // A cache-only lookup validates current configuration but never starts a provider.
+    func cachedLyrics(metadata: TrackMetadata) -> (lines: [LyricLine], message: String)? {
+        guard diskCache != nil,
+              let namespace = try? Self.namespace(for: OpenAPILyricConfiguration.load(from: configurationURL)) else { return nil }
+        return cachedLyrics(metadata: metadata, namespace: namespace)
+    }
+
+    private func cachedLyrics(metadata: TrackMetadata, namespace: String) -> (lines: [LyricLine], message: String)? {
+        guard let diskCache, let key = LyricDiskCache.key(metadata: metadata, namespace: namespace),
+              let cached = diskCache.load(CachedLyrics.self, key: key), Self.validCachedLines(cached.lines) else { return nil }
+        return (cached.lines, cached.message + " · 本地缓存")
+    }
+
     func load(key: String, metadata: TrackMetadata, completion: @escaping ([LyricLine], String) -> Void) {
         cancel()
         if diskCache != nil { configure() }
         let diskKey = cacheNamespace.flatMap { LyricDiskCache.key(metadata: metadata, namespace: $0) }
-        if let diskCache, let diskKey, let cached = diskCache.load(CachedLyrics.self, key: diskKey),
-           Self.validCachedLines(cached.lines) {
-            completion(cached.lines, cached.message + " · 本地缓存"); return
+        if let cacheNamespace, let cached = cachedLyrics(metadata: metadata, namespace: cacheNamespace) {
+            completion(cached.lines, cached.message); return
         }
         if diskCache == nil, let cached = cache.first(where: { $0.0 == key }) { completion(cached.1, cached.1.isEmpty ? "暂无可用歌词" : "歌词按歌曲信息匹配"); return }
         let token = generation
