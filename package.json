@@ -24,17 +24,58 @@
         "喜欢",
         "网易云"
       ]
+    },
+    {
+      "name": "preview-motion",
+      "title": "Preview Motion Mode (Development)",
+      "description": "Preview a Likeit motion mode without accessing music or changing saved preferences.",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "motionMode",
+          "type": "dropdown",
+          "placeholder": "动效模式",
+          "required": true,
+          "data": [
+            {
+              "title": "跟随系统",
+              "value": "system"
+            },
+            {
+              "title": "始终播放",
+              "value": "always"
+            },
+            {
+              "title": "关闭",
+              "value": "off"
+            }
+          ]
+        }
+      ]
     }
   ],
   "tools": [],
   "preferences": [
     {
-      "name": "successConfetti",
-      "type": "checkbox",
-      "title": "Success Confetti",
-      "label": "Celebrate newly liked tracks",
-      "description": "Show confetti after a confirmed new favorite when macOS Reduce Motion is off.",
-      "default": true,
+      "name": "motionMode",
+      "type": "dropdown",
+      "title": "收藏成功动效",
+      "description": "选择 Likeit 彩带是否跟随系统、始终播放或关闭；不更改 macOS 设置。",
+      "data": [
+        {
+          "title": "跟随系统",
+          "value": "system"
+        },
+        {
+          "title": "始终播放",
+          "value": "always"
+        },
+        {
+          "title": "关闭",
+          "value": "off"
+        }
+      ],
+      "default": "system",
       "required": false
     }
   ],

@@ -6,7 +6,7 @@
   ],
   "controllerSourceSHA256": "5168a1b5484568be69dfd7a0d8d378470414fb9ca05a911628eff242d424c512",
   "reduceMotionSourceSHA256": "d912ebc0cf2d6cf60e1f404fb66b948148abc1debd5d056c5ba8fb49fb852a02",
-  "confettiSourceSHA256": "3b4cc3f52799459ebcc27a08615418ba89d69a15d1c15b2a74f1a168adc075b7",
+  "confettiSourceSHA256": "526195a946d58efc2d09df1ecd000433251349b61cf9e84c0884b9380bdcd22b",
   "confettiUpstream": {
     "repository": "https://github.com/simibac/ConfettiSwiftUI",
     "version": "3.0.0",
@@ -58,7 +58,7 @@
     "MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist": "599acb89ed048dedc60d9257e7f320195d418a5494ca8c81e79fc03bedcd6b1e",
     "MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources": "5da1dac59eb6395e0e488df225718f360336a6a6da2f08dcd6c49a021bbe68ee",
-    "likeit-confetti": "774a64a161b54b017f8e2bb8b88989609196227b5f900d2feb739e36fd16eb95",
+    "likeit-confetti": "3a1b458ad8b0ad58df945bfb2859e2a4946a49b87cf3f2b9664abdc7ee4dabc3",
     "likeit-controller": "d2a39d54bf75742f198497b5802559781785b1fdce86849bd9bcfce25ca463e9",
     "likeit-reduce-motion": "70099374a3348edaa2ad0fe3e83a7b074e10d249cf08441c067cc5ff6a373c9a",
     "mediaremote-adapter.pl": "d97802e46db9535e2549e178c105ebf417a0254b3929fc32f08ecfd14d49a85f"

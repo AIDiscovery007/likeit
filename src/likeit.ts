@@ -2,7 +2,7 @@ import { closeMainWindow, environment, getPreferenceValues, showHUD } from "@ray
 import { join } from "node:path";
 import { likeCurrentTrack, type Status } from "./like-current-track";
 import { BusyError, openNetease } from "./netease";
-import { presentResult } from "./result-feedback";
+import { presentResult, type MotionMode } from "./result-feedback";
 import { readReduceMotion } from "./reduce-motion";
 import { celebrate } from "./confetti";
 
@@ -37,16 +37,17 @@ export default async function Command() {
       }
     }
   }
-  let enabled = false;
+  let mode: MotionMode = "off";
   try {
-    enabled = getPreferenceValues<Preferences>().successConfetti === true;
+    const preference = getPreferenceValues<Preferences>().motionMode;
+    if (preference === "system" || preference === "always") mode = preference;
   } catch {
     // An unreadable optional preference must not hide the music result.
   }
   const nativeDirectory = join(environment.assetsPath, "native");
-  await presentResult(status, enabled, {
+  await presentResult(status, mode, {
     showHUD: (result) => showHUD(messages[result]),
     readReduceMotion: () => readReduceMotion(nativeDirectory),
-    celebrate: () => celebrate(nativeDirectory, environment.supportPath),
+    celebrate: (policy) => celebrate(nativeDirectory, environment.supportPath, policy),
   });
 }

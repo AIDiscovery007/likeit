@@ -1,17 +1,23 @@
 import type { Status } from "./like-current-track";
 
 export type FeedbackStatus = Status | "busy";
+export type MotionMode = "system" | "always" | "off";
 export type FeedbackPort = {
   showHUD(status: FeedbackStatus): Promise<void>;
   readReduceMotion(): Promise<boolean | undefined>;
-  celebrate(): Promise<void>;
+  celebrate(mode: "system" | "always"): Promise<void>;
 };
 
-export async function presentResult(status: FeedbackStatus, enabled: boolean, port: FeedbackPort): Promise<void> {
+export async function presentResult(
+  status: FeedbackStatus,
+  mode: boolean | MotionMode,
+  port: FeedbackPort,
+): Promise<void> {
   await port.showHUD(status);
-  if (status !== "liked" || !enabled) return;
+  const policy = mode === true ? "system" : mode;
+  if (status !== "liked" || (policy !== "system" && policy !== "always")) return;
   try {
-    if ((await port.readReduceMotion()) === false) await port.celebrate();
+    if (policy === "always" || (await port.readReduceMotion()) === false) await port.celebrate(policy);
   } catch {
     // Optional animation must not change an already reported music result.
   }

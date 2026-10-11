@@ -2,10 +2,15 @@ import { spawn } from "node:child_process";
 import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 
-export async function celebrate(nativeDirectory: string, supportPath: string): Promise<void> {
+export async function celebrate(
+  nativeDirectory: string,
+  supportPath: string,
+  mode: "system" | "always" = "system",
+): Promise<void> {
+  if (mode !== "system" && mode !== "always") return;
   await mkdir(supportPath, { recursive: true });
   return new Promise((resolve, reject) => {
-    const child = spawn(join(nativeDirectory, "likeit-confetti"), [join(supportPath, "confetti.lock")], {
+    const child = spawn(join(nativeDirectory, "likeit-confetti"), [join(supportPath, "confetti.lock"), mode], {
       detached: true,
       stdio: ["ignore", "pipe", "pipe"],
     });

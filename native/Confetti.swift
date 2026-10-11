@@ -57,14 +57,17 @@ struct ConfettiMain {
         // This deadline also removes the window if the main run loop stalls.
         DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: startedAt + 2.9) { _exit(0) }
         signal(SIGPIPE, SIG_IGN)
-        guard CommandLine.arguments.count == 2, CommandLine.arguments[1].hasPrefix("/") else { skip() }
+        guard (2...3).contains(CommandLine.arguments.count), CommandLine.arguments[1].hasPrefix("/") else { skip() }
+        let mode = CommandLine.arguments.count == 3 ? CommandLine.arguments[2] : "system"
+        guard mode == "system" || mode == "always" else { skip() }
+        let followsSystem = mode == "system"
         let lock = open(CommandLine.arguments[1], O_CREAT | O_RDWR | O_CLOEXEC | O_NOFOLLOW, 0o600)
         var info = stat()
         guard lock >= 0, fstat(lock, &info) == 0, info.st_mode & S_IFMT == S_IFREG,
               flock(lock, LOCK_EX | LOCK_NB) == 0 else { skip() }
         // Never unlink: this descriptor owns the fixed inode until process exit.
         let workspace = NSWorkspace.shared
-        guard !workspace.accessibilityDisplayShouldReduceMotion else { skip() }
+        guard !followsSystem || !workspace.accessibilityDisplayShouldReduceMotion else { skip() }
         let app = NSApplication.shared
         guard app.setActivationPolicy(.accessory) else { skip() }
         let pointer = NSEvent.mouseLocation
@@ -93,7 +96,7 @@ struct ConfettiMain {
         let observer = workspace.notificationCenter.addObserver(
             forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil, queue: .main
         ) { _ in
-            if workspace.accessibilityDisplayShouldReduceMotion { finish() }
+            if followsSystem && workspace.accessibilityDisplayShouldReduceMotion { finish() }
         }
         DispatchQueue.main.asyncAfter(deadline: startedAt + 2.1) {
             NSAnimationContext.runAnimationGroup { context in
@@ -103,7 +106,7 @@ struct ConfettiMain {
         }
         DispatchQueue.main.asyncAfter(deadline: startedAt + 2.4, execute: finish)
         DispatchQueue.main.async {
-            guard !workspace.accessibilityDisplayShouldReduceMotion else { skip() }
+            guard !followsSystem || !workspace.accessibilityDisplayShouldReduceMotion else { skip() }
             panel.contentView?.layoutSubtreeIfNeeded()
             panel.orderFrontRegardless()
             panel.displayIfNeeded()
