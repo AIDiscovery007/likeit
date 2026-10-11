@@ -36,4 +36,6 @@ Node 每次命令启动一个控制器，唯一参数为 Raycast supportPath 内
 
 每个媒体子进程四秒期限、stdout+stderr 总计 64 KiB 上限；请求九秒、启动两秒，Node 会话总计 25 秒。超时杀整个进程组；普通完成关闭 stdin，500ms 未结束则强制终止，再最多等一秒。Node 退出、SIGINT、SIGTERM 都结束进程组。控制器另有 30 秒硬期限及父进程消失检查，以应对 Node 无法处理的异常退出；它会终止正在读取的 Perl 子进程并释放锁。动作或确认期间异常仍反馈结果未确认，不重复点击。
 
-开发阶段只执行过一次真实 `read`：得到网易云 PID 5511、Antisocial、playing=true、liked=false，夹取键一致。此时系统艺术家字段为 Ed Sheeran/Travis Scott，条目 UUID 与早期样本不同；这是不跨命令缓存的又一理由。未执行 `press`，真实收藏、并发和异常退出行为仍待协调者验收。
+媒体子进程由 `posix_spawn` 使用结构化 argv 启动，不设置新的进程组，明确继承控制器的组；标准输入指向 `/dev/null`，输出经非阻塞管道读取，并用 `waitpid` 回收。超限或超时先 SIGKILL 再回收。
+
+首次控制器真实 `read` 得到网易云 PID 5511、Antisocial、playing=true、liked=false，夹取键一致。此时系统艺术家字段为 Ed Sheeran/Travis Scott，条目 UUID 与早期样本不同；这是不跨命令缓存的又一理由。改用 `posix_spawn` 后另通过正式 TypeScript 端口进行一次只读诊断和正常关闭。未执行 `press`，真实收藏、并发和异常退出行为仍待协调者验收。

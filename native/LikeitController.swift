@@ -31,36 +31,59 @@ func currentPID() -> pid_t? {
 }
 
 func mediaData() throws -> [String: Any] {
-    let task = Process()
-    let output = Pipe(), errors = Pipe()
-    task.executableURL = URL(fileURLWithPath: "/usr/bin/perl")
-    task.arguments = [nativeDirectory.appendingPathComponent("mediaremote-adapter.pl").path,
-                      nativeDirectory.appendingPathComponent("MediaRemoteAdapter.framework").path,
-                      "get", "--no-artwork"]
-    task.environment = ProcessInfo.processInfo.environment.filter { !$0.key.hasPrefix("MEDIAREMOTEADAPTER_") }
-    task.standardInput = FileHandle.nullDevice
-    task.standardOutput = output
-    task.standardError = errors
-    try task.run()
+    var output = [Int32](repeating: -1, count: 2), errors = [Int32](repeating: -1, count: 2)
+    guard pipe(&output) == 0 else { throw ControllerError.unavailable }
+    defer { for fd in output where fd >= 0 { close(fd) } }
+    guard pipe(&errors) == 0 else { throw ControllerError.unavailable }
+    defer { for fd in errors where fd >= 0 { close(fd) } }
+    for fd in output + errors {
+        guard fcntl(fd, F_SETFD, FD_CLOEXEC) == 0 else { throw ControllerError.unavailable }
+    }
+    var actions: posix_spawn_file_actions_t?
+    guard posix_spawn_file_actions_init(&actions) == 0 else { throw ControllerError.unavailable }
+    defer { posix_spawn_file_actions_destroy(&actions) }
+    guard posix_spawn_file_actions_addopen(&actions, STDIN_FILENO, "/dev/null", O_RDONLY, 0) == 0,
+          posix_spawn_file_actions_adddup2(&actions, output[1], STDOUT_FILENO) == 0,
+          posix_spawn_file_actions_adddup2(&actions, errors[1], STDERR_FILENO) == 0 else { throw ControllerError.unavailable }
+    let arguments = ["/usr/bin/perl", nativeDirectory.appendingPathComponent("mediaremote-adapter.pl").path,
+                     nativeDirectory.appendingPathComponent("MediaRemoteAdapter.framework").path,
+                     "get", "--no-artwork"]
+    let environment = ProcessInfo.processInfo.environment.filter { !$0.key.hasPrefix("MEDIAREMOTEADAPTER_") }
+    var argv = arguments.map { strdup($0) } + [nil]
+    var envp = environment.map { strdup($0.key + "=" + $0.value) } + [nil]
+    defer { for pointer in argv + envp { free(pointer) } }
+    var pid: pid_t = 0
+    // No spawn attributes: the reader inherits this controller's process group.
+    guard posix_spawn(&pid, "/usr/bin/perl", &actions, nil, &argv, &envp) == 0 else { throw ControllerError.unavailable }
+    close(output[1]); output[1] = -1
+    close(errors[1]); errors[1] = -1
     childLock.lock()
-    mediaPID = task.processIdentifier
+    mediaPID = pid
     childLock.unlock()
+    var reaped = false
+    var status: Int32 = 0
     defer {
-        if task.isRunning { kill(task.processIdentifier, SIGKILL) }
-        task.waitUntilExit()
+        if !reaped {
+            kill(pid, SIGKILL)
+            while waitpid(pid, &status, 0) < 0 && errno == EINTR {}
+        }
         childLock.lock()
         mediaPID = 0
         childLock.unlock()
-        try? output.fileHandleForReading.close()
-        try? errors.fileHandleForReading.close()
     }
-    let handles = [output.fileHandleForReading, errors.fileHandleForReading]
-    var descriptors = handles.map { pollfd(fd: $0.fileDescriptor, events: Int16(POLLIN), revents: 0) }
-    for handle in handles { _ = fcntl(handle.fileDescriptor, F_SETFL, O_NONBLOCK) }
+    var descriptors = [output[0], errors[0]].map { pollfd(fd: $0, events: Int16(POLLIN), revents: 0) }
+    for fd in [output[0], errors[0]] {
+        guard fcntl(fd, F_SETFL, O_NONBLOCK) == 0 else { throw ControllerError.unavailable }
+    }
     var buffers = [Data(), Data()]
     let deadline = ProcessInfo.processInfo.systemUptime + 4
-    while descriptors.contains(where: { $0.fd >= 0 }) || task.isRunning {
+    while descriptors.contains(where: { $0.fd >= 0 }) || !reaped {
         if ProcessInfo.processInfo.systemUptime >= deadline { throw ControllerError.timeout }
+        if !reaped {
+            let result = waitpid(pid, &status, WNOHANG)
+            if result == pid { reaped = true }
+            else if result < 0 && errno != EINTR { throw ControllerError.unavailable }
+        }
         let polled = poll(&descriptors, nfds_t(descriptors.count), 50)
         if polled < 0 && errno != EINTR { throw ControllerError.unavailable }
         for index in descriptors.indices where descriptors[index].fd >= 0 && descriptors[index].revents != 0 {
@@ -74,7 +97,7 @@ func mediaData() throws -> [String: Any] {
             } else if errno != EAGAIN && errno != EINTR { throw ControllerError.unavailable }
         }
     }
-    guard task.terminationStatus == 0 else { throw ControllerError.unavailable }
+    guard status == 0 else { throw ControllerError.unavailable }
     let value = try JSONSerialization.jsonObject(with: buffers[0], options: [.fragmentsAllowed])
     if value is NSNull { return [:] }
     guard let dictionary = value as? [String: Any] else { throw ControllerError.unavailable }
