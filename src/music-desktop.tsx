@@ -19,9 +19,11 @@ import { promisify } from "node:util";
 async function openDesktop() {
   try {
     const previous = await getFrontmostApplication();
-    const mode = getPreferenceValues<Preferences>().desktopMotionMode ?? "system";
+    const preferences = getPreferenceValues<Preferences>();
+    const mode = preferences.desktopMotionMode ?? "system";
     const url = new URL("likeit-desktop://open");
     url.searchParams.set("mode", mode);
+    url.searchParams.set("lyricsSource", preferences.desktopLyricsSource === "community" ? "community" : "netease");
     if (previous.bundleId) url.searchParams.set("returnBundle", previous.bundleId);
     await closeMainWindow();
     await promisify(execFile)(

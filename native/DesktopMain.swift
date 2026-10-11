@@ -20,6 +20,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var terminating = false
     private var allowAudio = false
     private var mode = "off"
+    private var lyricsSource = "netease"
     private var motionObserver: NSObjectProtocol?
     private var lock: Int32 = -1
 
@@ -41,7 +42,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         NSApp.mainMenu = menu
         motionObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.updateMotion() }
         showWindow()
-        session = DesktopSession(model: model)
+        session = DesktopSession(model: model, lyricsSource: lyricsSource)
         audio.output = { [weak self] features, message in
             guard let self, !self.terminating, self.allowAudio else { return }
             if self.model.low != features.low { self.model.low = features.low }
@@ -59,6 +60,8 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func application(_ application: NSApplication, open urls: [URL]) {
         guard let url = urls.last, url.scheme == "likeit-desktop", url.host == "open", let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+        lyricsSource = components.queryItems?.first(where: { $0.name == "lyricsSource" })?.value == "community" ? "community" : "netease"
+        session?.setLyricsSource(lyricsSource)
         mode = components.queryItems?.first(where: { $0.name == "mode" })?.value ?? "system"
         if let bundle = components.queryItems?.first(where: { $0.name == "returnBundle" })?.value, bundle != "com.likeit.desktop",
            let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundle).first, !app.isTerminated {
