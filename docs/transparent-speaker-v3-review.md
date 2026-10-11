@@ -58,3 +58,11 @@ node --test --test-concurrency=2 acceptance/*.test.mjs
 原始 render-poster.swift 的 0.5→4.0 是 seek，必须立即呈现。单独保留的 render-sequential.swift 使用 3.9→4.0 检查顺序入场；未把 seek 的失败预期改成动画成功。sample 适配只为这份合成输入补上同速率采样时刻，没有修改产品或行为断言。最终全帧哈希、真实时间与像素比较见 accepted/ 下的 JSON。
 
 源码验收通过；统一构建安装与原生操作检查在下一条集成记录中单独登记，不能由离屏结果代替。
+
+## 主分支统一构建与安装
+
+主协调者从 `698c618` 快进合入 `9c3f267`，确认 native、src、acceptance、scripts 和 package.json 与完成 593/593 回归的 `4865adc` 一致，引用该固定源码的回归记录，没有重复运行相同测试。32 份冻结清单的 780 条记录全部核验通过；旧清单及用户原始 HTML 未变。
+
+从合并源码重新运行 `scripts/build-desktop.py` 构建 arm64/x86_64，保持既有 ad-hoc hardened runtime 签名。确认桌面进程不存在后执行 `npm run build` 安装。13 项源码和 10 项包文件摘要一致，安装 manifest 与仓库逐字节一致；已安装包通过 strict deep codesign 和双架构校验。完整摘要见 `review-evidence/transparent-speaker-v3/main-installation.json`。
+
+安装过程没有启动桌面、控制音乐、修改签名身份或系统权限；安装后确认无桌面进程。UI 锁交回主题协调会话，实际原生操作与音频表现的验收边界由后续实机记录说明，本节不把安装成功记作实机通过。

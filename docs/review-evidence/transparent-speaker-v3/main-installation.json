@@ -1,0 +1,25 @@
+{
+  "integrationSourceCommit": "9c3f267c3aa2dac0f545658da8fe9e0d204c0061",
+  "testedSourceCommit": "4865adc3f74f03f9f60c3011aca4b1bd5b004585",
+  "codeAndTestsUnchangedFromTestedSource": true,
+  "testEvidence": "full-4865adc.tap; executed by theme reviewer, not rerun during identical-source integration",
+  "tests": 593,
+  "passed": 593,
+  "failed": 0,
+  "frozenManifests": 32,
+  "frozenEntries": 780,
+  "sourceHashes": 13,
+  "sourceMapSHA256": "25fab428c969f0740ca6bab395eb90d7e8453232c81d3b4722c25b49541ca890",
+  "installedBundleHashes": 10,
+  "manifestSHA256": "4cdddbf5e4ecb5bab5c02cbebec1bfbb0c766cca14dfb747d82ac239655ba3f0",
+  "installedExecutableSHA256": "15bf0ed78b4196efc26f7715b6986d65ae188d44dea6393ca9f7085ff0646dc7",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "signing": "ad-hoc, hardened runtime",
+  "installedSignatureVerified": true,
+  "desktopRunningAfterInstall": false,
+  "userHTMLUnchanged": true,
+  "uiAcceptance": "pending theme coordinator"
+}
