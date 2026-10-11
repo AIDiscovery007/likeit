@@ -1,0 +1,114 @@
+TAP version 13
+# Subtest: cache review: malformed word timing and interrupted writes recover safely
+    # Subtest: R1 seed has ordered real word intervals
+    ok 1 - R1 seed has ordered real word intervals
+      ---
+      duration_ms: 0.519208
+      type: 'test'
+      ...
+    # Subtest: R1 out-of-order word cache is a network miss
+    not ok 2 - R1 out-of-order word cache is a network miss
+      ---
+      duration_ms: 0.565291
+      type: 'test'
+      location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:71)
+        Test.runInAsyncScope (node:async_hooks:227:14)
+        Test.run (node:internal/test_runner/test:1382:25)
+        Test.start (node:internal/test_runner/test:1242:17)
+        TestContext.test (node:internal/test_runner/test:394:20)
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: R1 returned words come from fresh valid source
+    not ok 3 - R1 returned words come from fresh valid source
+      ---
+      duration_ms: 0.150958
+      type: 'test'
+      location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:71)
+        Test.runInAsyncScope (node:async_hooks:227:14)
+        Test.run (node:internal/test_runner/test:1382:25)
+        Test.start (node:internal/test_runner/test:1242:17)
+        TestContext.test (node:internal/test_runner/test:394:20)
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: R2 stale interrupted-write files cannot exceed disk budget
+    not ok 4 - R2 stale interrupted-write files cannot exceed disk budget
+      ---
+      duration_ms: 0.071875
+      type: 'test'
+      location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:71)
+        Test.runInAsyncScope (node:async_hooks:227:14)
+        Test.run (node:internal/test_runner/test:1382:25)
+        Test.start (node:internal/test_runner/test:1242:17)
+        TestContext.test (node:internal/test_runner/test:394:20)
+        TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:17:41)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: R2 cleanup preserves unrelated file
+    ok 5 - R2 cleanup preserves unrelated file
+      ---
+      duration_ms: 0.042041
+      type: 'test'
+      ...
+    1..5
+not ok 1 - cache review: malformed word timing and interrupted writes recover safely
+  ---
+  duration_ms: 7140.281292
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-cache-review-regressions.test.mjs:9:1'
+  failureType: 'subtestsFailed'
+  error: '3 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 2
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7214.418625

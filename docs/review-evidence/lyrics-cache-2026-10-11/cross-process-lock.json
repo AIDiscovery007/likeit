@@ -1,0 +1,12 @@
+[
+  {
+    "version": "before",
+    "active_writer_preserved": true,
+    "unlocked_orphan_reclaimed": false
+  },
+  {
+    "version": "after",
+    "active_writer_preserved": true,
+    "unlocked_orphan_reclaimed": true
+  }
+]

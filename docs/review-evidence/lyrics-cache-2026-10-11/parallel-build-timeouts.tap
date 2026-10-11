@@ -1,0 +1,2294 @@
+TAP version 13
+# Subtest: R2: word highlighting uses original text positions
+    # Subtest: duplicate untimed prefix unchanged
+    ok 1 - duplicate untimed prefix unchanged
+      ---
+      duration_ms: 1.16475
+      type: 'test'
+      ...
+    # Subtest: substring actual word waits
+    ok 2 - substring actual word waits
+      ---
+      duration_ms: 0.379625
+      type: 'test'
+      ...
+    # Subtest: substring preserves text
+    ok 3 - substring preserves text
+      ---
+      duration_ms: 0.244875
+      type: 'test'
+      ...
+    # Subtest: duplicate actual word advances
+    ok 4 - duplicate actual word advances
+      ---
+      duration_ms: 0.342458
+      type: 'test'
+      ...
+    # Subtest: Chinese preserves text
+    ok 5 - Chinese preserves text
+      ---
+      duration_ms: 0.074667
+      type: 'test'
+      ...
+    # Subtest: substring untimed prefix unchanged
+    ok 6 - substring untimed prefix unchanged
+      ---
+      duration_ms: 0.050583
+      type: 'test'
+      ...
+    # Subtest: substring actual word advances
+    ok 7 - substring actual word advances
+      ---
+      duration_ms: 0.043084
+      type: 'test'
+      ...
+    # Subtest: Unicode preserves text
+    ok 8 - Unicode preserves text
+      ---
+      duration_ms: 0.064791
+      type: 'test'
+      ...
+    # Subtest: duplicate preserves text
+    ok 9 - duplicate preserves text
+      ---
+      duration_ms: 0.074167
+      type: 'test'
+      ...
+    # Subtest: Unicode actual word waits
+    ok 10 - Unicode actual word waits
+      ---
+      duration_ms: 0.102583
+      type: 'test'
+      ...
+    # Subtest: Unicode untimed prefix unchanged
+    ok 11 - Unicode untimed prefix unchanged
+      ---
+      duration_ms: 0.068459
+      type: 'test'
+      ...
+    # Subtest: duplicate actual word waits
+    ok 12 - duplicate actual word waits
+      ---
+      duration_ms: 0.036041
+      type: 'test'
+      ...
+    # Subtest: Chinese actual word waits
+    ok 13 - Chinese actual word waits
+      ---
+      duration_ms: 0.026667
+      type: 'test'
+      ...
+    # Subtest: Chinese actual word advances
+    ok 14 - Chinese actual word advances
+      ---
+      duration_ms: 0.026292
+      type: 'test'
+      ...
+    # Subtest: Unicode actual word advances
+    ok 15 - Unicode actual word advances
+      ---
+      duration_ms: 0.05025
+      type: 'test'
+      ...
+    # Subtest: Chinese untimed prefix unchanged
+    ok 16 - Chinese untimed prefix unchanged
+      ---
+      duration_ms: 0.05725
+      type: 'test'
+      ...
+    1..16
+ok 1 - R2: word highlighting uses original text positions
+  ---
+  duration_ms: 16409.923583
+  type: 'test'
+  ...
+# Subtest: R1: real AMLL timed containers retain strict timing validation
+    # Subtest: reversed container rejected
+    ok 1 - reversed container rejected
+      ---
+      duration_ms: 1.555542
+      type: 'test'
+      ...
+    # Subtest: timed body and nested div are supported
+    ok 2 - timed body and nested div are supported
+      ---
+      duration_ms: 0.09125
+      type: 'test'
+      ...
+    # Subtest: line outside bounded ancestor rejected
+    ok 3 - line outside bounded ancestor rejected
+      ---
+      duration_ms: 0.360958
+      type: 'test'
+      ...
+    # Subtest: timed div preserves absolute line and word times
+    ok 4 - timed div preserves absolute line and word times
+      ---
+      duration_ms: 0.139791
+      type: 'test'
+      ...
+    # Subtest: negative container rejected
+    ok 5 - negative container rejected
+      ---
+      duration_ms: 0.252959
+      type: 'test'
+      ...
+    # Subtest: partial container time rejected
+    ok 6 - partial container time rejected
+      ---
+      duration_ms: 0.161958
+      type: 'test'
+      ...
+    1..6
+ok 2 - R1: real AMLL timed containers retain strict timing validation
+  ---
+  duration_ms: 9594.2445
+  type: 'test'
+  ...
+# Subtest: C01–C16: production community lyrics satisfy frozen offline behavior
+    # Subtest: C01 main words preserve spaces and translation
+    ok 1 - C01 main words preserve spaces and translation
+      ---
+      duration_ms: 2.879834
+      type: 'test'
+      ...
+    # Subtest: C02 line-only remains line-only
+    ok 2 - C02 line-only remains line-only
+      ---
+      duration_ms: 12.513667
+      type: 'test'
+      ...
+    # Subtest: C01 background does not contaminate primary line
+    ok 3 - C01 background does not contaminate primary line
+      ---
+      duration_ms: 0.289541
+      type: 'test'
+      ...
+    # Subtest: C01 supported time formats are media time
+    ok 4 - C01 supported time formats are media time
+      ---
+      duration_ms: 0.111459
+      type: 'test'
+      ...
+    # Subtest: C01 zero duration whitespace stays text not a word
+    ok 5 - C01 zero duration whitespace stays text not a word
+      ---
+      duration_ms: 1.030292
+      type: 'test'
+      ...
+    # Subtest: C03 rejects namespace
+    ok 6 - C03 rejects namespace
+      ---
+      duration_ms: 0.09475
+      type: 'test'
+      ...
+    # Subtest: C03 rejects entity
+    ok 7 - C03 rejects entity
+      ---
+      duration_ms: 0.274083
+      type: 'test'
+      ...
+    # Subtest: C03 rejects negative
+    ok 8 - C03 rejects negative
+      ---
+      duration_ms: 0.078208
+      type: 'test'
+      ...
+    # Subtest: C03 rejects nonfinite
+    ok 9 - C03 rejects nonfinite
+      ---
+      duration_ms: 0.117167
+      type: 'test'
+      ...
+    # Subtest: C03 rejects reversed
+    ok 10 - C03 rejects reversed
+      ---
+      duration_ms: 0.121708
+      type: 'test'
+      ...
+    # Subtest: C03 rejects outside line
+    ok 11 - C03 rejects outside line
+      ---
+      duration_ms: 0.052083
+      type: 'test'
+      ...
+    # Subtest: C03 rejects broken
+    ok 12 - C03 rejects broken
+      ---
+      duration_ms: 0.03625
+      type: 'test'
+      ...
+    # Subtest: C03 rejects oversize
+    ok 13 - C03 rejects oversize
+      ---
+      duration_ms: 0.032875
+      type: 'test'
+      ...
+    # Subtest: C04 word clock clamps and seeks
+    ok 14 - C04 word clock clamps and seeks
+      ---
+      duration_ms: 0.069833
+      type: 'test'
+      ...
+    # Subtest: C04 invalid clock never highlights
+    ok 15 - C04 invalid clock never highlights
+      ---
+      duration_ms: 0.030666
+      type: 'test'
+      ...
+    # Subtest: C06 exact AMLL ID wins without fallback
+    ok 16 - C06 exact AMLL ID wins without fallback
+      ---
+      duration_ms: 9.54675
+      type: 'test'
+      ...
+    # Subtest: C07 opaque snapshot uses verified search and detail
+    ok 17 - C07 opaque snapshot uses verified search and detail
+      ---
+      duration_ms: 0.143458
+      type: 'test'
+      ...
+    # Subtest: C07 incomplete never sends AMLL
+    ok 18 - C07 incomplete never sends AMLL
+      ---
+      duration_ms: 0.066084
+      type: 'test'
+      ...
+    # Subtest: C07 ambiguous never sends AMLL
+    ok 19 - C07 ambiguous never sends AMLL
+      ---
+      duration_ms: 0.151583
+      type: 'test'
+      ...
+    # Subtest: C07 detail mismatch never sends AMLL
+    ok 20 - C07 detail mismatch never sends AMLL
+      ---
+      duration_ms: 0.037042
+      type: 'test'
+      ...
+    # Subtest: C07 invalid supplied ID never sends AMLL
+    ok 21 - C07 invalid supplied ID never sends AMLL
+      ---
+      duration_ms: 5.19525
+      type: 'test'
+      ...
+    # Subtest: C08 fallback after 404
+    ok 22 - C08 fallback after 404
+      ---
+      duration_ms: 0.165792
+      type: 'test'
+      ...
+    # Subtest: C08 fallback after wrong association
+    ok 23 - C08 fallback after wrong association
+      ---
+      duration_ms: 0.072625
+      type: 'test'
+      ...
+    # Subtest: C08 fallback after invalid TTML
+    ok 24 - C08 fallback after invalid TTML
+      ---
+      duration_ms: 0.034333
+      type: 'test'
+      ...
+    # Subtest: C08 fallback after error envelope
+    ok 25 - C08 fallback after error envelope
+      ---
+      duration_ms: 0.028625
+      type: 'test'
+      ...
+    # Subtest: C08 fallback after missing payload
+    ok 26 - C08 fallback after missing payload
+      ---
+      duration_ms: 0.033291
+      type: 'test'
+      ...
+    # Subtest: C08 LRCLIB query includes all identity fields and client
+    ok 27 - C08 LRCLIB query includes all identity fields and client
+      ---
+      duration_ms: 1.253292
+      type: 'test'
+      ...
+    # Subtest: C05 plain text stays unsynchronized
+    ok 28 - C05 plain text stays unsynchronized
+      ---
+      duration_ms: 0.244833
+      type: 'test'
+      ...
+    # Subtest: C05 instrumental is explicit
+    ok 29 - C05 instrumental is explicit
+      ---
+      duration_ms: 1.076667
+      type: 'test'
+      ...
+    # Subtest: C05 empty is unavailable
+    ok 30 - C05 empty is unavailable
+      ---
+      duration_ms: 0.234
+      type: 'test'
+      ...
+    # Subtest: C05 contradictory instrumental rejected
+    ok 31 - C05 contradictory instrumental rejected
+      ---
+      duration_ms: 0.4905
+      type: 'test'
+      ...
+    # Subtest: C09 reject trackName Synthetic Song (Live)
+    ok 32 - C09 reject trackName Synthetic Song (Live)
+      ---
+      duration_ms: 0.046292
+      type: 'test'
+      ...
+    # Subtest: C09 reject artistName Other
+    ok 33 - C09 reject artistName Other
+      ---
+      duration_ms: 0.030083
+      type: 'test'
+      ...
+    # Subtest: C09 reject albumName Other
+    ok 34 - C09 reject albumName Other
+      ---
+      duration_ms: 0.1615
+      type: 'test'
+      ...
+    # Subtest: C09 reject duration 181.01
+    ok 35 - C09 reject duration 181.01
+      ---
+      duration_ms: 0.578417
+      type: 'test'
+      ...
+    # Subtest: C09 reject duration true
+    ok 36 - C09 reject duration true
+      ---
+      duration_ms: 3.103708
+      type: 'test'
+      ...
+    # Subtest: C09 reject albumName <null>
+    ok 37 - C09 reject albumName <null>
+      ---
+      duration_ms: 0.173125
+      type: 'test'
+      ...
+    # Subtest: C09 one second boundary accepted
+    ok 38 - C09 one second boundary accepted
+      ---
+      duration_ms: 0.12925
+      type: 'test'
+      ...
+    # Subtest: C10 failures remain unavailable without body leak
+    ok 39 - C10 failures remain unavailable without body leak
+      ---
+      duration_ms: 0.117708
+      type: 'test'
+      ...
+    # Subtest: C10 streamed oversize is rejected
+    ok 40 - C10 streamed oversize is rejected
+      ---
+      duration_ms: 0.235708
+      type: 'test'
+      ...
+    # Subtest: C10 redirect is not followed
+    ok 41 - C10 redirect is not followed
+      ---
+      duration_ms: 0.058958
+      type: 'test'
+      ...
+    # Subtest: C10 all requests have fixed HTTPS and no secrets
+    ok 42 - C10 all requests have fixed HTTPS and no secrets
+      ---
+      duration_ms: 0.037333
+      type: 'test'
+      ...
+    # Subtest: C13 cancel suppresses late result and chain
+    ok 43 - C13 cancel suppresses late result and chain
+      ---
+      duration_ms: 0.028375
+      type: 'test'
+      ...
+    # Subtest: C14 only new generation completes
+    ok 44 - C14 only new generation completes
+      ---
+      duration_ms: 0.031416
+      type: 'test'
+      ...
+    # Subtest: C12 successful result cached
+    ok 45 - C12 successful result cached
+      ---
+      duration_ms: 0.028083
+      type: 'test'
+      ...
+    # Subtest: C12 cache includes metadata not only opaque key
+    ok 46 - C12 cache includes metadata not only opaque key
+      ---
+      duration_ms: 4.44725
+      type: 'test'
+      ...
+    # Subtest: C16 stop clears memory cache
+    ok 47 - C16 stop clears memory cache
+      ---
+      duration_ms: 0.137459
+      type: 'test'
+      ...
+    # Subtest: C12 temporary failures are retried on explicit load
+    ok 48 - C12 temporary failures are retried on explicit load
+      ---
+      duration_ms: 0.267958
+      type: 'test'
+      ...
+    # Subtest: C12 memory cache evicts after twenty
+    ok 49 - C12 memory cache evicts after twenty
+      ---
+      duration_ms: 0.04
+      type: 'test'
+      ...
+    # Subtest: C11 whole load has bounded single completion
+    ok 50 - C11 whole load has bounded single completion
+      ---
+      duration_ms: 0.057375
+      type: 'test'
+      ...
+    # Subtest: C10 rate limit survives explicit reload and reopen
+    ok 51 - C10 rate limit survives explicit reload and reopen
+      ---
+      duration_ms: 0.025917
+      type: 'test'
+      ...
+    1..51
+ok 3 - C01–C16: production community lyrics satisfy frozen offline behavior
+  ---
+  duration_ms: 37203.63575
+  type: 'test'
+  ...
+# Subtest: C15: community is an explicit source and legacy remains default
+ok 4 - C15: community is an explicit source and legacy remains default
+  ---
+  duration_ms: 23.050083
+  type: 'test'
+  ...
+# (node:5307) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/src/result-feedback.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/qiaochao/.codex/worktrees/community-lyrics/likeit/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: C01: confirmed new favorite shows its HUD before one celebration
+ok 5 - C01: confirmed new favorite shows its HUD before one celebration
+  ---
+  duration_ms: 4.246583
+  type: 'test'
+  ...
+# Subtest: C02: already-liked retains its feedback without checking or starting animation
+ok 6 - C02: already-liked retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.196667
+  type: 'test'
+  ...
+# Subtest: C02: not-running retains its feedback without checking or starting animation
+ok 7 - C02: not-running retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.07
+  type: 'test'
+  ...
+# Subtest: C02: not-playing retains its feedback without checking or starting animation
+ok 8 - C02: not-playing retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.053625
+  type: 'test'
+  ...
+# Subtest: C02: unavailable retains its feedback without checking or starting animation
+ok 9 - C02: unavailable retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.079
+  type: 'test'
+  ...
+# Subtest: C02: permission-required retains its feedback without checking or starting animation
+ok 10 - C02: permission-required retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.235959
+  type: 'test'
+  ...
+# Subtest: C02: track-changed retains its feedback without checking or starting animation
+ok 11 - C02: track-changed retains its feedback without checking or starting animation
+  ---
+  duration_ms: 1.375792
+  type: 'test'
+  ...
+# Subtest: C02: unconfirmed retains its feedback without checking or starting animation
+ok 12 - C02: unconfirmed retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.0625
+  type: 'test'
+  ...
+# Subtest: C02: failed retains its feedback without checking or starting animation
+ok 13 - C02: failed retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.109375
+  type: 'test'
+  ...
+# Subtest: C02: busy retains its feedback without checking or starting animation
+ok 14 - C02: busy retains its feedback without checking or starting animation
+  ---
+  duration_ms: 0.177291
+  type: 'test'
+  ...
+# Subtest: C03: disabling celebration preserves successful favorite feedback
+ok 15 - C03: disabling celebration preserves successful favorite feedback
+  ---
+  duration_ms: 0.148167
+  type: 'test'
+  ...
+# Subtest: C04: reduced motion or unreadable policy (true) suppresses celebration
+ok 16 - C04: reduced motion or unreadable policy (true) suppresses celebration
+  ---
+  duration_ms: 0.285333
+  type: 'test'
+  ...
+# Subtest: C04: reduced motion or unreadable policy (undefined) suppresses celebration
+ok 17 - C04: reduced motion or unreadable policy (undefined) suppresses celebration
+  ---
+  duration_ms: 0.044167
+  type: 'test'
+  ...
+# Subtest: C04: reduced motion or unreadable policy (null) suppresses celebration
+ok 18 - C04: reduced motion or unreadable policy (null) suppresses celebration
+  ---
+  duration_ms: 0.035792
+  type: 'test'
+  ...
+# Subtest: C04: motion policy read failure preserves success and does not launch
+ok 19 - C04: motion policy read failure preserves success and does not launch
+  ---
+  duration_ms: 0.310333
+  type: 'test'
+  ...
+# Subtest: C05: animation throw cannot replace success or retry
+ok 20 - C05: animation throw cannot replace success or retry
+  ---
+  duration_ms: 10.457459
+  type: 'test'
+  ...
+# Subtest: C05: animation rejection cannot replace success or retry
+ok 21 - C05: animation rejection cannot replace success or retry
+  ---
+  duration_ms: 1.23825
+  type: 'test'
+  ...
+# Subtest: C05: slow animation startup cannot delay the already determined HUD
+ok 22 - C05: slow animation startup cannot delay the already determined HUD
+  ---
+  duration_ms: 0.283041
+  type: 'test'
+  ...
+# Subtest: audio interruption recovers without blaming permission or reopening
+not ok 23 - audio interruption recovers without blaming permission or reopening
+  ---
+  duration_ms: 20023.80975
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/immersive-audio-interruption.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    null !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/immersive-audio-interruption.test.mjs:15:12)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: audio lifecycle obeys latest intent and rejects stale resources
+not ok 24 - audio lifecycle obeys latest intent and rejects stale resources
+  ---
+  duration_ms: 20056.509458
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/immersive-audio-recovery.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    null !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/immersive-audio-recovery.test.mjs:15:12)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: I01: Likeit menu supplements the original one-action like command
+ok 25 - I01: Likeit menu supplements the original one-action like command
+  ---
+  duration_ms: 10.588166
+  type: 'test'
+  ...
+# Subtest: I11: desktop motion is an independent three-mode preference
+ok 26 - I11: desktop motion is an independent three-mode preference
+  ---
+  duration_ms: 6.05075
+  type: 'test'
+  ...
+# Subtest: I04–I11: production native core satisfies frozen behavior scenarios
+    # Subtest: L01 sorted timestamp precisions and Unicode
+    ok 1 - L01 sorted timestamp precisions and Unicode
+      ---
+      duration_ms: 2.585417
+      type: 'test'
+      ...
+    # Subtest: L02 multiple time tags and global offset
+    ok 2 - L02 multiple time tags and global offset
+      ---
+      duration_ms: 0.266916
+      type: 'test'
+      ...
+    # Subtest: L03 negative offset applies globally and clamps
+    ok 3 - L03 negative offset applies globally and clamps
+      ---
+      duration_ms: 0.196375
+      type: 'test'
+      ...
+    # Subtest: L04 simultaneous text merges without duplicates
+    ok 4 - L04 simultaneous text merges without duplicates
+      ---
+      duration_ms: 0.168875
+      type: 'test'
+      ...
+    # Subtest: L05 empty timed line clears previous sentence
+    ok 5 - L05 empty timed line clears previous sentence
+      ---
+      duration_ms: 0.22425
+      type: 'test'
+      ...
+    # Subtest: L06 invalid timestamps and metadata are ignored
+    ok 6 - L06 invalid timestamps and metadata are ignored
+      ---
+      duration_ms: 0.20225
+      type: 'test'
+      ...
+    # Subtest: L07 plain lyrics are not fabricated into timecodes
+    ok 7 - L07 plain lyrics are not fabricated into timecodes
+      ---
+      duration_ms: 0.141417
+      type: 'test'
+      ...
+    # Subtest: L08 index before first line is absent
+    ok 8 - L08 index before first line is absent
+      ---
+      duration_ms: 0.137709
+      type: 'test'
+      ...
+    # Subtest: L09 exact boundary picks new line
+    ok 9 - L09 exact boundary picks new line
+      ---
+      duration_ms: 0.066875
+      type: 'test'
+      ...
+    # Subtest: L10 seek backwards repositions immediately
+    ok 10 - L10 seek backwards repositions immediately
+      ---
+      duration_ms: 0.219208
+      type: 'test'
+      ...
+    # Subtest: L11 empty and invalid positions have no active line
+    ok 11 - L11 empty and invalid positions have no active line
+      ---
+      duration_ms: 0.345708
+      type: 'test'
+      ...
+    # Subtest: L12 after last line retains last sentence
+    ok 12 - L12 after last line retains last sentence
+      ---
+      duration_ms: 0.068625
+      type: 'test'
+      ...
+    # Subtest: T01 clock advances using rate
+    ok 13 - T01 clock advances using rate
+      ---
+      duration_ms: 0.065459
+      type: 'test'
+      ...
+    # Subtest: T02 pause freezes position
+    ok 14 - T02 pause freezes position
+      ---
+      duration_ms: 0.183625
+      type: 'test'
+      ...
+    # Subtest: T03 seek uses newest anchor
+    ok 15 - T03 seek uses newest anchor
+      ---
+      duration_ms: 0.140542
+      type: 'test'
+      ...
+    # Subtest: T04 end clamps to duration
+    ok 16 - T04 end clamps to duration
+      ---
+      duration_ms: 0.12775
+      type: 'test'
+      ...
+    # Subtest: T05 stale anchor is rejected
+    ok 17 - T05 stale anchor is rejected
+      ---
+      duration_ms: 0.091209
+      type: 'test'
+      ...
+    # Subtest: T06 future and nonfinite anchors are rejected
+    ok 18 - T06 future and nonfinite anchors are rejected
+      ---
+      duration_ms: 0.135458
+      type: 'test'
+      ...
+    # Subtest: T07 invalid rates and duration are rejected
+    ok 19 - T07 invalid rates and duration are rejected
+      ---
+      duration_ms: 0.089333
+      type: 'test'
+      ...
+    # Subtest: S01 unique complete metadata matches
+    ok 20 - S01 unique complete metadata matches
+      ---
+      duration_ms: 0.187542
+      type: 'test'
+      ...
+    # Subtest: S02 whitespace case and Unicode normalize
+    ok 21 - S02 whitespace case and Unicode normalize
+      ---
+      duration_ms: 0.065
+      type: 'test'
+      ...
+    # Subtest: S03 version suffix is not discarded
+    ok 22 - S03 version suffix is not discarded
+      ---
+      duration_ms: 0.2545
+      type: 'test'
+      ...
+    # Subtest: S04 artist or album mismatch is rejected
+    ok 23 - S04 artist or album mismatch is rejected
+      ---
+      duration_ms: 0.046542
+      type: 'test'
+      ...
+    # Subtest: S05 all artists required, set order may differ
+    ok 24 - S05 all artists required, set order may differ
+      ---
+      duration_ms: 0.03
+      type: 'test'
+      ...
+    # Subtest: S06 literal slash name is not split
+    ok 25 - S06 literal slash name is not split
+      ---
+      duration_ms: 4.316833
+      type: 'test'
+      ...
+    # Subtest: S07 exact complete flattened artist string can match
+    ok 26 - S07 exact complete flattened artist string can match
+      ---
+      duration_ms: 0.106125
+      type: 'test'
+      ...
+    # Subtest: S08 duration within one second is accepted
+    ok 27 - S08 duration within one second is accepted
+      ---
+      duration_ms: 0.114625
+      type: 'test'
+      ...
+    # Subtest: S09 duration beyond tolerance rejected
+    ok 28 - S09 duration beyond tolerance rejected
+      ---
+      duration_ms: 0.049542
+      type: 'test'
+      ...
+    # Subtest: S10 ambiguous different IDs rejected
+    ok 29 - S10 ambiguous different IDs rejected
+      ---
+      duration_ms: 6.306083
+      type: 'test'
+      ...
+    # Subtest: S11 duplicate same ID is one candidate
+    ok 30 - S11 duplicate same ID is one candidate
+      ---
+      duration_ms: 0.078167
+      type: 'test'
+      ...
+    # Subtest: S12 missing metadata rejects
+    ok 31 - S12 missing metadata rejects
+      ---
+      duration_ms: 0.030459
+      type: 'test'
+      ...
+    # Subtest: S13 invalid IDs never become a lyric request
+    ok 32 - S13 invalid IDs never become a lyric request
+      ---
+      duration_ms: 0.091625
+      type: 'test'
+      ...
+    # Subtest: S14 nonfinite duration rejects
+    ok 33 - S14 nonfinite duration rejects
+      ---
+      duration_ms: 0.043208
+      type: 'test'
+      ...
+    # Subtest: R01 new session has no lyrics
+    ok 34 - R01 new session has no lyrics
+      ---
+      duration_ms: 0.044333
+      type: 'test'
+      ...
+    # Subtest: R02 current request is accepted
+    ok 35 - R02 current request is accepted
+      ---
+      duration_ms: 0.050375
+      type: 'test'
+      ...
+    # Subtest: R03 same track refresh retains loaded lyrics
+    ok 36 - R03 same track refresh retains loaded lyrics
+      ---
+      duration_ms: 0.281917
+      type: 'test'
+      ...
+    # Subtest: R04 track switch clears old lyrics immediately
+    ok 37 - R04 track switch clears old lyrics immediately
+      ---
+      duration_ms: 0.027792
+      type: 'test'
+      ...
+    # Subtest: R05 late old response cannot overwrite
+    ok 38 - R05 late old response cannot overwrite
+      ---
+      duration_ms: 0.0215
+      type: 'test'
+      ...
+    # Subtest: R06 unsupported or absent source clears and rejects
+    ok 39 - R06 unsupported or absent source clears and rejects
+      ---
+      duration_ms: 0.021291
+      type: 'test'
+      ...
+    # Subtest: A01 silence produces no rhythm
+    ok 40 - A01 silence produces no rhythm
+      ---
+      duration_ms: 0.017334
+      type: 'test'
+      ...
+    # Subtest: A02 empty input produces no rhythm
+    ok 41 - A02 empty input produces no rhythm
+      ---
+      duration_ms: 0.022583
+      type: 'test'
+      ...
+    # Subtest: A03 invalid sample rates produce no rhythm
+    ok 42 - A03 invalid sample rates produce no rhythm
+      ---
+      duration_ms: 0.11725
+      type: 'test'
+      ...
+    # Subtest: A04 nonfinite samples cannot poison renderer
+    ok 43 - A04 nonfinite samples cannot poison renderer
+      ---
+      duration_ms: 0.019833
+      type: 'test'
+      ...
+    # Subtest: A05 low tone drives low band
+    ok 44 - A05 low tone drives low band
+      ---
+      duration_ms: 0.020292
+      type: 'test'
+      ...
+    # Subtest: A06 mid tone drives mid band
+    ok 45 - A06 mid tone drives mid band
+      ---
+      duration_ms: 0.037917
+      type: 'test'
+      ...
+    # Subtest: A07 high tone drives high band
+    ok 46 - A07 high tone drives high band
+      ---
+      duration_ms: 0.01925
+      type: 'test'
+      ...
+    # Subtest: A08 sine RMS follows real amplitude
+    ok 47 - A08 sine RMS follows real amplitude
+      ---
+      duration_ms: 0.020958
+      type: 'test'
+      ...
+    # Subtest: A09 quieter signal has lower energy
+    ok 48 - A09 quieter signal has lower energy
+      ---
+      duration_ms: 0.019208
+      type: 'test'
+      ...
+    # Subtest: A10 all outputs are finite and normalized
+    ok 49 - A10 all outputs are finite and normalized
+      ---
+      duration_ms: 0.021166
+      type: 'test'
+      ...
+    # Subtest: A11 frequency uses actual sample rate
+    ok 50 - A11 frequency uses actual sample rate
+      ---
+      duration_ms: 0.01825
+      type: 'test'
+      ...
+    # Subtest: A12 silence after loud input does not retain energy
+    ok 51 - A12 silence after loud input does not retain energy
+      ---
+      duration_ms: 0.023542
+      type: 'test'
+      ...
+    # Subtest: M01 system motion follows false only
+    ok 52 - M01 system motion follows false only
+      ---
+      duration_ms: 0.023041
+      type: 'test'
+      ...
+    # Subtest: M02 always independent of system
+    ok 53 - M02 always independent of system
+      ---
+      duration_ms: 0.018041
+      type: 'test'
+      ...
+    # Subtest: M03 off and unknown never capture
+    ok 54 - M03 off and unknown never capture
+      ---
+      duration_ms: 0.018542
+      type: 'test'
+      ...
+    1..54
+ok 27 - I04–I11: production native core satisfies frozen behavior scenarios
+  ---
+  duration_ms: 23057.584375
+  type: 'test'
+  ...
+# Subtest: visible desktop capture is independent of application focus
+    # Subtest: visible foreground captures
+    ok 1 - visible foreground captures
+      ---
+      duration_ms: 2.91325
+      type: 'test'
+      ...
+    # Subtest: visible inactive window keeps capture and lyric refresh
+    ok 2 - visible inactive window keeps capture and lyric refresh
+      ---
+      duration_ms: 0.751708
+      type: 'test'
+      ...
+    # Subtest: focus loss neither stops capture nor erases live features
+    ok 3 - focus loss neither stops capture nor erases live features
+      ---
+      duration_ms: 0.115833
+      type: 'test'
+      ...
+    # Subtest: fully occluded foreground stops
+    ok 4 - fully occluded foreground stops
+      ---
+      duration_ms: 0.073042
+      type: 'test'
+      ...
+    # Subtest: hidden inactive window stops
+    ok 5 - hidden inactive window stops
+      ---
+      duration_ms: 0.155083
+      type: 'test'
+      ...
+    # Subtest: miniaturized window stops
+    ok 6 - miniaturized window stops
+      ---
+      duration_ms: 0.072875
+      type: 'test'
+      ...
+    # Subtest: becoming visible restores capture without focus
+    ok 7 - becoming visible restores capture without focus
+      ---
+      duration_ms: 0.0465
+      type: 'test'
+      ...
+    # Subtest: missing window never captures
+    ok 8 - missing window never captures
+      ---
+      duration_ms: 0.068875
+      type: 'test'
+      ...
+    # Subtest: motion off remains off while visible inactive
+    ok 9 - motion off remains off while visible inactive
+      ---
+      duration_ms: 0.124667
+      type: 'test'
+      ...
+    # Subtest: system reduce motion still prevents capture
+    ok 10 - system reduce motion still prevents capture
+      ---
+      duration_ms: 0.152167
+      type: 'test'
+      ...
+    # Subtest: paused source still prevents capture
+    ok 11 - paused source still prevents capture
+      ---
+      duration_ms: 0.05575
+      type: 'test'
+      ...
+    # Subtest: stale source still prevents capture
+    ok 12 - stale source still prevents capture
+      ---
+      duration_ms: 0.037167
+      type: 'test'
+      ...
+    # Subtest: missing source still prevents capture
+    ok 13 - missing source still prevents capture
+      ---
+      duration_ms: 1.386125
+      type: 'test'
+      ...
+    # Subtest: terminating ignores late visibility changes
+    ok 14 - terminating ignores late visibility changes
+      ---
+      duration_ms: 0.218125
+      type: 'test'
+      ...
+    1..14
+ok 28 - visible desktop capture is independent of application focus
+  ---
+  duration_ms: 15561.926208
+  type: 'test'
+  ...
+# (node:5683) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/src/like-current-track.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/qiaochao/.codex/worktrees/community-lyrics/likeit/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: A01: confirms the same track is liked after exactly one write
+ok 29 - A01: confirms the same track is liked after exactly one write
+  ---
+  duration_ms: 4.649833
+  type: 'test'
+  ...
+# Subtest: A02: an already-liked track is never toggled
+ok 30 - A02: an already-liked track is never toggled
+  ---
+  duration_ms: 0.176666
+  type: 'test'
+  ...
+# Subtest: A03: not running causes no write
+ok 31 - A03: not running causes no write
+  ---
+  duration_ms: 0.075375
+  type: 'test'
+  ...
+# Subtest: A03: paused with a residual track causes no write
+ok 32 - A03: paused with a residual track causes no write
+  ---
+  duration_ms: 0.055584
+  type: 'test'
+  ...
+# Subtest: A03: unknown playback causes no write
+ok 33 - A03: unknown playback causes no write
+  ---
+  duration_ms: 2.238833
+  type: 'test'
+  ...
+# Subtest: A03: unknown like state causes no write
+ok 34 - A03: unknown like state causes no write
+  ---
+  duration_ms: 0.12075
+  type: 'test'
+  ...
+# Subtest: A03: missing track identity causes no write
+ok 35 - A03: missing track identity causes no write
+  ---
+  duration_ms: 0.086375
+  type: 'test'
+  ...
+# Subtest: A03: empty track identity causes no write
+ok 36 - A03: empty track identity causes no write
+  ---
+  duration_ms: 0.041917
+  type: 'test'
+  ...
+# Subtest: A03: missing permission causes no write
+ok 37 - A03: missing permission causes no write
+  ---
+  duration_ms: 0.0605
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that track changed
+ok 38 - A04: recheck detects that track changed
+  ---
+  duration_ms: 0.574834
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that track paused
+ok 39 - A04: recheck detects that track paused
+  ---
+  duration_ms: 0.223375
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that app quit
+ok 40 - A04: recheck detects that app quit
+  ---
+  duration_ms: 0.139125
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that liked elsewhere
+ok 41 - A04: recheck detects that liked elsewhere
+  ---
+  duration_ms: 0.196917
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that identity became unavailable
+ok 42 - A04: recheck detects that identity became unavailable
+  ---
+  duration_ms: 0.197916
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that like state became unavailable
+ok 43 - A04: recheck detects that like state became unavailable
+  ---
+  duration_ms: 0.257959
+  type: 'test'
+  ...
+# Subtest: A04: recheck detects that permission revoked
+ok 44 - A04: recheck detects that permission revoked
+  ---
+  duration_ms: 0.045583
+  type: 'test'
+  ...
+# Subtest: A05: native guard returning changed is respected without retries
+ok 45 - A05: native guard returning changed is respected without retries
+  ---
+  duration_ms: 0.166917
+  type: 'test'
+  ...
+# Subtest: A05: native guard returning already-liked is respected without retries
+ok 46 - A05: native guard returning already-liked is respected without retries
+  ---
+  duration_ms: 0.040959
+  type: 'test'
+  ...
+# Subtest: A05: native guard returning unavailable is respected without retries
+ok 47 - A05: native guard returning unavailable is respected without retries
+  ---
+  duration_ms: 0.058625
+  type: 'test'
+  ...
+# Subtest: A06: the track changed even though the new one is liked cannot produce success
+ok 48 - A06: the track changed even though the new one is liked cannot produce success
+  ---
+  duration_ms: 0.061167
+  type: 'test'
+  ...
+# Subtest: A06: the like state never changed cannot produce success
+ok 49 - A06: the like state never changed cannot produce success
+  ---
+  duration_ms: 0.03875
+  type: 'test'
+  ...
+# Subtest: A06: the identity disappeared cannot produce success
+ok 50 - A06: the identity disappeared cannot produce success
+  ---
+  duration_ms: 0.046667
+  type: 'test'
+  ...
+# Subtest: A06: the like state is unknown cannot produce success
+ok 51 - A06: the like state is unknown cannot produce success
+  ---
+  duration_ms: 0.034416
+  type: 'test'
+  ...
+# Subtest: A06: the app disappeared cannot produce success
+ok 52 - A06: the app disappeared cannot produce success
+  ---
+  duration_ms: 0.03475
+  type: 'test'
+  ...
+# Subtest: A06: confirmation cannot be read cannot produce success
+ok 53 - A06: confirmation cannot be read cannot produce success
+  ---
+  duration_ms: 0.072458
+  type: 'test'
+  ...
+# Subtest: A06: an uncertain write is never retried
+ok 54 - A06: an uncertain write is never retried
+  ---
+  duration_ms: 0.059041
+  type: 'test'
+  ...
+# Subtest: A10: read failure before mutation (1) is reported without writing
+ok 55 - A10: read failure before mutation (1) is reported without writing
+  ---
+  duration_ms: 0.046083
+  type: 'test'
+  ...
+# Subtest: A10: read failure before mutation (2) is reported without writing
+ok 56 - A10: read failure before mutation (2) is reported without writing
+  ---
+  duration_ms: 0.051334
+  type: 'test'
+  ...
+# Subtest: cache review: malformed word timing and interrupted writes recover safely
+    # Subtest: R1 seed has ordered real word intervals
+    ok 1 - R1 seed has ordered real word intervals
+      ---
+      duration_ms: 1.264583
+      type: 'test'
+      ...
+    # Subtest: R1 out-of-order word cache is a network miss
+    ok 2 - R1 out-of-order word cache is a network miss
+      ---
+      duration_ms: 0.470083
+      type: 'test'
+      ...
+    # Subtest: R1 returned words come from fresh valid source
+    ok 3 - R1 returned words come from fresh valid source
+      ---
+      duration_ms: 0.076625
+      type: 'test'
+      ...
+    # Subtest: R2 stale interrupted-write files cannot exceed disk budget
+    ok 4 - R2 stale interrupted-write files cannot exceed disk budget
+      ---
+      duration_ms: 0.057209
+      type: 'test'
+      ...
+    # Subtest: R2 cleanup preserves unrelated file
+    ok 5 - R2 cleanup preserves unrelated file
+      ---
+      duration_ms: 0.053625
+      type: 'test'
+      ...
+    1..5
+ok 57 - cache review: malformed word timing and interrupted writes recover safely
+  ---
+  duration_ms: 20612.952625
+  type: 'test'
+  ...
+# Subtest: K01–K12: lyrics persist across real process restarts with identity and lifecycle isolation
+    # Subtest: K01 seed AMLL preserves attribution, translation, timing and exact repeated-word range
+    ok 1 - K01 seed AMLL preserves attribution, translation, timing and exact repeated-word range
+      ---
+      duration_ms: 1.242375
+      type: 'test'
+      ...
+    # Subtest: K02 seed public lyrics remain distinct
+    ok 2 - K02 seed public lyrics remain distinct
+      ---
+      duration_ms: 0.097416
+      type: 'test'
+      ...
+    # Subtest: K03 seed official lyrics remain distinct
+    ok 3 - K03 seed official lyrics remain distinct
+      ---
+      duration_ms: 0.052
+      type: 'test'
+      ...
+    # Subtest: K04 seed plain LRCLIB content retained
+    ok 4 - K04 seed plain LRCLIB content retained
+      ---
+      duration_ms: 0.0645
+      type: 'test'
+      ...
+    # Subtest: K04 seed instrumental retained
+    ok 5 - K04 seed instrumental retained
+      ---
+      duration_ms: 0.213583
+      type: 'test'
+      ...
+    # Subtest: K01 hit AMLL preserves attribution, translation, timing and exact repeated-word range
+    ok 6 - K01 hit AMLL preserves attribution, translation, timing and exact repeated-word range
+      ---
+      duration_ms: 0.183375
+      type: 'test'
+      ...
+    # Subtest: K02 hit public lyrics remain distinct
+    ok 7 - K02 hit public lyrics remain distinct
+      ---
+      duration_ms: 0.067959
+      type: 'test'
+      ...
+    # Subtest: K03 hit official lyrics remain distinct
+    ok 8 - K03 hit official lyrics remain distinct
+      ---
+      duration_ms: 0.060625
+      type: 'test'
+      ...
+    # Subtest: K04 hit plain LRCLIB content retained
+    ok 9 - K04 hit plain LRCLIB content retained
+      ---
+      duration_ms: 0.239459
+      type: 'test'
+      ...
+    # Subtest: K04 hit instrumental retained
+    ok 10 - K04 hit instrumental retained
+      ---
+      duration_ms: 0.327417
+      type: 'test'
+      ...
+    # Subtest: K01 process restart and new opaque keys need zero requests
+    ok 11 - K01 process restart and new opaque keys need zero requests
+      ---
+      duration_ms: 0.428292
+      type: 'test'
+      ...
+    # Subtest: K05 unexpired cache avoids requests
+    ok 12 - K05 unexpired cache avoids requests
+      ---
+      duration_ms: 0.956333
+      type: 'test'
+      ...
+    # Subtest: K05 age is from write, not last access
+    ok 13 - K05 age is from write, not last access
+      ---
+      duration_ms: 0.443916
+      type: 'test'
+      ...
+    # Subtest: K06 changed title version cannot reuse old cache
+    ok 14 - K06 changed title version cannot reuse old cache
+      ---
+      duration_ms: 0.189334
+      type: 'test'
+      ...
+    # Subtest: K06 changed artists cannot reuse old cache
+    ok 15 - K06 changed artists cannot reuse old cache
+      ---
+      duration_ms: 0.065542
+      type: 'test'
+      ...
+    # Subtest: K06 changed album cannot reuse old cache
+    ok 16 - K06 changed album cannot reuse old cache
+      ---
+      duration_ms: 0.041209
+      type: 'test'
+      ...
+    # Subtest: K06 changed duration cannot reuse old cache
+    ok 17 - K06 changed duration cannot reuse old cache
+      ---
+      duration_ms: 0.074166
+      type: 'test'
+      ...
+    # Subtest: K06 trusted ID input is part of cache identity
+    ok 18 - K06 trusted ID input is part of cache identity
+      ---
+      duration_ms: 0.038083
+      type: 'test'
+      ...
+    # Subtest: K06 incomplete metadata cannot consume cache
+    ok 19 - K06 incomplete metadata cannot consume cache
+      ---
+      duration_ms: 0.085708
+      type: 'test'
+      ...
+    # Subtest: K07 corrupt cache refetches successfully
+    ok 20 - K07 corrupt cache refetches successfully
+      ---
+      duration_ms: 0.034041
+      type: 'test'
+      ...
+    # Subtest: K07 unusable cache directory does not break network result
+    ok 21 - K07 unusable cache directory does not break network result
+      ---
+      duration_ms: 0.049583
+      type: 'test'
+      ...
+    # Subtest: K08 community failure is retried and not persisted
+    ok 22 - K08 community failure is retried and not persisted
+      ---
+      duration_ms: 0.047084
+      type: 'test'
+      ...
+    # Subtest: K08 public failure is retried and not persisted
+    ok 23 - K08 public failure is retried and not persisted
+      ---
+      duration_ms: 0.038542
+      type: 'test'
+      ...
+    # Subtest: K09 changed official token cannot use prior account cache
+    ok 24 - K09 changed official token cannot use prior account cache
+      ---
+      duration_ms: 0.027417
+      type: 'test'
+      ...
+    # Subtest: K09 changed official lyric mode cannot use prior cache
+    ok 25 - K09 changed official lyric mode cannot use prior cache
+      ---
+      duration_ms: 0.057209
+      type: 'test'
+      ...
+    # Subtest: K09 invalid official config cannot use previous success
+    ok 26 - K09 invalid official config cannot use previous success
+      ---
+      duration_ms: 0.028625
+      type: 'test'
+      ...
+    # Subtest: K09 absent config selects public rather than official cache
+    ok 27 - K09 absent config selects public rather than official cache
+      ---
+      duration_ms: 0.025333
+      type: 'test'
+      ...
+    # Subtest: K09 cache contains no credential or manifest plaintext
+    ok 28 - K09 cache contains no credential or manifest plaintext
+      ---
+      duration_ms: 0.024667
+      type: 'test'
+      ...
+    # Subtest: K10 cache directory and files have owner-only access
+    ok 29 - K10 cache directory and files have owner-only access
+      ---
+      duration_ms: 0.02475
+      type: 'test'
+      ...
+    # Subtest: K10 removing cache after stop forces fresh request
+    ok 30 - K10 removing cache after stop forces fresh request
+      ---
+      duration_ms: 0.024792
+      type: 'test'
+      ...
+    # Subtest: K11 cancelled response cannot callback or populate disk
+    ok 31 - K11 cancelled response cannot callback or populate disk
+      ---
+      duration_ms: 0.024583
+      type: 'test'
+      ...
+    # Subtest: K10 newest of 201 entries remains cached
+    ok 32 - K10 newest of 201 entries remains cached
+      ---
+      duration_ms: 0.022959
+      type: 'test'
+      ...
+    # Subtest: K10 recently read old entry survives LRU eviction
+    ok 33 - K10 recently read old entry survives LRU eviction
+      ---
+      duration_ms: 0.021583
+      type: 'test'
+      ...
+    # Subtest: K10 entry count evicts oldest
+    ok 34 - K10 entry count evicts oldest
+      ---
+      duration_ms: 0.018292
+      type: 'test'
+      ...
+    # Subtest: K10 total persisted bytes stay within 20 MiB
+    ok 35 - K10 total persisted bytes stay within 20 MiB
+      ---
+      duration_ms: 0.103875
+      type: 'test'
+      ...
+    # Subtest: K10 byte budget retains valid recent large document
+    ok 36 - K10 byte budget retains valid recent large document
+      ---
+      duration_ms: 0.282292
+      type: 'test'
+      ...
+    # Subtest: K10 byte pressure evicts before count limit and respects 20 MiB
+    ok 37 - K10 byte pressure evicts before count limit and respects 20 MiB
+      ---
+      duration_ms: 0.067667
+      type: 'test'
+      ...
+    # Subtest: K08 empty public result is not persistent success
+    ok 38 - K08 empty public result is not persistent success
+      ---
+      duration_ms: 0.032916
+      type: 'test'
+      ...
+    # Subtest: K01 changed transient player key reuses same full metadata
+    ok 39 - K01 changed transient player key reuses same full metadata
+      ---
+      duration_ms: 0.025791
+      type: 'test'
+      ...
+    # Subtest: K12 no fixture request escapes approved HTTPS sources
+    ok 40 - K12 no fixture request escapes approved HTTPS sources
+      ---
+      duration_ms: 0.02775
+      type: 'test'
+      ...
+    1..40
+ok 58 - K01–K12: lyrics persist across real process restarts with identity and lifecycle isolation
+  ---
+  duration_ms: 29602.552709
+  type: 'test'
+  ...
+# Subtest: K12: real desktop enables both persistent providers
+ok 59 - K12: real desktop enables both persistent providers
+  ---
+  duration_ms: 1.328167
+  type: 'test'
+  ...
+# (node:5978) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/src/result-feedback.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/qiaochao/.codex/worktrees/community-lyrics/likeit/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: M01: one independent three-mode preference defaults to following system
+ok 60 - M01: one independent three-mode preference defaults to following system
+  ---
+  duration_ms: 23.484916
+  type: 'test'
+  ...
+# Subtest: M02: system honors strict motion policy false
+ok 61 - M02: system honors strict motion policy false
+  ---
+  duration_ms: 0.367542
+  type: 'test'
+  ...
+# Subtest: M02: system honors strict motion policy true
+ok 62 - M02: system honors strict motion policy true
+  ---
+  duration_ms: 0.078
+  type: 'test'
+  ...
+# Subtest: M02: system honors strict motion policy undefined
+ok 63 - M02: system honors strict motion policy undefined
+  ---
+  duration_ms: 0.04775
+  type: 'test'
+  ...
+# Subtest: M02: system honors strict motion policy null
+ok 64 - M02: system honors strict motion policy null
+  ---
+  duration_ms: 0.047625
+  type: 'test'
+  ...
+# Subtest: M02: system honors strict motion policy Error: unavailable
+ok 65 - M02: system honors strict motion policy Error: unavailable
+  ---
+  duration_ms: 0.115
+  type: 'test'
+  ...
+# Subtest: M03: always does not depend on system preference and passes explicit permission
+ok 66 - M03: always does not depend on system preference and passes explicit permission
+  ---
+  duration_ms: 0.092625
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode off preserves HUD without optional work
+ok 67 - M04: off or invalid mode off preserves HUD without optional work
+  ---
+  duration_ms: 0.338166
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode undefined preserves HUD without optional work
+ok 68 - M04: off or invalid mode undefined preserves HUD without optional work
+  ---
+  duration_ms: 0.086291
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode null preserves HUD without optional work
+ok 69 - M04: off or invalid mode null preserves HUD without optional work
+  ---
+  duration_ms: 0.10225
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode invalid preserves HUD without optional work
+ok 70 - M04: off or invalid mode invalid preserves HUD without optional work
+  ---
+  duration_ms: 0.065958
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode ALWAYS preserves HUD without optional work
+ok 71 - M04: off or invalid mode ALWAYS preserves HUD without optional work
+  ---
+  duration_ms: 0.037583
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode  preserves HUD without optional work
+ok 72 - M04: off or invalid mode  preserves HUD without optional work
+  ---
+  duration_ms: 0.028125
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode 1 preserves HUD without optional work
+ok 73 - M04: off or invalid mode 1 preserves HUD without optional work
+  ---
+  duration_ms: 0.028416
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode [object Object] preserves HUD without optional work
+ok 74 - M04: off or invalid mode [object Object] preserves HUD without optional work
+  ---
+  duration_ms: 0.0365
+  type: 'test'
+  ...
+# Subtest: M04: off or invalid mode  preserves HUD without optional work
+ok 75 - M04: off or invalid mode  preserves HUD without optional work
+  ---
+  duration_ms: 0.026042
+  type: 'test'
+  ...
+# Subtest: M05: system never celebrates any non-confirmed result
+ok 76 - M05: system never celebrates any non-confirmed result
+  ---
+  duration_ms: 0.1105
+  type: 'test'
+  ...
+# Subtest: M05: always never celebrates any non-confirmed result
+ok 77 - M05: always never celebrates any non-confirmed result
+  ---
+  duration_ms: 0.081583
+  type: 'test'
+  ...
+# Subtest: M05: off never celebrates any non-confirmed result
+ok 78 - M05: off never celebrates any non-confirmed result
+  ---
+  duration_ms: 0.077541
+  type: 'test'
+  ...
+# Subtest: M06: system animation failure keeps successful HUD and never retries
+ok 79 - M06: system animation failure keeps successful HUD and never retries
+  ---
+  duration_ms: 1.180667
+  type: 'test'
+  ...
+# Subtest: M06: always animation failure keeps successful HUD and never retries
+ok 80 - M06: always animation failure keeps successful HUD and never retries
+  ---
+  duration_ms: 0.051833
+  type: 'test'
+  ...
+# Subtest: M07: legacy true still follows system and legacy false stays off
+ok 81 - M07: legacy true still follows system and legacy false stays off
+  ---
+  duration_ms: 0.058333
+  type: 'test'
+  ...
+# Subtest: Decimal precision is bounded before parsing without inspecting lyric strings
+    # Subtest: 200.0000000000000000000000000000000000001
+    ok 1 - 200.0000000000000000000000000000000000001
+      ---
+      duration_ms: 0.584458
+      type: 'test'
+      ...
+    # Subtest: 200.00000000000000000000000000000000001
+    ok 2 - 200.00000000000000000000000000000000001
+      ---
+      duration_ms: 0.340334
+      type: 'test'
+      ...
+    # Subtest: long numeric lyric string preserved
+    ok 3 - long numeric lyric string preserved
+      ---
+      duration_ms: 0.197875
+      type: 'test'
+      ...
+    1..3
+ok 82 - Decimal precision is bounded before parsing without inspecting lyric strings
+  ---
+  duration_ms: 7401.407167
+  type: 'test'
+  ...
+# Subtest: GET query survives server form decoding before signature verification
+ok 83 - GET query survives server form decoding before signature verification
+  ---
+  duration_ms: 11609.403833
+  type: 'test'
+  ...
+# Subtest: JSON encoding cannot bypass numeric precision checks
+    # Subtest: UTF-16
+    ok 1 - UTF-16
+      ---
+      duration_ms: 0.724458
+      type: 'test'
+      ...
+    # Subtest: UTF-16LE
+    ok 2 - UTF-16LE
+      ---
+      duration_ms: 0.082833
+      type: 'test'
+      ...
+    # Subtest: UTF-32
+    ok 3 - UTF-32
+      ---
+      duration_ms: 0.062625
+      type: 'test'
+      ...
+    # Subtest: escaped NUL in valid UTF-8 JSON remains accepted
+    ok 4 - escaped NUL in valid UTF-8 JSON remains accepted
+      ---
+      duration_ms: 0.519459
+      type: 'test'
+      ...
+    1..4
+ok 84 - JSON encoding cannot bypass numeric precision checks
+  ---
+  duration_ms: 6351.939667
+  type: 'test'
+  ...
+# Subtest: invalid PKCS8 attributes must not be ignored
+ok 85 - invalid PKCS8 attributes must not be ignored
+  ---
+  duration_ms: 4945.528625
+  type: 'test'
+  ...
+# Subtest: official lyric signing and payload contract
+    # Subtest: signature known answer 1
+    ok 1 - signature known answer 1
+      ---
+      duration_ms: 4.14775
+      type: 'test'
+      ...
+    # Subtest: signature known answer 2
+    ok 2 - signature known answer 2
+      ---
+      duration_ms: 0.11075
+      type: 'test'
+      ...
+    # Subtest: empty key rejected
+    ok 3 - empty key rejected
+      ---
+      duration_ms: 0.053958
+      type: 'test'
+      ...
+    # Subtest: bad key rejected safely
+    ok 4 - bad key rejected safely
+      ---
+      duration_ms: 0.051208
+      type: 'test'
+      ...
+    # Subtest: original lrc drives existing timeline
+    ok 5 - original lrc drives existing timeline
+      ---
+      duration_ms: 0.043791
+      type: 'test'
+      ...
+    # Subtest: word array not required for lrc
+    ok 6 - word array not required for lrc
+      ---
+      duration_ms: 0.038959
+      type: 'test'
+      ...
+    # Subtest: null distinguishes no word lyrics
+    ok 7 - null distinguishes no word lyrics
+      ---
+      duration_ms: 0.033792
+      type: 'test'
+      ...
+    # Subtest: translation and words not substituted
+    ok 8 - translation and words not substituted
+      ---
+      duration_ms: 0.052125
+      type: 'test'
+      ...
+    # Subtest: untimed text has no synchronized lyrics
+    ok 9 - untimed text has no synchronized lyrics
+      ---
+      duration_ms: 0.088875
+      type: 'test'
+      ...
+    # Subtest: blank timed text is not lyrics success
+    ok 10 - blank timed text is not lyrics success
+      ---
+      duration_ms: 14.1835
+      type: 'test'
+      ...
+    # Subtest: api error never returns supplied lyrics
+    ok 11 - api error never returns supplied lyrics
+      ---
+      duration_ms: 0.278333
+      type: 'test'
+      ...
+    # Subtest: fractional business code rejected
+    ok 12 - fractional business code rejected
+      ---
+      duration_ms: 0.12175
+      type: 'test'
+      ...
+    # Subtest: missing data not confused with null
+    ok 13 - missing data not confused with null
+      ---
+      duration_ms: 0.037209
+      type: 'test'
+      ...
+    # Subtest: array data rejected
+    ok 14 - array data rejected
+      ---
+      duration_ms: 0.03025
+      type: 'test'
+      ...
+    # Subtest: nontext lrc rejected
+    ok 15 - nontext lrc rejected
+      ---
+      duration_ms: 0.274208
+      type: 'test'
+      ...
+    # Subtest: broken json rejected
+    ok 16 - broken json rejected
+      ---
+      duration_ms: 0.655917
+      type: 'test'
+      ...
+    # Subtest: oversize body rejected
+    ok 17 - oversize body rejected
+      ---
+      duration_ms: 0.112291
+      type: 'test'
+      ...
+    1..17
+ok 86 - official lyric signing and payload contract
+  ---
+  duration_ms: 5437.740792
+  type: 'test'
+  ...
+# Subtest: official provider and real desktop integration stay within frozen boundaries
+    # Subtest: missing config disables official provider
+    ok 1 - missing config disables official provider
+      ---
+      duration_ms: 8.595167
+      type: 'test'
+      ...
+    # Subtest: private config loads exact explicit values
+    ok 2 - private config loads exact explicit values
+      ---
+      duration_ms: 0.165417
+      type: 'test'
+      ...
+    # Subtest: default config is outside app bundle
+    ok 3 - default config is outside app bundle
+      ---
+      duration_ms: 0.071833
+      type: 'test'
+      ...
+    # Subtest: empty token rejected safely
+    ok 4 - empty token rejected safely
+      ---
+      duration_ms: 0.14125
+      type: 'test'
+      ...
+    # Subtest: empty device rejected
+    ok 5 - empty device rejected
+      ---
+      duration_ms: 0.100875
+      type: 'test'
+      ...
+    # Subtest: remote key path rejected
+    ok 6 - remote key path rejected
+      ---
+      duration_ms: 0.116416
+      type: 'test'
+      ...
+    # Subtest: shared config permissions rejected
+    ok 7 - shared config permissions rejected
+      ---
+      duration_ms: 0.0895
+      type: 'test'
+      ...
+    # Subtest: shared key permissions rejected
+    ok 8 - shared key permissions rejected
+      ---
+      duration_ms: 0.088333
+      type: 'test'
+      ...
+    # Subtest: oversize config rejected
+    ok 9 - oversize config rejected
+      ---
+      duration_ms: 1.81275
+      type: 'test'
+      ...
+    # Subtest: signed manifest mapping and word lyrics complete
+    ok 10 - signed manifest mapping and word lyrics complete
+      ---
+      duration_ms: 0.133584
+      type: 'test'
+      ...
+    # Subtest: word lrc does not require ordinary lyric permission
+    ok 11 - word lrc does not require ordinary lyric permission
+      ---
+      duration_ms: 0.097125
+      type: 'test'
+      ...
+    # Subtest: manifest GET command signs query fields
+    ok 12 - manifest GET command signs query fields
+      ---
+      duration_ms: 0.048084
+      type: 'test'
+      ...
+    # Subtest: null word result falls back to ordinary lyrics
+    ok 13 - null word result falls back to ordinary lyrics
+      ---
+      duration_ms: 0.0325
+      type: 'test'
+      ...
+    # Subtest: unsynchronized word result uses nested ordinary lrc
+    ok 14 - unsynchronized word result uses nested ordinary lrc
+      ---
+      duration_ms: 0.027667
+      type: 'test'
+      ...
+    # Subtest: ordinary empty is not transport failure
+    ok 15 - ordinary empty is not transport failure
+      ---
+      duration_ms: 0.038084
+      type: 'test'
+      ...
+    # Subtest: API error does not fallback or leak body
+    ok 16 - API error does not fallback or leak body
+      ---
+      duration_ms: 0.047916
+      type: 'test'
+      ...
+    # Subtest: malformed word payload does not fallback
+    ok 17 - malformed word payload does not fallback
+      ---
+      duration_ms: 0.022833
+      type: 'test'
+      ...
+    # Subtest: malformed ordinary original is not empty success
+    ok 18 - malformed ordinary original is not empty success
+      ---
+      duration_ms: 0.027167
+      type: 'test'
+      ...
+    # Subtest: HTTP failure is unavailable
+    ok 19 - HTTP failure is unavailable
+      ---
+      duration_ms: 0.074458
+      type: 'test'
+      ...
+    # Subtest: original ID is required independently
+    ok 20 - original ID is required independently
+      ---
+      duration_ms: 0.140084
+      type: 'test'
+      ...
+    # Subtest: unmatched page does not guess encrypted ID
+    ok 21 - unmatched page does not guess encrypted ID
+      ---
+      duration_ms: 0.027958
+      type: 'test'
+      ...
+    # Subtest: conflicting mappings rejected
+    ok 22 - conflicting mappings rejected
+      ---
+      duration_ms: 0.025959
+      type: 'test'
+      ...
+    # Subtest: identical mappings may repeat
+    ok 23 - identical mappings may repeat
+      ---
+      duration_ms: 0.021291
+      type: 'test'
+      ...
+    # Subtest: numeric original is not encrypted ID
+    ok 24 - numeric original is not encrypted ID
+      ---
+      duration_ms: 0.023792
+      type: 'test'
+      ...
+    # Subtest: off-host command rejected
+    ok 25 - off-host command rejected
+      ---
+      duration_ms: 2.7025
+      type: 'test'
+      ...
+    # Subtest: encoded traversal rejected
+    ok 26 - encoded traversal rejected
+      ---
+      duration_ms: 0.074917
+      type: 'test'
+      ...
+    # Subtest: unsupported method rejected
+    ok 27 - unsupported method rejected
+      ---
+      duration_ms: 0.026166
+      type: 'test'
+      ...
+    # Subtest: unknown auth provider rejected
+    ok 28 - unknown auth provider rejected
+      ---
+      duration_ms: 0.159875
+      type: 'test'
+      ...
+    # Subtest: undeclared keyword rejected
+    ok 29 - undeclared keyword rejected
+      ---
+      duration_ms: 0.02375
+      type: 'test'
+      ...
+    # Subtest: upload command rejected
+    ok 30 - upload command rejected
+      ---
+      duration_ms: 0.021958
+      type: 'test'
+      ...
+    # Subtest: fixed keyword cannot replace input
+    ok 31 - fixed keyword cannot replace input
+      ---
+      duration_ms: 0.05125
+      type: 'test'
+      ...
+    # Subtest: missing required parameter rejected
+    ok 32 - missing required parameter rejected
+      ---
+      duration_ms: 0.031542
+      type: 'test'
+      ...
+    # Subtest: incomplete manifest cannot guess routes
+    ok 33 - incomplete manifest cannot guess routes
+      ---
+      duration_ms: 0.027917
+      type: 'test'
+      ...
+    # Subtest: MediaRemote UUID rejected before network
+    ok 34 - MediaRemote UUID rejected before network
+      ---
+      duration_ms: 0.024791
+      type: 'test'
+      ...
+    # Subtest: cancel suppresses delayed callback and chain
+    ok 35 - cancel suppresses delayed callback and chain
+      ---
+      duration_ms: 0.03475
+      type: 'test'
+      ...
+    # Subtest: new load excludes old generation
+    ok 36 - new load excludes old generation
+      ---
+      duration_ms: 0.552292
+      type: 'test'
+      ...
+    # Subtest: oversize network response rejected
+    ok 37 - oversize network response rejected
+      ---
+      duration_ms: 0.045375
+      type: 'test'
+      ...
+    # Subtest: unconfigured desktop preserves original public chain
+    ok 38 - unconfigured desktop preserves original public chain
+      ---
+      duration_ms: 0.069167
+      type: 'test'
+      ...
+    # Subtest: configured desktop verifies public identity before official lyrics
+    ok 39 - configured desktop verifies public identity before official lyrics
+      ---
+      duration_ms: 0.025791
+      type: 'test'
+      ...
+    # Subtest: new provider cannot bypass incomplete public identity
+    ok 40 - new provider cannot bypass incomplete public identity
+      ---
+      duration_ms: 0.026208
+      type: 'test'
+      ...
+    # Subtest: invalid explicit config does not silently use public lyrics
+    ok 41 - invalid explicit config does not silently use public lyrics
+      ---
+      duration_ms: 0.024708
+      type: 'test'
+      ...
+    # Subtest: every emitted request is independently signature-verified
+    ok 42 - every emitted request is independently signature-verified
+      ---
+      duration_ms: 21.309291
+      type: 'test'
+      ...
+    1..42
+ok 87 - official provider and real desktop integration stay within frozen boundaries
+  ---
+  duration_ms: 19249.901583
+  type: 'test'
+  ...
+# Subtest: numeric JSON retains precision before identity and fixed-value checks
+    # Subtest: numeric source
+    ok 1 - numeric source
+      ---
+      duration_ms: 2.483167
+      type: 'test'
+      ...
+    # Subtest: fixed conflict
+    ok 2 - fixed conflict
+      ---
+      duration_ms: 0.148792
+      type: 'test'
+      ...
+    1..2
+ok 88 - numeric JSON retains precision before identity and fixed-value checks
+  ---
+  duration_ms: 14344.033333
+  type: 'test'
+  ...
+# Subtest: personal developer defaults, explicit ID pair and chosen lyric source
+    # Subtest: defaults
+    ok 1 - defaults
+      ---
+      duration_ms: 2.2825
+      type: 'test'
+      ...
+    # Subtest: provided wins
+    ok 2 - provided wins
+      ---
+      duration_ms: 0.129875
+      type: 'test'
+      ...
+    # Subtest: invalid used default
+    ok 3 - invalid used default
+      ---
+      duration_ms: 0.060875
+      type: 'test'
+      ...
+    # Subtest: records pair
+    ok 4 - records pair
+      ---
+      duration_ms: 0.096917
+      type: 'test'
+      ...
+    # Subtest: records missing original
+    ok 5 - records missing original
+      ---
+      duration_ms: 0.068333
+      type: 'test'
+      ...
+    # Subtest: records numeric id
+    ok 6 - records numeric id
+      ---
+      duration_ms: 0.046834
+      type: 'test'
+      ...
+    # Subtest: records conflicting id
+    ok 7 - records conflicting id
+      ---
+      duration_ms: 0.039625
+      type: 'test'
+      ...
+    # Subtest: standard
+    ok 8 - standard
+      ---
+      duration_ms: 0.045125
+      type: 'test'
+      ...
+    # Subtest: standard permission error
+    ok 9 - standard permission error
+      ---
+      duration_ms: 0.069209
+      type: 'test'
+      ...
+    # Subtest: word permission error
+    ok 10 - word permission error
+      ---
+      duration_ms: 0.075666
+      type: 'test'
+      ...
+    # Subtest: invalid explicit source rejected
+    ok 11 - invalid explicit source rejected
+      ---
+      duration_ms: 0.08275
+      type: 'test'
+      ...
+    1..11
+ok 89 - personal developer defaults, explicit ID pair and chosen lyric source
+  ---
+  duration_ms: 13900.304916
+  type: 'test'
+  ...
+# Subtest: personal developer manifest accepts null fixed parameters without accepting wrong types
+    # Subtest: word original
+    ok 1 - word original
+      ---
+      duration_ms: 1.307333
+      type: 'test'
+      ...
+    # Subtest: ordinary fallback
+    ok 2 - ordinary fallback
+      ---
+      duration_ms: 0.340167
+      type: 'test'
+      ...
+    # Subtest: malformed fixed params
+    ok 3 - malformed fixed params
+      ---
+      duration_ms: 0.125
+      type: 'test'
+      ...
+    1..3
+ok 90 - personal developer manifest accepts null fixed parameters without accepting wrong types
+  ---
+  duration_ms: 13431.381916
+  type: 'test'
+  ...
+# Subtest: reviewed identity and response compatibility regressions
+    # Subtest: fractional
+    ok 1 - fractional
+      ---
+      duration_ms: 8.50325
+      type: 'test'
+      ...
+    # Subtest: null original
+    ok 2 - null original
+      ---
+      duration_ms: 0.349875
+      type: 'test'
+      ...
+    # Subtest: empty original
+    ok 3 - empty original
+      ---
+      duration_ms: 0.089875
+      type: 'test'
+      ...
+    # Subtest: fixed
+    ok 4 - fixed
+      ---
+      duration_ms: 0.065125
+      type: 'test'
+      ...
+    # Subtest: fixed wrong type
+    ok 5 - fixed wrong type
+      ---
+      duration_ms: 0.061541
+      type: 'test'
+      ...
+    1..5
+ok 91 - reviewed identity and response compatibility regressions
+  ---
+  duration_ms: 14079.885416
+  type: 'test'
+  ...
+# Subtest: fractional success codes are rejected before selecting lyrics
+    # Subtest: core
+    ok 1 - core
+      ---
+      duration_ms: 1.368584
+      type: 'test'
+      ...
+    # Subtest: manifest
+    ok 2 - manifest
+      ---
+      duration_ms: 0.394291
+      type: 'test'
+      ...
+    # Subtest: search
+    ok 3 - search
+      ---
+      duration_ms: 0.231791
+      type: 'test'
+      ...
+    # Subtest: word
+    ok 4 - word
+      ---
+      duration_ms: 0.929041
+      type: 'test'
+      ...
+    # Subtest: ordinary
+    ok 5 - ordinary
+      ---
+      duration_ms: 0.0655
+      type: 'test'
+      ...
+    1..5
+ok 92 - fractional success codes are rejected before selecting lyrics
+  ---
+  duration_ms: 11318.127792
+  type: 'test'
+  ...
+1..92
+# tests 370
+# suites 0
+# pass 368
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 48996.002792
