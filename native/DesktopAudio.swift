@@ -17,6 +17,8 @@ final class DesktopAudio {
     private var intentReason = ""
     private var intentRevision: UInt64 = 0
     private var reconcileQueued = false
+    private var retryRequested = false
+    private var failureMessage: String?
     private var captureEpoch: UInt64 = 0
     private let buffer = UnsafeMutablePointer<Float>.allocate(capacity: 2048)
     private var cursor = 0
@@ -29,8 +31,6 @@ final class DesktopAudio {
     private var timer: DispatchSourceTimer?
     private var sampleRate = 0.0
     private var currentPID: pid_t?
-    private var failed = false
-    private var failureMessage = ""
     private var lastRebuild = 0.0
     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
     var output: ((AudioFeatures, String) -> Void)?
@@ -52,6 +52,22 @@ final class DesktopAudio {
         if enqueue { queue.async { [self] in reconcile() } }
     }
 
+    var canRetry: Bool {
+        intentLock.lock(); defer { intentLock.unlock() }
+        return !stopped && desiredPID != nil && failureMessage != nil && !retryRequested
+    }
+
+    func retry() {
+        intentLock.lock()
+        guard !stopped, desiredPID != nil, failureMessage != nil, !retryRequested else { intentLock.unlock(); return }
+        retryRequested = true
+        intentRevision &+= 1
+        let enqueue = !reconcileQueued
+        reconcileQueued = true
+        intentLock.unlock()
+        if enqueue { queue.async { [self] in reconcile() } }
+    }
+
     func stop(completion: @escaping () -> Void) {
         intentLock.lock()
         stopped = true
@@ -64,21 +80,26 @@ final class DesktopAudio {
         }
     }
 
-    private func intent() -> (pid: pid_t?, reason: String, revision: UInt64, stopped: Bool, epoch: UInt64) {
+    private func intent(consumingRetry: Bool = false) -> (pid: pid_t?, reason: String, revision: UInt64, stopped: Bool, epoch: UInt64, failure: String?) {
         intentLock.lock(); defer { intentLock.unlock() }
-        return (desiredPID, intentReason, intentRevision, stopped, captureEpoch)
+        if consumingRetry && retryRequested {
+            retryRequested = false
+            if !stopped && desiredPID != nil { failureMessage = nil }
+        }
+        return (desiredPID, intentReason, intentRevision, stopped, captureEpoch, failureMessage)
     }
 
     private func reconcile() {
         while true {
-            let request = intent()
+            let request = intent(consumingRetry: true)
             if !request.stopped {
                 if request.pid != currentPID {
                     releaseCapture()
-                    if let pid = request.pid, !failed { start(pid) }
+                    if let pid = request.pid, request.failure == nil { start(pid) }
                 }
-                if request.pid == nil || failed {
-                    publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? failureMessage : request.reason)
+                let failure = intent().failure
+                if request.pid == nil || failure != nil {
+                    publish(.init(rms: 0, low: 0, mid: 0, high: 0), failure ?? request.reason)
                 }
             }
             intentLock.lock()
@@ -156,8 +177,9 @@ final class DesktopAudio {
             try checked(AudioHardwareCreateAggregateDevice(composition as CFDictionary, &device), stage: "create-aggregate")
             try checkIntent(pid)
             guard device != kAudioObjectUnknown else { throw CaptureError.invalid("create-aggregate-handle") }
+            let epoch = intent().epoch
             try checked(AudioDeviceCreateIOProcIDWithBlock(&ioProc, device, ioQueue) { [weak self] _, input, _, _, _ in
-                self?.receive(input)
+                self?.receive(input, epoch: epoch)
             }, stage: "create-io-proc")
             try checkIntent(pid)
             guard ioProc != nil else { throw CaptureError.invalid("create-io-proc-handle") }
@@ -175,7 +197,6 @@ final class DesktopAudio {
                 try listen(object, selector)
                 try checkIntent(pid)
             }
-            let epoch = intent().epoch
             let timer = DispatchSource.makeTimerSource(queue: queue)
             timer.schedule(deadline: .now(), repeating: 1.0 / 30, leeway: .milliseconds(3))
             timer.setEventHandler { [weak self] in
@@ -189,8 +210,10 @@ final class DesktopAudio {
         } catch CaptureError.cancelled {
             releaseCapture()
         } catch {
-            failed = true
-            failureMessage = "音频启动失败 · 可重试音频"
+            let message = "音频启动失败 · 可重试音频"
+            intentLock.lock()
+            failureMessage = message
+            intentLock.unlock()
             switch error {
             case CaptureError.unavailable(let stage, let status):
                 audioLog.error("Capture failed: stage=\(stage, privacy: .public) OSStatus=\(status, privacy: .public)")
@@ -199,14 +222,15 @@ final class DesktopAudio {
             default: audioLog.error("Capture failed: stage=start reason=unexpected-error")
             }
             releaseCapture()
-            publish(.init(rms: 0, low: 0, mid: 0, high: 0), failureMessage)
+            publish(.init(rms: 0, low: 0, mid: 0, high: 0), message)
         }
     }
 
     // The callback only copies into fixed storage; contention drops a frame instead of blocking I/O.
-    private func receive(_ input: UnsafePointer<AudioBufferList>) {
+    private func receive(_ input: UnsafePointer<AudioBufferList>, epoch: UInt64) {
         guard bufferLock.try() else { return }
         defer { bufferLock.unlock() }
+        guard isCurrent(epoch) else { return }
         let buffers = UnsafeMutableAudioBufferListPointer(UnsafeMutablePointer(mutating: input))
         guard let first = buffers.first, first.mNumberChannels > 0, first.mData != nil else { return }
         let frames = min(8192, Int(first.mDataByteSize) / (4 * Int(first.mNumberChannels)))
@@ -273,8 +297,8 @@ final class DesktopAudio {
         releaseCapture()
         publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备变化 · 正在重新核对")
         let request = intent()
-        if let pid = request.pid, !failed, !request.stopped { start(pid) }
-        else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备不稳定 · 保持静态，退出后可重试") }
+        if let pid = request.pid, request.failure == nil, !request.stopped { start(pid) }
+        else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), request.failure ?? request.reason) }
     }
 
     private func releaseCapture() {

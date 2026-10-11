@@ -8,6 +8,7 @@ final class DesktopModel: ObservableObject {
     @Published var nextLine = ""
     @Published var status = "等待网易云歌曲信息"
     @Published var audioStatus = ""
+    @Published var canRetryAudio = false
     @Published var progress = 0.0
     @Published var low = 0.0
     @Published var mid = 0.0
@@ -16,6 +17,7 @@ final class DesktopModel: ObservableObject {
 
 struct DesktopView: View {
     @ObservedObject var model: DesktopModel
+    let retryAudio: () -> Void
     let exit: () -> Void
 
     var body: some View {
@@ -55,6 +57,9 @@ struct DesktopView: View {
                         VStack(alignment: .trailing, spacing: 6) {
                             Text(model.status)
                             Text(model.audioStatus)
+                            if model.canRetryAudio {
+                                Button("重试音频", action: retryAudio).buttonStyle(.bordered).accessibilityLabel("重试系统音频采集")
+                            }
                         }.font(.system(size: 12)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.trailing)
                     }
                 }.padding(40)
