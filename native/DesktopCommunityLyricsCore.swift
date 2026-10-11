@@ -97,7 +97,7 @@ func parseCommunityTTML(_ text: String) -> [CommunityLyricLine] {
     func validTimes(_ node: TTMLNode) -> Bool {
         if node.name == "head" { return true }
         if node.attributes["begin"] != nil || node.attributes["end"] != nil {
-            guard ["p", "span"].contains(node.name), interval(node, required: node.name == "p") != nil else { return false }
+            guard ["body", "div", "p", "span"].contains(node.name), interval(node, required: node.name != "span") != nil else { return false }
         }
         return node.children.allSatisfy(validTimes)
     }
@@ -130,17 +130,26 @@ func parseCommunityTTML(_ text: String) -> [CommunityLyricLine] {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
         return CommunityLyricLine(start: start, end: end, text: text, translation: translation, words: words)
     }
-    func visit(_ node: TTMLNode, parent: String?) -> Bool {
+    func visit(_ node: TTMLNode, parent: String?, bounds: (Double, Double)? = nil) -> Bool {
         guard node.namespace == ttmlNamespace else { return false }
         if node.name == "head" { return parent == "tt" }
         if node.name == "p" {
-            guard parent == "div", let parsed = line(node), parsed.start >= (lines.last?.start ?? 0) else { return false }
+            guard parent == "div", let parsed = line(node),
+                  bounds.map({ parsed.start >= $0.0 && parsed.end <= $0.1 }) ?? true else { return false }
             lines.append(parsed); return true
         }
         guard (node.name == "tt" && parent == nil) || (node.name == "body" && parent == "tt") || (node.name == "div" && ["body", "div"].contains(parent)) else { return false }
-        return node.children.allSatisfy { visit($0, parent: node.name) }
+        var childBounds = bounds
+        if node.attributes["begin"] != nil || node.attributes["end"] != nil {
+            guard let range = interval(node, required: true), bounds.map({ range.0 >= $0.0 && range.1 <= $0.1 }) ?? true else { return false }
+            childBounds = range
+        }
+        return node.children.allSatisfy { visit($0, parent: node.name, bounds: childBounds) }
     }
-    return validTimes(root) && visit(root, parent: nil) ? lines : []
+    guard validTimes(root), visit(root, parent: nil) else { return [] }
+    // Overlapping containers can interleave lines; retain document order for tied starts.
+    return lines.enumerated().sorted { $0.element.start == $1.element.start ? $0.offset < $1.offset : $0.element.start < $1.element.start }.map(\.element)
+
 }
 
 func communityLRCLines(_ text: String, duration: Double) -> [CommunityLyricLine] {
