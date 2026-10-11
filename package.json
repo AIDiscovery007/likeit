@@ -28,7 +28,7 @@
     {
       "name": "preview-confetti",
       "title": "Preview Confetti (Development)",
-      "description": "Preview Raycast's built-in confetti without accessing music.",
+      "description": "Preview Likeit's native confetti without accessing music.",
       "mode": "no-view"
     }
   ],

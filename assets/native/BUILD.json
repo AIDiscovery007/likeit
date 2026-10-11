@@ -6,7 +6,23 @@
   ],
   "controllerSourceSHA256": "5168a1b5484568be69dfd7a0d8d378470414fb9ca05a911628eff242d424c512",
   "reduceMotionSourceSHA256": "d912ebc0cf2d6cf60e1f404fb66b948148abc1debd5d056c5ba8fb49fb852a02",
-  "buildScriptSHA256": "3c09e45a08df5181d7aedc5c7f3053566b4ee06704b918d8e639734489e87177",
+  "confettiSourceSHA256": "3b4cc3f52799459ebcc27a08615418ba89d69a15d1c15b2a74f1a168adc075b7",
+  "confettiUpstream": {
+    "repository": "https://github.com/simibac/ConfettiSwiftUI",
+    "version": "3.0.0",
+    "commit": "9ae5bc2ce2149980884d4612321c3a266d6bf82c",
+    "files": {
+      "LICENSE": "7f5138952ef2a5c9fc4ef15d77d8449f0b20f0da041ebc493153febefa9daa4d",
+      "Package.swift": "233f1cb5aada18f131991a61bbc83dd713b2213ee24202c098bdd52e9cd505e3",
+      "Sources/ConfettiSwiftUI.swift": "3fbb7f0c83aae0e5db351e1b43801134e98cd45b143891bb92078be5433cb0e1",
+      "Sources/View+ConfettiCannon.swift": "3ad23c43610a172955a79359ad502c09340ae52c60fc00b280642bf736d6ac02",
+      "Sources/Shapes/RoundedCross.swift": "785e9ffaf63e43b04b26d7a2e5ec2de5323f23be6e44794393812005c74a0e8c",
+      "Sources/Shapes/SlimRectangle.swift": "d5731df200566f3a5c4776c82a2beb55eafb1fc26905d9ba352a4974031f214e",
+      "Sources/Shapes/Triangle.swift": "8b161bbdbfbbaf8c4f34188d9c59a7b05a3c58bd0fbd1614d2b1713e057d78cf"
+    }
+  },
+  "confettiPatchedSourceSHA256": "133c61ed5e14c727c27e8adceb18dd616fd35646c05c2e4eeb31eb959a576e5a",
+  "buildScriptSHA256": "5b79db9e87399c7d9b1c9a7fe24b74a87efcc46efd55a19e21f5a9f8d087416c",
   "compiler": "Apple clang version 17.0.0 (clang-1700.4.4.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
   "commands": [
     "xcrun clang -dynamiclib -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=13.0 -fobjc-arc -fvisibility=default -I<PROJECT>/vendor/mediaremote-adapter/include -I<PROJECT>/vendor/mediaremote-adapter/src <PROJECT>/vendor/mediaremote-adapter/src/adapter/env.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/get.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/globals.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/keys.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/now_playing.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/repeat.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/seek.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/send.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/shuffle.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/speed.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/stream.m <PROJECT>/vendor/mediaremote-adapter/src/adapter/test.m <PROJECT>/vendor/mediaremote-adapter/src/private/MediaRemote.m <PROJECT>/vendor/mediaremote-adapter/src/utility/Debounce.m <PROJECT>/vendor/mediaremote-adapter/src/utility/helpers.m -framework Foundation -framework AppKit -framework UniformTypeIdentifiers -install_name @rpath/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter -o <BUILD>/arm64",
@@ -26,15 +42,23 @@
     "xcrun lipo -create <BUILD>/reduce-motion-arm64 <BUILD>/reduce-motion-x86_64 -output <BUILD>/likeit-reduce-motion",
     "/usr/bin/codesign --force --sign - <BUILD>/likeit-reduce-motion",
     "/usr/bin/codesign --verify --strict <BUILD>/likeit-reduce-motion",
-    "xcrun lipo <BUILD>/likeit-reduce-motion -verify_arch arm64 x86_64"
+    "xcrun lipo <BUILD>/likeit-reduce-motion -verify_arch arm64 x86_64",
+    "xcrun swiftc -O -parse-as-library -target arm64-apple-macosx13.0 -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk <PROJECT>/native/Confetti.swift <BUILD>/ConfettiSwiftUI/ConfettiSwiftUI.swift <BUILD>/ConfettiSwiftUI/Shapes/RoundedCross.swift <BUILD>/ConfettiSwiftUI/Shapes/SlimRectangle.swift <BUILD>/ConfettiSwiftUI/Shapes/Triangle.swift <BUILD>/ConfettiSwiftUI/View+ConfettiCannon.swift -framework AppKit -framework SwiftUI -o <BUILD>/confetti-arm64",
+    "xcrun swiftc -O -parse-as-library -target x86_64-apple-macosx13.0 -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk <PROJECT>/native/Confetti.swift <BUILD>/ConfettiSwiftUI/ConfettiSwiftUI.swift <BUILD>/ConfettiSwiftUI/Shapes/RoundedCross.swift <BUILD>/ConfettiSwiftUI/Shapes/SlimRectangle.swift <BUILD>/ConfettiSwiftUI/Shapes/Triangle.swift <BUILD>/ConfettiSwiftUI/View+ConfettiCannon.swift -framework AppKit -framework SwiftUI -o <BUILD>/confetti-x86_64",
+    "xcrun lipo -create <BUILD>/confetti-arm64 <BUILD>/confetti-x86_64 -output <BUILD>/likeit-confetti",
+    "/usr/bin/codesign --force --sign - <BUILD>/likeit-confetti",
+    "/usr/bin/codesign --verify --strict <BUILD>/likeit-confetti",
+    "xcrun lipo <BUILD>/likeit-confetti -verify_arch arm64 x86_64"
   ],
   "sha256": {
+    "LICENSE-ConfettiSwiftUI": "7f5138952ef2a5c9fc4ef15d77d8449f0b20f0da041ebc493153febefa9daa4d",
     "LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter": "765d305bc480b5a08bffdc319856251efc27b0a536737a683bb181598b81113a",
     "MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist": "599acb89ed048dedc60d9257e7f320195d418a5494ca8c81e79fc03bedcd6b1e",
     "MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources": "5da1dac59eb6395e0e488df225718f360336a6a6da2f08dcd6c49a021bbe68ee",
+    "likeit-confetti": "774a64a161b54b017f8e2bb8b88989609196227b5f900d2feb739e36fd16eb95",
     "likeit-controller": "d2a39d54bf75742f198497b5802559781785b1fdce86849bd9bcfce25ca463e9",
     "likeit-reduce-motion": "70099374a3348edaa2ad0fe3e83a7b074e10d249cf08441c067cc5ff6a373c9a",
     "mediaremote-adapter.pl": "d97802e46db9535e2549e178c105ebf417a0254b3929fc32f08ecfd14d49a85f"

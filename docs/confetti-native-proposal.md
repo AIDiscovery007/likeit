@@ -1,6 +1,6 @@
-# 原生彩带最小包装提案（待协调者批准）
+# 原生彩带最小包装提案（已批准）
 
-C1 的扩展内 `open("raycast://confetti")` 仍出现确认框，由协调者取消。正式路径不采用该 URL，不改变 Raycast 安全设置。本提案只记录实现方案，尚未引入 renderer。
+C1 的扩展内 `open("raycast://confetti")` 仍出现确认框，由协调者取消。正式路径不采用该 URL，不改变 Raycast 安全设置。协调者已批准本方案；实现边界见 `result-feedback-design.md`。后续 SDK 核对发现 `.prohibited` 不允许创建窗口，协调者另批准 `.accessory`，窗口仍保持不激活、不可聚焦和鼠标穿透。
 
 ## 固定依赖
 
@@ -20,7 +20,7 @@ MIT，Copyright (c) 2020 Simon Bachmann；完整许可证随 vendored 源码和�
 
 ## 包装与视觉
 
-新增独立 `likeit-confetti` 可执行 helper，AppKit + SwiftUI，不改变音乐 controller。启动时检查 Reduce Motion，取得当前鼠标位置所在的 `NSScreen`，固定该屏幕 frame；无匹配屏幕就退出。进程使用禁止激活策略；透明无边框 `.nonactivatingPanel`，不能成为 key/main window，`ignoresMouseEvents=true`，无阴影，`hidesOnDeactivate=false`，不调用 activate 或 makeKey。使用 `canJoinAllSpaces`、`fullScreenAuxiliary`、`ignoresCycle`，窗口层级为 statusBar；实际 Space / 全屏行为由 reviewer 验证。
+新增独立 `likeit-confetti` 可执行 helper，AppKit + SwiftUI，不改变音乐 controller。启动时检查 Reduce Motion，取得当前鼠标位置所在的 `NSScreen`，固定该屏幕 frame；无匹配屏幕就退出。进程使用协调者后续批准的 `.accessory` 策略；透明无边框 `.nonactivatingPanel`，不能成为 key/main window，`ignoresMouseEvents=true`，无阴影，`hidesOnDeactivate=false`，不调用 activate 或 makeKey。使用 `canJoinAllSpaces`、`fullScreenAuxiliary`、`ignoresCycle`，窗口层级为 statusBar；实际 Space / 全屏行为由 reviewer 验证。
 
 NSHostingView 放两个 cannon：左右边缘、距顶部约 72% 高度，各 60 个彩色纸片（square/slimRectangle/circle），左 35–75°、右 105–145°，向内上方喷射。半径取 `min(width * 0.65, height * 0.9)`，下落距离取 `height * 0.45`；仅一次 trigger，`repetitions=1`、`hapticFeedback=false`、`fadesOut=true`。不播放声音。
 
@@ -38,4 +38,4 @@ TypeScript adapter 启动 helper 后等待一行 `started` / `skipped`，启动�
 
 构建复用 `scripts/build-native.py`：校验原始源摘要 → 在临时目录应用上述两行补丁 → `swiftc` 编译 helper 和五个 Swift 源文件，链接 AppKit/SwiftUI，目标 macOS 13 的 arm64/x86_64 → lipo → ad-hoc 签名及校验 → BUILD.json 记录 wrapper/构建脚本/补丁后源码/产物摘要与完整命令。运行时不下载、不编译、不增加隐私授权。
 
-待确认：此依赖子集、两行时间补丁、窗口策略及启动/生命周期方案。视觉、当前屏幕、键鼠穿透、焦点/Space、并发和清理仍需真实验收；源码和编译成功不能替代。
+此依赖子集、两行时间补丁、窗口策略及启动/生命周期方案已获批准。视觉、当前屏幕、键鼠穿透、焦点/Space、并发和清理仍需真实验收；源码和编译成功不能替代。

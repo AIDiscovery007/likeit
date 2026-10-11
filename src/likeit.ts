@@ -1,7 +1,10 @@
-import { closeMainWindow, environment, showHUD } from "@raycast/api";
+import { closeMainWindow, environment, getPreferenceValues, showHUD } from "@raycast/api";
 import { join } from "node:path";
 import { likeCurrentTrack, type Status } from "./like-current-track";
 import { BusyError, openNetease } from "./netease";
+import { presentResult } from "./result-feedback";
+import { readReduceMotion } from "./reduce-motion";
+import { celebrate } from "./confetti";
 
 const messages: Record<Status | "busy", string> = {
   liked: "网易云客户端已确认喜欢；云端同步以客户端为准",
@@ -34,5 +37,16 @@ export default async function Command() {
       }
     }
   }
-  await showHUD(messages[status]);
+  let enabled = false;
+  try {
+    enabled = getPreferenceValues<Preferences>().successConfetti === true;
+  } catch {
+    // An unreadable optional preference must not hide the music result.
+  }
+  const nativeDirectory = join(environment.assetsPath, "native");
+  await presentResult(status, enabled, {
+    showHUD: (result) => showHUD(messages[result]),
+    readReduceMotion: () => readReduceMotion(nativeDirectory),
+    celebrate: () => celebrate(nativeDirectory, environment.supportPath),
+  });
 }

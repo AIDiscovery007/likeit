@@ -12,6 +12,8 @@ macOS 网易云音乐的 Raycast `like` 命令：确认当前正在播放的歌�
 
 成功提示表示同一播放条目的客户端菜单已确认喜欢，不保证云端同步。出现“结果未确认”时请在网易云检查；命令不会重试点击。未登录、离线或不支持收藏的内容可能无法确认结果。
 
+新收藏确认后，默认显示一次双侧彩带；可在 Raycast 的 Likeit 偏好中关闭 **Success Confetti → Celebrate newly liked tracks**。已喜欢或结果未确认时不庆祝。macOS 开启“减少动态效果”，或无法读取该设置时，只显示原文字提示。彩带故障不会改变收藏结果或重试收藏。本轮彩带仍待真实桌面验收。
+
 ## 权限
 
 正式命令通过原生辅助功能接口读取菜单并执行语义明确的 Like。需要在“系统设置 → 隐私与安全性 → 辅助功能”检查 Raycast 相关授权。命令只检测权限，不弹出授权申请或修改系统设置。本机现有权限下的 Raycast 路径已成功；没有更改系统授权，首次授权流程及权限撤回后的体验仍未验证。开发终端可读不代表另一台机器上的 Raycast 已获授权。
@@ -28,6 +30,8 @@ npm run dev
 ```
 
 `assets/native` 已包含控制器、MediaRemote framework、Perl 入口及许可证。普通命令只运行随包二进制和 macOS 自带 Perl，不下载或编译代码，用户无需安装 Xcode、CMake 或 Homebrew。
+
+彩带和 Reduce Motion 使用独立的随包 helper，不访问音乐、不增加辅助功能／录屏／自动化授权。彩带依赖固定 ConfettiSwiftUI 3.0.0（`9ae5bc2ce2149980884d4612321c3a266d6bf82c`），原始源文件及 MIT 许可保留在 `vendor/ConfettiSwiftUI`；两处获批时长补丁仅作用于构建副本，来源和产物摘要记录于 `assets/native/BUILD.json`。
 
 修改原生源码的开发者使用 Python 3 和 Apple Command Line Tools 重建：
 

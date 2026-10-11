@@ -11,11 +11,16 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "vendor/mediaremote-adapter"
+CONFETTI_SOURCE = ROOT / "vendor/ConfettiSwiftUI"
 ASSETS = ROOT / "assets/native"
 manifest = json.loads((SOURCE / "SOURCE.json").read_text())
 for name, expected in manifest["files"].items():
     if hashlib.sha256((SOURCE / name).read_bytes()).hexdigest() != expected:
         raise SystemExit(f"Upstream source checksum mismatch: {name}")
+confetti_manifest = json.loads((CONFETTI_SOURCE / "SOURCE.json").read_text())
+for name, expected in confetti_manifest["files"].items():
+    if hashlib.sha256((CONFETTI_SOURCE / name).read_bytes()).hexdigest() != expected:
+        raise SystemExit(f"Confetti source checksum mismatch: {name}")
 
 sdk = subprocess.check_output(["xcrun", "--show-sdk-path"], text=True).strip()
 commands = []
@@ -84,6 +89,29 @@ with tempfile.TemporaryDirectory(prefix="likeit-native-build-") as directory:
     run(["/usr/bin/codesign", "--force", "--sign", "-", str(reduce_motion)])
     run(["/usr/bin/codesign", "--verify", "--strict", str(reduce_motion)])
     run(["xcrun", "lipo", str(reduce_motion), "-verify_arch", "arm64", "x86_64"])
+    confetti_sources = stage / "ConfettiSwiftUI"
+    shutil.copytree(CONFETTI_SOURCE / "Sources", confetti_sources)
+    patched_source = confetti_sources / "ConfettiSwiftUI.swift"
+    patched = patched_source.read_text()
+    for original, replacement in [
+        ("self.explosionAnimationDuration = Double(radius / 1300)", "self.explosionAnimationDuration = 0.45"),
+        ("self.rainAnimationDuration = Double((rainHeight + radius) / 200)", "self.rainAnimationDuration = 1.6"),
+    ]:
+        if patched.count(original) != 1:
+            raise SystemExit(f"Confetti patch must match exactly once: {original}")
+        patched = patched.replace(original, replacement)
+    patched_source.write_text(patched)
+    patched_sha256 = hashlib.sha256(patched_source.read_bytes()).hexdigest()
+    for arch in ["arm64", "x86_64"]:
+        run(["xcrun", "swiftc", "-O", "-parse-as-library", "-target", arch + "-apple-macosx13.0", "-sdk", sdk,
+             str(ROOT / "native/Confetti.swift"), *[str(path) for path in sorted(confetti_sources.rglob("*.swift"))],
+             "-framework", "AppKit", "-framework", "SwiftUI", "-o", str(stage / ("confetti-" + arch))])
+    confetti = stage / "likeit-confetti"
+    run(["xcrun", "lipo", "-create", str(stage / "confetti-arm64"), str(stage / "confetti-x86_64"),
+         "-output", str(confetti)])
+    run(["/usr/bin/codesign", "--force", "--sign", "-", str(confetti)])
+    run(["/usr/bin/codesign", "--verify", "--strict", str(confetti)])
+    run(["xcrun", "lipo", str(confetti), "-verify_arch", "arm64", "x86_64"])
     ASSETS.mkdir(parents=True, exist_ok=True)
     destination = ASSETS / framework.name
     if destination.exists():
@@ -93,12 +121,17 @@ with tempfile.TemporaryDirectory(prefix="likeit-native-build-") as directory:
     shutil.copy2(SOURCE / "LICENSE", ASSETS / "LICENSE-mediaremote-adapter")
     shutil.copy2(controller, ASSETS / "likeit-controller")
     shutil.copy2(reduce_motion, ASSETS / "likeit-reduce-motion")
+    shutil.copy2(confetti, ASSETS / "likeit-confetti")
+    shutil.copy2(CONFETTI_SOURCE / "LICENSE", ASSETS / "LICENSE-ConfettiSwiftUI")
 
 (ASSETS / "BUILD.json").write_text(json.dumps({
     "sourceCommit": manifest["commit"],
     "architectures": ["arm64", "x86_64"],
     "controllerSourceSHA256": hashlib.sha256((ROOT / "native/LikeitController.swift").read_bytes()).hexdigest(),
     "reduceMotionSourceSHA256": hashlib.sha256((ROOT / "native/ReduceMotion.swift").read_bytes()).hexdigest(),
+    "confettiSourceSHA256": hashlib.sha256((ROOT / "native/Confetti.swift").read_bytes()).hexdigest(),
+    "confettiUpstream": confetti_manifest,
+    "confettiPatchedSourceSHA256": patched_sha256,
     "buildScriptSHA256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     "compiler": subprocess.check_output(["xcrun", "clang", "--version"], text=True).strip(),
     "commands": [command.replace(str(ROOT), "<PROJECT>").replace(str(stage), "<BUILD>") for command in commands],
