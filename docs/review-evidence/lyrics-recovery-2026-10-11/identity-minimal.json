@@ -1,0 +1,164 @@
+{
+  "fullCount" : 93,
+  "fullStatus" : "暂无可用歌词 · 无唯一完整匹配",
+  "goodAloneLines" : 1,
+  "minimal" : [
+    {
+      "album" : {
+        "artist" : {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "",
+          "picId" : 0
+        },
+        "copyrightId" : 1416336,
+        "id" : 37026331,
+        "mark" : 0,
+        "name" : "50 Feet",
+        "picId" : 109951163168473869,
+        "publishTime" : 1514131200000,
+        "size" : 1,
+        "status" : 0
+      },
+      "artists" : [
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 892040,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "SoMo",
+          "picId" : 0
+        }
+      ],
+      "duration" : 185714,
+      "id" : 526116053,
+      "name" : "50 Feet"
+    },
+    {
+      "album" : {
+        "artist" : {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "",
+          "picId" : 0
+        },
+        "copyrightId" : 0,
+        "id" : 0,
+        "mark" : 0,
+        "name" : "",
+        "picId" : 109951169484091680,
+        "publishTime" : 0,
+        "size" : 0,
+        "status" : 0
+      },
+      "artists" : [
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "DPR IAN",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "DPR LIVE",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "CL",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "Jenevieve",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "SoMo",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "Dhruv",
+          "picId" : 0
+        },
+        {
+          "albumSize" : 0,
+          "alias" : [
+
+          ],
+          "id" : 0,
+          "img1v1" : 0,
+          "img1v1Url" : "https:\/\/p1.music.126.net\/6y-UleORITEDbvrOLV0Q8A==\/5639395138885805.jpg",
+          "musicSize" : 0,
+          "name" : "Aureliano137",
+          "picId" : 0
+        }
+      ],
+      "duration" : 98568,
+      "id" : 2143016902,
+      "name" : "No Blueberries + Baby Powder + 50 Feet + double take + 2 Soon (网友改编)"
+    }
+  ],
+  "minimalCount" : 2,
+  "minimalStatus" : "暂无可用歌词 · 无唯一完整匹配",
+  "projectionPreservesFailure" : true
+}

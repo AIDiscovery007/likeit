@@ -1,0 +1,337 @@
+✖ real lyric acquisition: Netease then AMLL then LRCLIB, optional metadata, restart cache (3695.255125ms)
+✖ desktop uses the acquisition flow and keeps obtained lyrics visible without a clock (1.092541ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3748.764417
+
+✖ failing tests:
+
+test at acceptance/lyrics-identity-recovery.test.mjs:9:1
+✖ real lyric acquisition: Netease then AMLL then LRCLIB, optional metadata, restart cache (3695.255125ms)
+  Error: Command failed: xcrun swiftc native/ImmersiveCore.swift native/DesktopMedia.swift native/OpenAPILyricCore.swift native/DesktopOpenAPILyrics.swift native/DesktopLyrics.swift native/DesktopCommunityLyrics.swift native/DesktopCommunityLyricsCore.swift acceptance/lyrics-identity-recovery.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-recovery-QwTdQc/acceptance
+  acceptance/lyrics-identity-recovery.swift:121:55: error: cannot find type 'DesktopLyricRecovery' in scope
+  119 |         }
+  120 |         let bad = dir.appendingPathComponent("bad.json"); try Data("invalid".utf8).write(to: bad)
+  121 |         func make(_ s: Scenario, disk: URL? = nil) -> DesktopLyricRecovery {
+      |                                                       `- error: cannot find type 'DesktopLyricRecovery' in scope
+  122 |             let url = s.invalidConfig ? bad : s.official ? config : absent
+  123 |             return DesktopLyricRecovery(lyrics: DesktopLyrics(sessionConfiguration: session, configurationURL: url, cacheDirectory: disk), community: CommunityLyrics(sessionConfiguration: session, cacheDirectory: disk), sessionConfiguration: session, configurationURL: url, cacheDirectory: disk)
+  
+  acceptance/lyrics-identity-recovery.swift:158:94: error: extra argument 'expectedPID' in call
+  156 |             }
+  157 |             var raw: [String: Any] = ["bundleIdentifier": "com.netease.163music", "processIdentifier": 123, "playing": true, "title": "Café Song"]
+  158 |             check("verified title-only snapshot accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.title == "Café Song")
+      |                                                                                              `- error: extra argument 'expectedPID' in call
+  159 |             check("unknown duration does not fabricate elapsed clock", DesktopSnapshot(raw, expectedPID: 123)?.metadata.duration == 0 && DesktopSnapshot(raw, expectedPID: 123)?.elapsed == nil)
+  160 |             raw["artist"] = "Artist A"; raw["album"] = ""; raw["durationMicros"] = 180000000
+  
+  acceptance/lyrics-identity-recovery.swift:159:106: error: extra argument 'expectedPID' in call
+  157 |             var raw: [String: Any] = ["bundleIdentifier": "com.netease.163music", "processIdentifier": 123, "playing": true, "title": "Café Song"]
+  158 |             check("verified title-only snapshot accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.title == "Café Song")
+  159 |             check("unknown duration does not fabricate elapsed clock", DesktopSnapshot(raw, expectedPID: 123)?.metadata.duration == 0 && DesktopSnapshot(raw, expectedPID: 123)?.elapsed == nil)
+      |                                                                                                          `- error: extra argument 'expectedPID' in call
+  160 |             raw["artist"] = "Artist A"; raw["album"] = ""; raw["durationMicros"] = 180000000
+  161 |             check("missing album and content ID accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.artists == ["Artist A"])
+  
+  acceptance/lyrics-identity-recovery.swift:159:172: error: extra argument 'expectedPID' in call
+  157 |             var raw: [String: Any] = ["bundleIdentifier": "com.netease.163music", "processIdentifier": 123, "playing": true, "title": "Café Song"]
+  158 |             check("verified title-only snapshot accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.title == "Café Song")
+  159 |             check("unknown duration does not fabricate elapsed clock", DesktopSnapshot(raw, expectedPID: 123)?.metadata.duration == 0 && DesktopSnapshot(raw, expectedPID: 123)?.elapsed == nil)
+      |                                                                                                                                                                            `- error: extra argument 'expectedPID' in call
+  160 |             raw["artist"] = "Artist A"; raw["album"] = ""; raw["durationMicros"] = 180000000
+  161 |             check("missing album and content ID accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.artists == ["Artist A"])
+  
+  acceptance/lyrics-identity-recovery.swift:161:94: error: extra argument 'expectedPID' in call
+  159 |             check("unknown duration does not fabricate elapsed clock", DesktopSnapshot(raw, expectedPID: 123)?.metadata.duration == 0 && DesktopSnapshot(raw, expectedPID: 123)?.elapsed == nil)
+  160 |             raw["artist"] = "Artist A"; raw["album"] = ""; raw["durationMicros"] = 180000000
+  161 |             check("missing album and content ID accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.artists == ["Artist A"])
+      |                                                                                              `- error: extra argument 'expectedPID' in call
+  162 |             check("foreign process rejected", DesktopSnapshot(raw, expectedPID: 456) == nil)
+  163 |             raw["bundleIdentifier"] = "other"
+  
+  acceptance/lyrics-identity-recovery.swift:162:81: error: extra argument 'expectedPID' in call
+  160 |             raw["artist"] = "Artist A"; raw["album"] = ""; raw["durationMicros"] = 180000000
+  161 |             check("missing album and content ID accepted", DesktopSnapshot(raw, expectedPID: 123)?.metadata.artists == ["Artist A"])
+  162 |             check("foreign process rejected", DesktopSnapshot(raw, expectedPID: 456) == nil)
+      |                                                                                 `- error: extra argument 'expectedPID' in call
+  163 |             raw["bundleIdentifier"] = "other"
+  164 |             check("foreign bundle rejected", DesktopSnapshot(raw, expectedPID: 123) == nil)
+  
+  acceptance/lyrics-identity-recovery.swift:164:80: error: extra argument 'expectedPID' in call
+  162 |             check("foreign process rejected", DesktopSnapshot(raw, expectedPID: 456) == nil)
+  163 |             raw["bundleIdentifier"] = "other"
+  164 |             check("foreign bundle rejected", DesktopSnapshot(raw, expectedPID: 123) == nil)
+      |                                                                                `- error: extra argument 'expectedPID' in call
+  165 |             raw["bundleIdentifier"] = "com.netease.163music"; raw["title"] = " "
+  166 |             check("blank snapshot title rejected", DesktopSnapshot(raw, expectedPID: 123) == nil)
+  
+  acceptance/lyrics-identity-recovery.swift:166:86: error: extra argument 'expectedPID' in call
+  164 |             check("foreign bundle rejected", DesktopSnapshot(raw, expectedPID: 123) == nil)
+  165 |             raw["bundleIdentifier"] = "com.netease.163music"; raw["title"] = " "
+  166 |             check("blank snapshot title rejected", DesktopSnapshot(raw, expectedPID: 123) == nil)
+      |                                                                                      `- error: extra argument 'expectedPID' in call
+  167 |             let s = scenarios[0]; configure(s); RecoveryHTTP.delay = 0.05; let recovery = make(s)
+  168 |             var stale = false, current = false
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-identity-recovery.test.mjs:14:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    status: 1,
+    signal: null,
+    output: [ null, <Buffer >, <Buffer 61 63 63 65 70 74 61 6e 63 65 2f 6c 79 72 69 63 73 2d 69 64 65 6e 74 69 74 79 2d 72 65 63 6f 76 65 72 79 2e 73 77 69 66 74 3a 31 32 31 3a 35 35 3a 20 ... 6531 more bytes> ],
+    pid: 53935,
+    stdout: <Buffer >,
+    stderr: <Buffer 61 63 63 65 70 74 61 6e 63 65 2f 6c 79 72 69 63 73 2d 69 64 65 6e 74 69 74 79 2d 72 65 63 6f 76 65 72 79 2e 73 77 69 66 74 3a 31 32 31 3a 35 35 3a 20 ... 6531 more bytes>
+  }
+
+test at acceptance/lyrics-identity-recovery.test.mjs:22:1
+✖ desktop uses the acquisition flow and keeps obtained lyrics visible without a clock (1.092541ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /DesktopLyricRecovery\(/. Input:
+  
+  'import AppKit\n' +
+    '\n' +
+    'final class DesktopSession {\n' +
+    '    let model: DesktopModel\n' +
+    '    private var lyrics: DesktopLyrics?\n' +
+    '    private let communityLyrics = CommunityLyrics(cacheDirectory: LyricDiskCache.defaultDirectory)\n' +
+    '    private var lyricsSource: String\n' +
+    '    private var communityDocument: CommunityLyricDocument?\n' +
+    '    private var lyricGeneration = UUID()\n' +
+    '    private var state = LyricState()\n' +
+    '    private var stream: DesktopMediaProcess?\n' +
+    '    private var reader: DesktopMediaProcess?\n' +
+    '    private var snapshot: DesktopSnapshot?\n' +
+    '    private var heartbeat: Timer?\n' +
+    '    private var clock: Timer?\n' +
+    '    private var visible = true\n' +
+    '    private var clockInterval = 0.0\n' +
+    '    private var running = false\n' +
+    '    private var checking = false\n' +
+    '    private var revision = 0\n' +
+    '    private var streamKey: String?\n' +
+    '    private var lyricStatus = "等待网易云歌曲信息"\n' +
+    '    var sourceChanged: ((DesktopSnapshot?) -> Void)?\n' +
+    '\n' +
+    '    init(model: DesktopModel, lyricsSource: String = "netease") {\n' +
+    '        self.model = model\n' +
+    '        self.lyricsSource = lyricsSource == "community" ? "community" : "netease"\n' +
+    '    }\n' +
+    '\n' +
+    '    func setLyricsSource(_ source: String) {\n' +
+    '        lyricsSource = source == "community" ? "community" : "netease"\n' +
+    '        lyrics?.stop(); lyrics = nil\n' +
+    '        communityLyrics.cancel()\n' +
+    '        resetLyrics()\n' +
+    '        if let snapshot, running { loadLyrics(snapshot); render() }\n' +
+    '    }\n' +
+    '\n' +
+    '    private func resetLyrics() {\n' +
+    '        lyricGeneration = UUID()\n' +
+    '        communityDocument = nil\n' +
+    '        state = LyricState()\n' +
+    '        clearDisplayedLyrics()\n' +
+    '    }\n' +
+    '\n' +
+    '    private func clearDisplayedLyrics() {\n' +
+    '        model.lyric = ""; model.previousLine = ""; model.nextLine = ""\n' +
+    '        model.timedLyric = nil; model.translation = ""; model.plainLyrics = nil\n' +
+    '    }\n' +
+    '\n' +
+    '    private func loadLyrics(_ value: DesktopSnapshot) {\n' +
+    '        lyrics?.cancel()\n' +
+    '        communityLyrics.cancel()\n' +
+    '        resetLyrics()\n' +
+    '        state.beginTrack(value.key)\n' +
+    '        lyricStatus = "正在匹配歌词"\n' +
+    '        let token = lyricGeneration\n' +
+    '        if lyricsSource == "community" {\n' +
+    '            communityLyrics.load(key: value.key, metadata: value.metadata) { [weak self] outcome in\n' +
+    '                guard let self, self.running, self.lyricGeneration == token, self.state.trackKey == value.key else { return }\n' +
+    '                self.communityDocument = outcome.document\n' +
+    '                self.lyricStatus = outcome.message\n' +
+    '                self.render()\n' +
+    '            }\n' +
+    '        } else {\n' +
+    '            if lyrics == nil { lyrics = DesktopLyrics(cacheDirectory: LyricDiskCache.defaultDirectory) }\n' +
+    '            lyrics?.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in\n' +
+    '                guard let self, self.running, self.lyricGeneration == token, self.state.accept(lines, for: value.key) else { return }\n' +
+    '                self.lyricStatus = message\n' +
+    '                self.render()\n' +
+    '            }\n' +
+    '        }\n' +
+    '    }\n' +
+    '\n' +
+    '    func start() {\n' +
+    '        guard !running else { return }\n' +
+    '        running = true\n' +
+    '        model.status = "正在读取网易云歌曲信息"\n' +
+    '        let stream = DesktopMediaProcess()\n' +
+    '        self.stream = stream\n' +
+    '        DispatchQueue.global(qos: .utility).async { [weak self] in\n' +
+    '            stream.run(stream: true) { data in\n' +
+    '                let value = data.flatMap(DesktopSnapshot.init)\n' +
+    '                DispatchQueue.main.async { self?.receive(value) }\n' +
+    '            }\n' +
+    '        }\n' +
+    '        heartbeat = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in self?.verify() }\n' +
+    '        scheduleClock()\n' +
+    '        verify()\n' +
+    '    }\n' +
+    '\n' +
+    '    func setVisible(_ value: Bool) {\n' +
+    '        guard visible != value else { return }\n' +
+    '        visible = value\n' +
+    '        scheduleClock()\n' +
+    '    }\n' +
+    '\n' +
+    '    private func scheduleClock() {\n' +
+    '        guard running else { return }\n' +
+    '        let interval = visible && snapshot?.playing == true ? 0.1 : 1.0\n' +
+    '        guard clockInterval != interval else { return }\n' +
+    '        clockInterval = interval\n' +
+    '        clock?.invalidate()\n' +
+    '        clock = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in self?.render() }\n' +
+    '    }\n' +
+    '\n' +
+    '    func stop() {\n' +
+    '        running = false\n' +
+    '        revision += 1\n' +
+    '        heartbeat?.invalidate(); heartbeat = nil\n' +
+    '        clock?.invalidate(); clock = nil\n' +
+    '        stream?.stop(); stream = nil\n' +
+    '        reader?.stop(); reader = nil\n' +
+    '        lyrics?.stop(); lyrics = nil\n' +
+    '        communityLyrics.stop()\n' +
+    '        clear()\n' +
+    '    }\n' +
+    '\n' +
+    '    private func receive(_ value: DesktopSnapshot?) {\n' +
+    '        guard running else { return }\n' +
+    '        // A same-track seek or pause is newer evidence too; discard any in-flight poll.\n' +
+    '        revision += 1\n' +
+    '        if streamKey != value?.key {\n' +
+    '            streamKey = value?.key\n' +
+    '            clear()\n' +
+    '            verify()\n' +
+    '        }\n' +
+    '        guard let value else { clear(); return }\n' +
+    '        if snapshot?.key == value.key { apply(value) }\n' +
+    '        // A stream can combine independently emitted metadata; a new key requires two get snapshots.\n' +
+    '    }\n' +
+    '\n' +
+    '    private func verify() {\n' +
+    '        guard running, !checking else { return }\n' +
+    '        checking = true\n' +
+    '        let token = revision\n' +
+    '        let reader = DesktopMediaProcess()\n' +
+    '        self.reader = reader\n' +
+    '        DispatchQueue.global(qos: .utility).async { [weak self] in\n' +
+    '            var first: DesktopSnapshot?, second: DesktopSnapshot?\n' +
+    '            reader.run(stream: false) { first = $0.flatMap(DesktopSnapshot.init) }\n' +
+    '            reader.run(stream: false) { second = $0.flatMap(DesktopSnapshot.init) }\n' +
+    '            let verified = first?.key == second?.key && first?.playing == second?.playing ? second : nil\n' +
+    '            DispatchQueue.main.async {\n' +
+    '                guard let self else { return }\n' +
+    '                self.checking = false\n' +
+    '                self.reader = nil\n' +
+    '                guard self.running else { return }\n' +
+    '                guard self.revision == token else { self.verify(); return }\n' +
+    '                if let verified { self.apply(verified) } else { self.clear() }\n' +
+    '            }\n' +
+    '        }\n' +
+    '    }\n' +
+    '\n' +
+    '    private func apply(_ value: DesktopSnapshot) {\n' +
+    '        let changed = state.trackKey != value.key\n' +
+    '        snapshot = value\n' +
+    '        scheduleClock()\n' +
+    '        state.beginTrack(value.key)\n' +
+    '        if model.title != value.metadata.title { model.title = value.metadata.title }\n' +
+    '        let artists = value.metadata.artists.joined(separator: " / ")\n' +
+    '        if model.artist != artists { model.artist = artists }\n' +
+    '        if changed { loadLyrics(value) }\n' +
+    '        sourceChanged?(value)\n' +
+    '        render()\n' +
+    '    }\n' +
+    '\n' +
+    '    private func clear() {\n' +
+    '        snapshot = nil\n' +
+    '        scheduleClock()\n' +
+    '        resetLyrics()\n' +
+    '        lyrics?.cancel()\n' +
+    '        communityLyrics.cancel()\n' +
+    '        sourceChanged?(nil)\n' +
+    '        model.title = "Likeit"\n' +
+    '        model.artist = "仅支持网易云音乐"\n' +
+    '        model.progress = 0\n' +
+    '        model.status = "暂无可靠网易云播放信息"\n' +
+    '    }\n' +
+    '\n' +
+    '    private func renderCommunity(_ lines: [CommunityLyricLine], at position: Double) {\n' +
+    '        let index = lines.lastIndex { $0.start <= position }\n' +
+    '        let current = index.map { lines[$0] }\n' +
+    '        model.lyric = current?.text ?? ""\n' +
+    '        model.translation = current?.translation ?? ""\n' +
+    '        model.previousLine = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""\n' +
+    '        model.nextLine = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")\n' +
+    '        model.timedLyric = current.map { communityHighlightedText($0, at: position) }\n' +
+    '    }\n' +
+    '\n' +
+    '    private func render() {\n' +
+    '        guard let snapshot else { return }\n' +
+    '        guard neteasePID() == snapshot.pid, ProcessInfo.processInfo.systemUptime - snapshot.sampledAt <= 5 else { clear(); return }\n' +
+    '        model.plainLyrics = communityDocument?.plainText\n' +
+    '        if communityDocument?.instrumental == true { model.lyric = "纯音乐" }\n' +
+    '        guard let elapsed = snapshot.elapsed, let rate = snapshot.rate,\n' +
+    '              let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {\n' +
+    '            model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""\n' +
+    '            model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""\n' +
+    '            model.progress = 0\n' +
+    '            model.status = lyricStatus + " · 播放进度不可用"\n' +
+    '            return\n' +
+    '        }\n' +
+    '        let progress = position / snapshot.metadata.duration\n' +
+    '        if model.progress != progress { model.progress = progress }\n' +
+    '        let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")\n' +
+    '        if model.status != status { model.status = status }\n' +
+    '        if let document = communityDocument {\n' +
+    '            if document.plainText != nil || document.instrumental { return }\n' +
+    '            renderCommunity(document.lines, at: position)\n' +
+    '            return\n' +
+    '        }\n' +
+    '        let lines = state.lines\n' +
+    '        let index = activeLyricIndex(in: lines, at: position)\n' +
+    '        let current = index.map { lines[$0].text } ?? ""\n' +
+    '        let previous = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""\n' +
+    '        let next = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")\n' +
+    '        if model.lyric != current { model.lyric = current }\n' +
+    '        if model.previousLine != previous { model.previousLine = previous }\n' +
+    '        if model.nextLine != next { model.nextLine = next }\n' +
+    '    }\n' +
+    '}\n'
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/community-lyrics/likeit/acceptance/lyrics-identity-recovery.test.mjs:24:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import AppKit\n\nfinal class DesktopSession {\n    let model: DesktopModel\n    private var lyrics: DesktopLyrics?\n    private let communityLyrics = CommunityLyrics(cacheDirectory: LyricDiskCache.defaultDirectory)\n    private var lyricsSource: String\n    private var communityDocument: CommunityLyricDocument?\n    private var lyricGeneration = UUID()\n    private var state = LyricState()\n    private var stream: DesktopMediaProcess?\n    private var reader: DesktopMediaProcess?\n    private var snapshot: DesktopSnapshot?\n    private var heartbeat: Timer?\n    private var clock: Timer?\n    private var visible = true\n    private var clockInterval = 0.0\n    private var running = false\n    private var checking = false\n    private var revision = 0\n    private var streamKey: String?\n    private var lyricStatus = "等待网易云歌曲信息"\n    var sourceChanged: ((DesktopSnapshot?) -> Void)?\n\n    init(model: DesktopModel, lyricsSource: String = "netease") {\n        self.model = model\n        self.lyricsSource = lyricsSource == "community" ? "community" : "netease"\n    }\n\n    func setLyricsSource(_ source: String) {\n        lyricsSource = source == "community" ? "community" : "netease"\n        lyrics?.stop(); lyrics = nil\n        communityLyrics.cancel()\n        resetLyrics()\n        if let snapshot, running { loadLyrics(snapshot); render() }\n    }\n\n    private func resetLyrics() {\n        lyricGeneration = UUID()\n        communityDocument = nil\n        state = LyricState()\n        clearDisplayedLyrics()\n    }\n\n    private func clearDisplayedLyrics() {\n        model.lyric = ""; model.previousLine = ""; model.nextLine = ""\n        model.timedLyric = nil; model.translation = ""; model.plainLyrics = nil\n    }\n\n    private func loadLyrics(_ value: DesktopSnapshot) {\n        lyrics?.cancel()\n        communityLyrics.cancel()\n        resetLyrics()\n        state.beginTrack(value.key)\n        lyricStatus = "正在匹配歌词"\n        let token = lyricGeneration\n        if lyricsSource == "community" {\n            communityLyrics.load(key: value.key, metadata: value.metadata) { [weak self] outcome in\n                guard let self, self.running, self.lyricGeneration == token, self.state.trackKey == value.key else { return }\n                self.communityDocument = outcome.document\n                self.lyricStatus = outcome.message\n                self.render()\n            }\n        } else {\n            if lyrics == nil { lyrics = DesktopLyrics(cacheDirectory: LyricDiskCache.defaultDirectory) }\n            lyrics?.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in\n                guard let self, self.running, self.lyricGeneration == token, self.state.accept(lines, for: value.key) else { return }\n                self.lyricStatus = message\n                self.render()\n            }\n        }\n    }\n\n    func start() {\n        guard !running else { return }\n        running = true\n        model.status = "正在读取网易云歌曲信息"\n        let stream = DesktopMediaProcess()\n        self.stream = stream\n        DispatchQueue.global(qos: .utility).async { [weak self] in\n            stream.run(stream: true) { data in\n                let value = data.flatMap(DesktopSnapshot.init)\n                DispatchQueue.main.async { self?.receive(value) }\n            }\n        }\n        heartbeat = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in self?.verify() }\n        scheduleClock()\n        verify()\n    }\n\n    func setVisible(_ value: Bool) {\n        guard visible != value else { return }\n        visible = value\n        scheduleClock()\n    }\n\n    private func scheduleClock() {\n        guard running else { return }\n        let interval = visible && snapshot?.playing == true ? 0.1 : 1.0\n        guard clockInterval != interval else { return }\n        clockInterval = interval\n        clock?.invalidate()\n        clock = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in self?.render() }\n    }\n\n    func stop() {\n        running = false\n        revision += 1\n        heartbeat?.invalidate(); heartbeat = nil\n        clock?.invalidate(); clock = nil\n        stream?.stop(); stream = nil\n        reader?.stop(); reader = nil\n        lyrics?.stop(); lyrics = nil\n        communityLyrics.stop()\n        clear()\n    }\n\n    private func receive(_ value: DesktopSnapshot?) {\n        guard running else { return }\n        // A same-track seek or pause is newer evidence too; discard any in-flight poll.\n        revision += 1\n        if streamKey != value?.key {\n            streamKey = value?.key\n            clear()\n            verify()\n        }\n        guard let value else { clear(); return }\n        if snapshot?.key == value.key { apply(value) }\n        // A stream can combine independently emitted metadata; a new key requires two get snapshots.\n    }\n\n    private func verify() {\n        guard running, !checking else { return }\n        checking = true\n        let token = revision\n        let reader = DesktopMediaProcess()\n        self.reader = reader\n        DispatchQueue.global(qos: .utility).async { [weak self] in\n            var first: DesktopSnapshot?, second: DesktopSnapshot?\n            reader.run(stream: false) { first = $0.flatMap(DesktopSnapshot.init) }\n            reader.run(stream: false) { second = $0.flatMap(DesktopSnapshot.init) }\n            let verified = first?.key == second?.key && first?.playing == second?.playing ? second : nil\n            DispatchQueue.main.async {\n                guard let self else { return }\n                self.checking = false\n                self.reader = nil\n                guard self.running else { return }\n                guard self.revision == token else { self.verify(); return }\n                if let verified { self.apply(verified) } else { self.clear() }\n            }\n        }\n    }\n\n    private func apply(_ value: DesktopSnapshot) {\n        let changed = state.trackKey != value.key\n        snapshot = value\n        scheduleClock()\n        state.beginTrack(value.key)\n        if model.title != value.metadata.title { model.title = value.metadata.title }\n        let artists = value.metadata.artists.joined(separator: " / ")\n        if model.artist != artists { model.artist = artists }\n        if changed { loadLyrics(value) }\n        sourceChanged?(value)\n        render()\n    }\n\n    private func clear() {\n        snapshot = nil\n        scheduleClock()\n        resetLyrics()\n        lyrics?.cancel()\n        communityLyrics.cancel()\n        sourceChanged?(nil)\n        model.title = "Likeit"\n        model.artist = "仅支持网易云音乐"\n        model.progress = 0\n        model.status = "暂无可靠网易云播放信息"\n    }\n\n    private func renderCommunity(_ lines: [CommunityLyricLine], at position: Double) {\n        let index = lines.lastIndex { $0.start <= position }\n        let current = index.map { lines[$0] }\n        model.lyric = current?.text ?? ""\n        model.translation = current?.translation ?? ""\n        model.previousLine = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""\n        model.nextLine = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")\n        model.timedLyric = current.map { communityHighlightedText($0, at: position) }\n    }\n\n    private func render() {\n        guard let snapshot else { return }\n        guard neteasePID() == snapshot.pid, ProcessInfo.processInfo.systemUptime - snapshot.sampledAt <= 5 else { clear(); return }\n        model.plainLyrics = communityDocument?.plainText\n        if communityDocument?.instrumental == true { model.lyric = "纯音乐" }\n        guard let elapsed = snapshot.elapsed, let rate = snapshot.rate,\n              let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {\n            model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""\n            model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""\n            model.progress = 0\n            model.status = lyricStatus + " · 播放进度不可用"\n            return\n        }\n        let progress = position / snapshot.metadata.duration\n        if model.progress != progress { model.progress = progress }\n        let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")\n        if model.status != status { model.status = status }\n        if let document = communityDocument {\n            if document.plainText != nil || document.instrumental { return }\n            renderCommunity(document.lines, at: position)\n            return\n        }\n        let lines = state.lines\n        let index = activeLyricIndex(in: lines, at: position)\n        let current = index.map { lines[$0].text } ?? ""\n        let previous = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""\n        let next = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")\n        if model.lyric != current { model.lyric = current }\n        if model.previousLine != previous { model.previousLine = previous }\n        if model.nextLine != next { model.nextLine = next }\n    }\n}\n',
+    expected: /DesktopLyricRecovery\(/,
+    operator: 'match',
+    diff: 'simple'
+  }
