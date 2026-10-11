@@ -92,7 +92,32 @@ private struct OpenAPIJSONValue: Decodable {
 }
 
 func decodeOpenAPIJSON(_ data: Data) throws -> Any {
-    try JSONDecoder().decode(OpenAPIJSONValue.self, from: data).value
+    // Decimal may round longer mantissas. Ignore strings and exponent digits;
+    // JSONDecoder below remains responsible for the complete JSON grammar.
+    var inString = false, escaped = false, exponent = false
+    var digits = 0
+    for byte in data {
+        if inString {
+            if escaped { escaped = false }
+            else if byte == 92 { escaped = true }
+            else if byte == 34 { inString = false }
+            continue
+        }
+        if byte == 34 { inString = true }
+        switch byte {
+        case 48...57:
+            if !exponent {
+                digits += 1
+                guard digits <= 38 else {
+                    throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "OpenAPI number exceeds supported precision"))
+                }
+            }
+        case 69, 101: exponent = true
+        case 43, 45, 46: break
+        default: digits = 0; exponent = false
+        }
+    }
+    return try JSONDecoder().decode(OpenAPIJSONValue.self, from: data).value
 }
 
 // Keep comparisons in Decimal: NSNumber.compare can round decimal JSON values.
