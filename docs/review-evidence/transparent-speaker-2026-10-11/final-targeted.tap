@@ -1,0 +1,58 @@
+▶ R2: word highlighting uses original text positions
+  ✔ Unicode preserves text (0.407542ms)
+  ✔ substring actual word waits (0.067917ms)
+  ✔ duplicate actual word advances (0.05ms)
+  ✔ Chinese preserves text (0.042167ms)
+  ✔ Chinese untimed prefix unchanged (0.039958ms)
+  ✔ Unicode untimed prefix unchanged (0.041666ms)
+  ✔ duplicate untimed prefix unchanged (0.036ms)
+  ✔ substring actual word advances (0.049ms)
+  ✔ Unicode actual word waits (0.107875ms)
+  ✔ duplicate preserves text (0.085458ms)
+  ✔ substring untimed prefix unchanged (0.046416ms)
+  ✔ Unicode actual word advances (0.036292ms)
+  ✔ Chinese actual word advances (0.03225ms)
+  ✔ duplicate actual word waits (0.024542ms)
+  ✔ substring preserves text (0.027209ms)
+  ✔ Chinese actual word waits (0.031042ms)
+✔ R2: word highlighting uses original text positions (4853.530917ms)
+▶ T05 regression: a theme-only URL preserves the active source and motion mode
+  ✔ omitted fields retain all selections (0.467291ms)
+  ✔ invalid host is ignored (0.106333ms)
+  ✔ theme-only preserves source without reloading (0.053833ms)
+  ✔ theme-only preserves off without enabling capture (0.051042ms)
+  ✔ same source never reloads (0.0515ms)
+  ✔ explicit fields apply once (0.067834ms)
+  ✔ theme-only selects glass (0.058084ms)
+✔ T05 regression: a theme-only URL preserves the active source and motion mode (5355.783584ms)
+▶ T01–T05: theme selection preserves the current desktop and survives restart
+  ✔ T01 default classic/celadon (0.570458ms)
+  ✔ T02 reopen glass (0.063917ms)
+  ✔ T02 select glass (0.071125ms)
+  ✔ T03 corrupt preferences recover (0.061583ms)
+  ✔ T03 explicit classic remembered (0.048333ms)
+  ✔ T03 invalid theme " glass " (0.0495ms)
+  ✔ T03 invalid theme "" (0.052959ms)
+  ✔ T03 invalid theme "GLASS" (0.059833ms)
+  ✔ T03 invalid theme "unknown" (0.096833ms)
+  ✔ T03 omitted selection retains glass (0.087584ms)
+  ✔ T04 invalid scene fallback (0.040709ms)
+  ✔ T04 scene celadon survives round trip (0.03425ms)
+  ✔ T04 scene dusk survives round trip (0.041625ms)
+  ✔ T04 scene night survives round trip (0.032458ms)
+  ✔ T04 scene paper survives round trip (0.028792ms)
+  ✔ T05 lyric text unchanged (0.028375ms)
+  ✔ T05 metadata unchanged (0.072792ms)
+  ✔ T05 progress and audio unchanged (0.038ms)
+  ✔ T05 status and retry unchanged (0.029375ms)
+  ✔ T05 timed and plain lyrics unchanged (0.025083ms)
+  ✔ T02/T04: a separate process restores theme and scene (0.173542ms)
+✔ T01–T05: theme selection preserves the current desktop and survives restart (5507.048792ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10468.194708

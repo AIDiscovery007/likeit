@@ -1,0 +1,49 @@
+▶ R2: word highlighting uses original text positions
+  ✔ Unicode actual word waits (0.457292ms)
+  ✔ Chinese actual word waits (0.054333ms)
+  ✔ substring untimed prefix unchanged (0.047958ms)
+  ✔ substring actual word advances (0.046042ms)
+  ✔ duplicate actual word advances (0.045042ms)
+  ✔ duplicate preserves text (0.04475ms)
+  ✔ Unicode untimed prefix unchanged (0.035708ms)
+  ✔ Unicode preserves text (0.044916ms)
+  ✔ Unicode actual word advances (0.069083ms)
+  ✔ Chinese actual word advances (0.080375ms)
+  ✔ Chinese preserves text (0.041458ms)
+  ✔ substring preserves text (0.037ms)
+  ✔ substring actual word waits (0.025625ms)
+  ✔ Chinese untimed prefix unchanged (0.023584ms)
+  ✔ duplicate actual word waits (0.024541ms)
+  ✔ duplicate untimed prefix unchanged (0.028542ms)
+✔ R2: word highlighting uses original text positions (3282.85625ms)
+▶ T01–T05: theme selection preserves the current desktop and survives restart
+  ✔ T01 default classic/celadon (0.615208ms)
+  ✔ T02 reopen glass (0.071667ms)
+  ✔ T02 select glass (0.09475ms)
+  ✔ T03 corrupt preferences recover (0.057459ms)
+  ✔ T03 explicit classic remembered (0.074041ms)
+  ✔ T03 invalid theme " glass " (0.087292ms)
+  ✔ T03 invalid theme "" (0.083375ms)
+  ✔ T03 invalid theme "GLASS" (0.067916ms)
+  ✔ T03 invalid theme "unknown" (0.108ms)
+  ✔ T03 omitted selection retains glass (0.126166ms)
+  ✔ T04 invalid scene fallback (0.063125ms)
+  ✔ T04 scene celadon survives round trip (0.046334ms)
+  ✔ T04 scene dusk survives round trip (0.082041ms)
+  ✔ T04 scene night survives round trip (0.044708ms)
+  ✔ T04 scene paper survives round trip (0.041542ms)
+  ✔ T05 lyric text unchanged (0.039291ms)
+  ✔ T05 metadata unchanged (0.091459ms)
+  ✔ T05 progress and audio unchanged (0.049333ms)
+  ✔ T05 status and retry unchanged (0.039375ms)
+  ✔ T05 timed and plain lyrics unchanged (0.035208ms)
+  ✔ T02/T04: a separate process restores theme and scene (0.197792ms)
+✔ T01–T05: theme selection preserves the current desktop and survives restart (3786.61625ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3845.409959

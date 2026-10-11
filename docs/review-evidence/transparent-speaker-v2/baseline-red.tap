@@ -1,0 +1,620 @@
+TAP version 13
+# Subtest: V2: real lyric cues and positions drive motion without changing song state
+not ok 1 - V2: real lyric cues and positions drive motion without changing song state
+  ---
+  duration_ms: 7701.976041
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-motion.test.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: xcrun swiftc native/ImmersiveCore.swift native/DesktopCommunityLyricsCore.swift native/DesktopView.swift /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/acceptance
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:228:63: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    226 |         }
+    227 |         let model = DesktopModel(themeDefaults: defaults), probe = RenderProbe(DesktopModel(themeDefaults: defaults))
+    228 |         check("motion defaults off without a session", !model.motionEnabled)
+        |                                                               `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:229:69: error: value of type 'DesktopModel' has no member 'lyricCue'
+    227 |         let model = DesktopModel(themeDefaults: defaults), probe = RenderProbe(DesktopModel(themeDefaults: defaults))
+    228 |         check("motion defaults off without a session", !model.motionEnabled)
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+        |                                                                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:229:94: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    227 |         let model = DesktopModel(themeDefaults: defaults), probe = RenderProbe(DesktopModel(themeDefaults: defaults))
+    228 |         check("motion defaults off without a session", !model.motionEnabled)
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+        |                                                                                              `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:230:24: error: cannot find 'DesktopLyricCue' in scope
+    228 |         check("motion defaults off without a session", !model.motionEnabled)
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+        |                        `- error: cannot find 'DesktopLyricCue' in scope
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:231:93: error: cannot find 'DesktopLyricCue' in scope
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+        |                                                                                             `- error: cannot find 'DesktopLyricCue' in scope
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    233 |         func load(_ value: DesktopSnapshot, lines: [LyricLine]) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:231:159: error: cannot find 'DesktopLyricCue' in scope
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+        |                                                                                                                                                               `- error: cannot find 'DesktopLyricCue' in scope
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    233 |         func load(_ value: DesktopSnapshot, lines: [LyricLine]) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:231:225: error: cannot find 'DesktopLyricCue' in scope
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+        |                                                                                                                                                                                                                                 `- error: cannot find 'DesktopLyricCue' in scope
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    233 |         func load(_ value: DesktopSnapshot, lines: [LyricLine]) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:231:291: error: cannot find 'DesktopLyricCue' in scope
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+        |                                                                                                                                                                                                                                                                                                   `- error: cannot find 'DesktopLyricCue' in scope
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    233 |         func load(_ value: DesktopSnapshot, lines: [LyricLine]) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:231:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    229 |         check("new model has no invented lyric clock or cue", model.lyricCue == nil && model.lyricPosition == nil)
+    230 |         let identity = DesktopLyricCue(trackKey: "a", index: 0, start: 1)
+    231 |         check("cue equality distinguishes track index and start independently", identity == DesktopLyricCue(trackKey: "a", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "b", index: 0, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 1, start: 1) && identity != DesktopLyricCue(trackKey: "a", index: 0, start: 2))
+        |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    232 |         let lines = parseLRC("[00:01.00]重复 Repeated 👩🏽‍💻\n[00:03.00]重复 Repeated 👩🏽‍💻\n[00:06.00]下一行")
+    233 |         func load(_ value: DesktopSnapshot, lines: [LyricLine]) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:240:80: error: value of type 'DesktopModel' has no member 'lyricCue'
+    238 |         load(snapshot(0.5), lines: lines)
+    239 |         probe.refresh()
+    240 |         check("before the first LRC line has position but no cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    241 |         probe.snapshot = snapshot(1.2)
+    242 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:240:111: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    238 |         load(snapshot(0.5), lines: lines)
+    239 |         probe.refresh()
+    240 |         check("before the first LRC line has position but no cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                                               `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    241 |         probe.snapshot = snapshot(1.2)
+    242 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:243:21: error: cannot find 'DesktopLyricCue' in scope
+    241 |         probe.snapshot = snapshot(1.2)
+    242 |         probe.refresh()
+    243 |         let first = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+        |                     `- error: cannot find 'DesktopLyricCue' in scope
+    244 |         check("LRC cue contains the verified track key index and timestamp", probe.model.lyricCue == first && probe.model.lyricPosition == 1.2 && probe.model.lyric == lines[0].text)
+    245 |         probe.snapshot = snapshot(1.3)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:244:90: error: value of type 'DesktopModel' has no member 'lyricCue'
+    242 |         probe.refresh()
+    243 |         let first = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+    244 |         check("LRC cue contains the verified track key index and timestamp", probe.model.lyricCue == first && probe.model.lyricPosition == 1.2 && probe.model.lyric == lines[0].text)
+        |                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    245 |         probe.snapshot = snapshot(1.3)
+    246 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:244:123: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    242 |         probe.refresh()
+    243 |         let first = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+    244 |         check("LRC cue contains the verified track key index and timestamp", probe.model.lyricCue == first && probe.model.lyricPosition == 1.2 && probe.model.lyric == lines[0].text)
+        |                                                                                                                           `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    245 |         probe.snapshot = snapshot(1.3)
+    246 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:247:92: error: value of type 'DesktopModel' has no member 'lyricCue'
+    245 |         probe.snapshot = snapshot(1.3)
+    246 |         probe.refresh()
+    247 |         check("100ms within one LRC line advances position without a new cue", probe.model.lyricCue == first && probe.model.lyricPosition == 1.3)
+        |                                                                                            `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    248 |         probe.snapshot = snapshot(3.2)
+    249 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:247:125: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    245 |         probe.snapshot = snapshot(1.3)
+    246 |         probe.refresh()
+    247 |         check("100ms within one LRC line advances position without a new cue", probe.model.lyricCue == first && probe.model.lyricPosition == 1.3)
+        |                                                                                                                             `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    248 |         probe.snapshot = snapshot(3.2)
+    249 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:250:93: error: cannot find 'DesktopLyricCue' in scope
+    248 |         probe.snapshot = snapshot(3.2)
+    249 |         probe.refresh()
+    250 |         check("repeated text at a new LRC timestamp has a new cue", probe.model.lyricCue == DesktopLyricCue(trackKey: first.trackKey, index: 1, start: 3) && probe.model.lyricCue != first && probe.model.lyric == lines[0].text)
+        |                                                                                             `- error: cannot find 'DesktopLyricCue' in scope
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:250:81: error: value of type 'DesktopModel' has no member 'lyricCue'
+    248 |         probe.snapshot = snapshot(3.2)
+    249 |         probe.refresh()
+    250 |         check("repeated text at a new LRC timestamp has a new cue", probe.model.lyricCue == DesktopLyricCue(trackKey: first.trackKey, index: 1, start: 3) && probe.model.lyricCue != first && probe.model.lyric == lines[0].text)
+        |                                                                                 `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:250:170: error: value of type 'DesktopModel' has no member 'lyricCue'
+    248 |         probe.snapshot = snapshot(3.2)
+    249 |         probe.refresh()
+    250 |         check("repeated text at a new LRC timestamp has a new cue", probe.model.lyricCue == DesktopLyricCue(trackKey: first.trackKey, index: 1, start: 3) && probe.model.lyricCue != first && probe.model.lyric == lines[0].text)
+        |                                                                                                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:253:102: error: cannot find 'DesktopLyricCue' in scope
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    253 |         check("same title and lyrics on another track have a different cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != first)
+        |                                                                                                      `- error: cannot find 'DesktopLyricCue' in scope
+    254 |         probe.snapshot = snapshot(0.5, track: "track-b")
+    255 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:253:90: error: value of type 'DesktopModel' has no member 'lyricCue'
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    253 |         check("same title and lyrics on another track have a different cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != first)
+        |                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    254 |         probe.snapshot = snapshot(0.5, track: "track-b")
+    255 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:253:184: error: value of type 'DesktopModel' has no member 'lyricCue'
+    251 |         load(snapshot(1.2, track: "track-b"), lines: lines)
+    252 |         probe.refresh()
+    253 |         check("same title and lyrics on another track have a different cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != first)
+        |                                                                                                                                                                                        `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    254 |         probe.snapshot = snapshot(0.5, track: "track-b")
+    255 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:256:88: error: value of type 'DesktopModel' has no member 'lyricCue'
+    254 |         probe.snapshot = snapshot(0.5, track: "track-b")
+    255 |         probe.refresh()
+    256 |         check("seeking before the first LRC line clears the previous cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                        `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    257 |         probe.snapshot = snapshot(6.2, track: "track-b")
+    258 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:256:119: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    254 |         probe.snapshot = snapshot(0.5, track: "track-b")
+    255 |         probe.refresh()
+    256 |         check("seeking before the first LRC line clears the previous cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                                                       `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    257 |         probe.snapshot = snapshot(6.2, track: "track-b")
+    258 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:261:96: error: cannot find 'DesktopLyricCue' in scope
+    259 |         probe.snapshot = snapshot(1.2, track: "track-b")
+    260 |         probe.refresh()
+    261 |         check("backward seeks immediately publish the target LRC cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricPosition == 1.2)
+        |                                                                                                `- error: cannot find 'DesktopLyricCue' in scope
+    262 | 
+    263 |         let communityLines = [
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:261:84: error: value of type 'DesktopModel' has no member 'lyricCue'
+    259 |         probe.snapshot = snapshot(1.2, track: "track-b")
+    260 |         probe.refresh()
+    261 |         check("backward seeks immediately publish the target LRC cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricPosition == 1.2)
+        |                                                                                    `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    262 | 
+    263 |         let communityLines = [
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:261:178: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    259 |         probe.snapshot = snapshot(1.2, track: "track-b")
+    260 |         probe.refresh()
+    261 |         check("backward seeks immediately publish the target LRC cue", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricPosition == 1.2)
+        |                                                                                                                                                                                  `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    262 | 
+    263 |         let communityLines = [
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:270:28: error: cannot find 'DesktopLyricCue' in scope
+    268 |         probe.snapshot = snapshot(1.2, track: "track-b", playing: true)
+    269 |         probe.refresh()
+    270 |         let communityCue = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+        |                            `- error: cannot find 'DesktopLyricCue' in scope
+    271 |         let highlighted = probe.model.timedLyric
+    272 |         check("community rendering publishes its real cue and trusted position", probe.model.lyricCue == communityCue && (1.2..<1.3).contains(probe.model.lyricPosition ?? -1) && probe.model.translation == "你好世界")
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:272:94: error: value of type 'DesktopModel' has no member 'lyricCue'
+    270 |         let communityCue = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+    271 |         let highlighted = probe.model.timedLyric
+    272 |         check("community rendering publishes its real cue and trusted position", probe.model.lyricCue == communityCue && (1.2..<1.3).contains(probe.model.lyricPosition ?? -1) && probe.model.translation == "你好世界")
+        |                                                                                              `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    273 |         probe.snapshot = snapshot(1.3, track: "track-b", playing: true)
+    274 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:272:155: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    270 |         let communityCue = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1)
+    271 |         let highlighted = probe.model.timedLyric
+    272 |         check("community rendering publishes its real cue and trusted position", probe.model.lyricCue == communityCue && (1.2..<1.3).contains(probe.model.lyricPosition ?? -1) && probe.model.translation == "你好世界")
+        |                                                                                                                                                           `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    273 |         probe.snapshot = snapshot(1.3, track: "track-b", playing: true)
+    274 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:275:93: error: value of type 'DesktopModel' has no member 'lyricCue'
+    273 |         probe.snapshot = snapshot(1.3, track: "track-b", playing: true)
+    274 |         probe.refresh()
+    275 |         check("100ms word highlighting changes without replaying the line cue", probe.model.lyricCue == communityCue && probe.model.timedLyric != highlighted && (1.3..<1.4).contains(probe.model.lyricPosition ?? -1))
+        |                                                                                             `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    276 |         probe.snapshot = snapshot(3.2, track: "track-b")
+    277 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:275:195: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    273 |         probe.snapshot = snapshot(1.3, track: "track-b", playing: true)
+    274 |         probe.refresh()
+    275 |         check("100ms word highlighting changes without replaying the line cue", probe.model.lyricCue == communityCue && probe.model.timedLyric != highlighted && (1.3..<1.4).contains(probe.model.lyricPosition ?? -1))
+        |                                                                                                                                                                                                   `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    276 |         probe.snapshot = snapshot(3.2, track: "track-b")
+    277 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:278:107: error: cannot find 'DesktopLyricCue' in scope
+    276 |         probe.snapshot = snapshot(3.2, track: "track-b")
+    277 |         probe.refresh()
+    278 |         check("repeated community text is identified by its new index and start", probe.model.lyricCue == DesktopLyricCue(trackKey: communityCue.trackKey, index: 1, start: 3) && probe.model.lyricCue != communityCue)
+        |                                                                                                           `- error: cannot find 'DesktopLyricCue' in scope
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:278:95: error: value of type 'DesktopModel' has no member 'lyricCue'
+    276 |         probe.snapshot = snapshot(3.2, track: "track-b")
+    277 |         probe.refresh()
+    278 |         check("repeated community text is identified by its new index and start", probe.model.lyricCue == DesktopLyricCue(trackKey: communityCue.trackKey, index: 1, start: 3) && probe.model.lyricCue != communityCue)
+        |                                                                                               `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:278:191: error: value of type 'DesktopModel' has no member 'lyricCue'
+    276 |         probe.snapshot = snapshot(3.2, track: "track-b")
+    277 |         probe.refresh()
+    278 |         check("repeated community text is identified by its new index and start", probe.model.lyricCue == DesktopLyricCue(trackKey: communityCue.trackKey, index: 1, start: 3) && probe.model.lyricCue != communityCue)
+        |                                                                                                                                                                                               `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:281:102: error: cannot find 'DesktopLyricCue' in scope
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    281 |         check("community cue changes track even when the text is identical", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != communityCue)
+        |                                                                                                      `- error: cannot find 'DesktopLyricCue' in scope
+    282 |         probe.snapshot = snapshot(0.5, track: "track-c")
+    283 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:281:90: error: value of type 'DesktopModel' has no member 'lyricCue'
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    281 |         check("community cue changes track even when the text is identical", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != communityCue)
+        |                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    282 |         probe.snapshot = snapshot(0.5, track: "track-c")
+    283 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:281:184: error: value of type 'DesktopModel' has no member 'lyricCue'
+    279 |         load(snapshot(1.2, track: "track-c"), lines: [])
+    280 |         probe.refresh()
+    281 |         check("community cue changes track even when the text is identical", probe.model.lyricCue == DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1) && probe.model.lyricCue != communityCue)
+        |                                                                                                                                                                                        `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    282 |         probe.snapshot = snapshot(0.5, track: "track-c")
+    283 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:284:82: error: value of type 'DesktopModel' has no member 'lyricCue'
+    282 |         probe.snapshot = snapshot(0.5, track: "track-c")
+    283 |         probe.refresh()
+    284 |         check("community seek before its first line clears the cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                  `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    285 |         probe.snapshot = snapshot(1.2, track: "track-c")
+    286 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:284:113: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    282 |         probe.snapshot = snapshot(0.5, track: "track-c")
+    283 |         probe.refresh()
+    284 |         check("community seek before its first line clears the cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 0.5)
+        |                                                                                                                 `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    285 |         probe.snapshot = snapshot(1.2, track: "track-c")
+    286 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:287:28: error: cannot find 'DesktopLyricCue' in scope
+    285 |         probe.snapshot = snapshot(1.2, track: "track-c")
+    286 |         probe.refresh()
+    287 |         let preservedCue = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1), preservedText = probe.model.timedLyric
+        |                            `- error: cannot find 'DesktopLyricCue' in scope
+    288 |         probe.model.motionEnabled = true
+    289 |         for _ in 0..<10 {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:288:21: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    286 |         probe.refresh()
+    287 |         let preservedCue = DesktopLyricCue(trackKey: probe.snapshot!.key, index: 0, start: 1), preservedText = probe.model.timedLyric
+    288 |         probe.model.motionEnabled = true
+        |                     `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    289 |         for _ in 0..<10 {
+    290 |             probe.model.selectTheme("glass"); probe.model.selectGlassScene("night")
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:293:106: error: value of type 'DesktopModel' has no member 'lyricCue'
+    291 |             probe.model.selectTheme("classic"); probe.model.selectGlassScene("paper")
+    292 |         }
+    293 |         check("theme and scene round trips retain cue position permission and highlighting", probe.model.lyricCue == preservedCue && probe.model.lyricPosition == 1.2 && probe.model.motionEnabled && probe.model.timedLyric == preservedText)
+        |                                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    294 |         probe.snapshot = snapshot(nil, track: "track-c")
+    295 |         probe.readableText = "静态全文\n完整保留"
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:293:146: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    291 |             probe.model.selectTheme("classic"); probe.model.selectGlassScene("paper")
+    292 |         }
+    293 |         check("theme and scene round trips retain cue position permission and highlighting", probe.model.lyricCue == preservedCue && probe.model.lyricPosition == 1.2 && probe.model.motionEnabled && probe.model.timedLyric == preservedText)
+        |                                                                                                                                                  `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    294 |         probe.snapshot = snapshot(nil, track: "track-c")
+    295 |         probe.readableText = "静态全文\n完整保留"
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:293:182: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    291 |             probe.model.selectTheme("classic"); probe.model.selectGlassScene("paper")
+    292 |         }
+    293 |         check("theme and scene round trips retain cue position permission and highlighting", probe.model.lyricCue == preservedCue && probe.model.lyricPosition == 1.2 && probe.model.motionEnabled && probe.model.timedLyric == preservedText)
+        |                                                                                                                                                                                      `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    294 |         probe.snapshot = snapshot(nil, track: "track-c")
+    295 |         probe.readableText = "静态全文\n完整保留"
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:297:105: error: value of type 'DesktopModel' has no member 'lyricCue'
+    295 |         probe.readableText = "静态全文\n完整保留"
+    296 |         probe.refresh()
+    297 |         check("missing trusted progress clears cue and position but retains static lyrics", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.model.plainLyrics == probe.readableText && probe.model.timedLyric == nil)
+        |                                                                                                         `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    298 | 
+    299 |         // Seed a stale cue deliberately: each alternate rendering branch must remove it.
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:297:136: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    295 |         probe.readableText = "静态全文\n完整保留"
+    296 |         probe.refresh()
+    297 |         check("missing trusted progress clears cue and position but retains static lyrics", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.model.plainLyrics == probe.readableText && probe.model.timedLyric == nil)
+        |                                                                                                                                        `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    298 | 
+    299 |         // Seed a stale cue deliberately: each alternate rendering branch must remove it.
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:301:21: error: value of type 'DesktopModel' has no member 'lyricCue'
+    299 |         // Seed a stale cue deliberately: each alternate rendering branch must remove it.
+    300 |         probe.snapshot = snapshot(4, track: "track-c")
+    301 |         probe.model.lyricCue = preservedCue
+        |                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    302 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: "纯文本\n无时间戳", instrumental: false)
+    303 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:304:91: error: value of type 'DesktopModel' has no member 'lyricCue'
+    302 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: "纯文本\n无时间戳", instrumental: false)
+    303 |         probe.refresh()
+    304 |         check("plain lyrics keep real progress without an invented line cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.plainLyrics == "纯文本\n无时间戳")
+        |                                                                                           `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    305 |         probe.model.lyricCue = preservedCue
+    306 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:304:122: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    302 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: "纯文本\n无时间戳", instrumental: false)
+    303 |         probe.refresh()
+    304 |         check("plain lyrics keep real progress without an invented line cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.plainLyrics == "纯文本\n无时间戳")
+        |                                                                                                                          `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    305 |         probe.model.lyricCue = preservedCue
+    306 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:305:21: error: value of type 'DesktopModel' has no member 'lyricCue'
+    303 |         probe.refresh()
+    304 |         check("plain lyrics keep real progress without an invented line cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.plainLyrics == "纯文本\n无时间戳")
+    305 |         probe.model.lyricCue = preservedCue
+        |                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    306 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+    307 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:308:89: error: value of type 'DesktopModel' has no member 'lyricCue'
+    306 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+    307 |         probe.refresh()
+    308 |         check("instrumental music keeps real progress without a lyric cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.lyric == "纯音乐")
+        |                                                                                         `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    309 |         probe.model.lyricCue = preservedCue
+    310 |         probe.communityDocument = nil
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:308:120: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    306 |         probe.communityDocument = CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+    307 |         probe.refresh()
+    308 |         check("instrumental music keeps real progress without a lyric cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.lyric == "纯音乐")
+        |                                                                                                                        `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    309 |         probe.model.lyricCue = preservedCue
+    310 |         probe.communityDocument = nil
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:309:21: error: value of type 'DesktopModel' has no member 'lyricCue'
+    307 |         probe.refresh()
+    308 |         check("instrumental music keeps real progress without a lyric cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4 && probe.model.lyric == "纯音乐")
+    309 |         probe.model.lyricCue = preservedCue
+        |                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    310 |         probe.communityDocument = nil
+    311 |         probe.state.accept([], for: probe.snapshot!.key)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:313:78: error: value of type 'DesktopModel' has no member 'lyricCue'
+    311 |         probe.state.accept([], for: probe.snapshot!.key)
+    312 |         probe.refresh()
+    313 |         check("an empty synchronized document has no stale cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4)
+        |                                                                              `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    315 |         probe.clearDisplay()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:313:109: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    311 |         probe.state.accept([], for: probe.snapshot!.key)
+    312 |         probe.refresh()
+    313 |         check("an empty synchronized document has no stale cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4)
+        |                                                                                                             `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    315 |         probe.clearDisplay()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:314:21: error: value of type 'DesktopModel' has no member 'lyricCue'
+    312 |         probe.refresh()
+    313 |         check("an empty synchronized document has no stale cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4)
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+        |                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:314:58: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    312 |         probe.refresh()
+    313 |         check("an empty synchronized document has no stale cue", probe.model.lyricCue == nil && probe.model.lyricPosition == 4)
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+        |                                                          `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:316:83: error: value of type 'DesktopModel' has no member 'lyricCue'
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+        |                                                                                   `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    318 |         probe.clearAll()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:316:114: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    314 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+        |                                                                                                                  `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    318 |         probe.clearAll()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:317:21: error: value of type 'DesktopModel' has no member 'lyricCue'
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+        |                     `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    318 |         probe.clearAll()
+    319 |         check("clearing the source removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:317:58: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    315 |         probe.clearDisplay()
+    316 |         check("clearing displayed lyrics removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil)
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+        |                                                          `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    318 |         probe.clearAll()
+    319 |         check("clearing the source removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:319:77: error: value of type 'DesktopModel' has no member 'lyricCue'
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    318 |         probe.clearAll()
+    319 |         check("clearing the source removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+        |                                                                             `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    320 |         load(snapshot(1.2), lines: lines)
+    321 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:319:108: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    317 |         probe.model.lyricCue = preservedCue; probe.model.lyricPosition = 4
+    318 |         probe.clearAll()
+    319 |         check("clearing the source removes both cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+        |                                                                                                            `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    320 |         load(snapshot(1.2), lines: lines)
+    321 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:324:86: error: value of type 'DesktopModel' has no member 'lyricCue'
+    322 |         musicPID = nil
+    323 |         probe.refresh()
+    324 |         check("loss of the verified music process clears cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+        |                                                                                      `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    325 |         musicPID = 77
+    326 |         load(snapshot(1.2), lines: lines)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:324:117: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    322 |         musicPID = nil
+    323 |         probe.refresh()
+    324 |         check("loss of the verified music process clears cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && probe.snapshot == nil)
+        |                                                                                                                     `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    325 |         musicPID = 77
+    326 |         load(snapshot(1.2), lines: lines)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:329:77: error: value of type 'DesktopModel' has no member 'lyricCue'
+    327 |         probe.refresh()
+    328 |         probe.stop()
+    329 |         check("stopping the real session clears cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && !probe.running && probe.recovery.stops == 1)
+        |                                                                             `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    330 | 
+    331 |         func motion(_ name: String, configure: (MotionProbe) -> Void, enabled: Bool) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:329:108: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    327 |         probe.refresh()
+    328 |         probe.stop()
+    329 |         check("stopping the real session clears cue and clock", probe.model.lyricCue == nil && probe.model.lyricPosition == nil && !probe.running && probe.recovery.stops == 1)
+        |                                                                                                            `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    330 | 
+    331 |         func motion(_ name: String, configure: (MotionProbe) -> Void, enabled: Bool) {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:334:26: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    332 |             NSWorkspace.shared.accessibilityDisplayShouldReduceMotion = false
+    333 |             let motion = MotionProbe(DesktopModel(themeDefaults: defaults))
+    334 |             motion.model.motionEnabled = !enabled
+        |                          `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    335 |             configure(motion)
+    336 |             motion.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:337:38: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    335 |             configure(motion)
+    336 |             motion.refresh()
+    337 |             check(name, motion.model.motionEnabled == enabled && motion.permitted == enabled && motion.audio.pids == [enabled ? 77 : nil])
+        |                                      `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    338 |         }
+    339 |         motion("visible playing always publishes motion permission", configure: { _ in }, enabled: true)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:355:93: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    353 |         motion.refresh()
+    354 |         motion.stopPermission()
+    355 |         check("clearing allowAudio also revokes the presentation permission", !motion.model.motionEnabled && !motion.permitted)
+        |                                                                                             `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    356 |         let reopened = DesktopModel(themeDefaults: defaults)
+    357 |         check("reopening restores theme but never persists a cue clock or motion permission", reopened.theme == .classic && reopened.glassScene == .paper && reopened.lyricCue == nil && reopened.lyricPosition == nil && !reopened.motionEnabled)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:357:167: error: value of type 'DesktopModel' has no member 'lyricCue'
+    355 |         check("clearing allowAudio also revokes the presentation permission", !motion.model.motionEnabled && !motion.permitted)
+    356 |         let reopened = DesktopModel(themeDefaults: defaults)
+    357 |         check("reopening restores theme but never persists a cue clock or motion permission", reopened.theme == .classic && reopened.glassScene == .paper && reopened.lyricCue == nil && reopened.lyricPosition == nil && !reopened.motionEnabled)
+        |                                                                                                                                                                       `- error: value of type 'DesktopModel' has no member 'lyricCue'
+    358 |         print(String(decoding: try! JSONSerialization.data(withJSONObject: results, options: [.sortedKeys]), as: UTF8.self))
+    359 |     }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:357:195: error: value of type 'DesktopModel' has no member 'lyricPosition'
+    355 |         check("clearing allowAudio also revokes the presentation permission", !motion.model.motionEnabled && !motion.permitted)
+    356 |         let reopened = DesktopModel(themeDefaults: defaults)
+    357 |         check("reopening restores theme but never persists a cue clock or motion permission", reopened.theme == .classic && reopened.glassScene == .paper && reopened.lyricCue == nil && reopened.lyricPosition == nil && !reopened.motionEnabled)
+        |                                                                                                                                                                                                   `- error: value of type 'DesktopModel' has no member 'lyricPosition'
+    358 |         print(String(decoding: try! JSONSerialization.data(withJSONObject: results, options: [.sortedKeys]), as: UTF8.self))
+    359 |     }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-motion-7R7Dx3/driver.swift:357:229: error: value of type 'DesktopModel' has no member 'motionEnabled'
+    355 |         check("clearing allowAudio also revokes the presentation permission", !motion.model.motionEnabled && !motion.permitted)
+    356 |         let reopened = DesktopModel(themeDefaults: defaults)
+    357 |         check("reopening restores theme but never persists a cue clock or motion permission", reopened.theme == .classic && reopened.glassScene == .paper && reopened.lyricCue == nil && reopened.lyricPosition == nil && !reopened.motionEnabled)
+        |                                                                                                                                                                                                                                     `- error: value of type 'DesktopModel' has no member 'motionEnabled'
+    358 |         print(String(decoding: try! JSONSerialization.data(withJSONObject: results, options: [.sortedKeys]), as: UTF8.self))
+    359 |     }
+    
+  code: 1
+  stack: |-
+    genericNodeError (node:internal/errors:985:15)
+    wrappedFn (node:internal/errors:539:14)
+    ChildProcess.exithandler (node:child_process:417:12)
+    ChildProcess.emit (node:events:509:28)
+    maybeClose (node:internal/child_process:1141:16)
+    ChildProcess._handle.onexit (node:internal/child_process:306:5)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7764.072666

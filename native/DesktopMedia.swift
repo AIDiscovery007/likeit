@@ -21,26 +21,27 @@ struct DesktopSnapshot {
     let elapsed: Double?
     let sampledAt: Double
 
-    init?(_ data: [String: Any]) {
-        guard let pid = neteasePID(), data["bundleIdentifier"] as? String == neteaseBundle,
+    init?(_ data: [String: Any], expectedPID: pid_t? = neteasePID()) {
+        guard let pid = expectedPID, data["bundleIdentifier"] as? String == neteaseBundle,
               jsonNumber(data["processIdentifier"]) == Double(pid),
-              let playing = data["playing"] as? NSNumber, CFGetTypeID(playing) == CFBooleanGetTypeID(),
-              let duration = jsonNumber(data["durationMicros"]).map({ $0 / 1_000_000 }), duration > 0 else { return nil }
+              let playing = data["playing"] as? NSNumber, CFGetTypeID(playing) == CFBooleanGetTypeID() else { return nil }
+        let duration = max(0, jsonNumber(data["durationMicros"]).map { $0 / 1_000_000 } ?? 0)
         var fields: [String] = []
         for name in ["contentItemIdentifier", "title", "artist", "album"] {
-            guard let value = data[name] as? String, !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, value.utf8.count <= 4096 else { return nil }
-            fields.append(value)
+            let value = data[name] as? String ?? ""
+            if name == "title", value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || value.utf8.count > 4096 { return nil }
+            fields.append(value.utf8.count <= 4096 ? value : "")
         }
         guard let bytes = try? JSONSerialization.data(withJSONObject: [neteaseBundle, Int(pid), fields[0], fields[1], fields[2], fields[3], duration]), let key = String(data: bytes, encoding: .utf8) else { return nil }
         self.key = key
         self.pid = pid
-        metadata = TrackMetadata(title: fields[1], artists: [fields[2]], album: fields[3], duration: duration)
+        metadata = TrackMetadata(title: fields[1], artists: fields[2].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? [] : [fields[2]], album: fields[3], duration: duration)
         self.playing = playing.boolValue
         sampledAt = ProcessInfo.processInfo.systemUptime
         let rawRate = jsonNumber(data["playbackRate"])
         let timestamp = jsonNumber(data["timestampEpochMicros"]).map { $0 / 1_000_000 }
         let rawElapsed = jsonNumber(data["elapsedTimeMicros"]).map { $0 / 1_000_000 }
-        if let rawRate, (0...4).contains(rawRate), playing.boolValue == (rawRate > 0),
+        if duration > 0, let rawRate, (0...4).contains(rawRate), playing.boolValue == (rawRate > 0),
            let timestamp, timestamp > 0, timestamp <= Date().timeIntervalSince1970,
            let rawElapsed, rawElapsed >= 0 {
             let position = rawElapsed + (Date().timeIntervalSince1970 - timestamp) * rawRate

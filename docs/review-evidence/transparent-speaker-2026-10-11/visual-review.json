@@ -1,0 +1,24 @@
+{
+  "source": "5b1588f8b9c9dacf5893dd15028cf41aa9e21641",
+  "renderer": "production DesktopView in hidden NSHostingView; isolated UserDefaults; no DesktopSession or DesktopAudio",
+  "inputs": "original synthetic text, never real lyric success evidence",
+  "checked": [
+    "celadon",
+    "dusk",
+    "night",
+    "paper",
+    "long-1000",
+    "long-1920",
+    "plain",
+    "unavailable",
+    "small-800",
+    "classic"
+  ],
+  "fixed": [
+    "URL omitted mode/source reset",
+    "long translation overlapped right driver",
+    "opaque driver center",
+    "classic picker contrast under light system appearance"
+  ],
+  "open": []
+}
