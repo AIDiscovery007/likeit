@@ -24,6 +24,18 @@
         "喜欢",
         "网易云"
       ]
+    },
+    {
+      "name": "music-desktop",
+      "title": "Likeit",
+      "description": "Open the immersive NetEase music desktop or like the current track.",
+      "mode": "view",
+      "keywords": [
+        "music",
+        "desktop",
+        "沉浸",
+        "音乐桌面"
+      ]
     }
   ],
   "tools": [],
@@ -33,6 +45,28 @@
       "type": "dropdown",
       "title": "收藏成功动效",
       "description": "选择 Likeit 彩带是否跟随系统、始终播放或关闭；不更改 macOS 设置。",
+      "data": [
+        {
+          "title": "跟随系统",
+          "value": "system"
+        },
+        {
+          "title": "始终播放",
+          "value": "always"
+        },
+        {
+          "title": "关闭",
+          "value": "off"
+        }
+      ],
+      "default": "system",
+      "required": false
+    },
+    {
+      "name": "desktopMotionMode",
+      "type": "dropdown",
+      "title": "沉浸桌面动效",
+      "description": "独立控制沉浸桌面律动；关闭时不采集音频。",
       "data": [
         {
           "title": "跟随系统",

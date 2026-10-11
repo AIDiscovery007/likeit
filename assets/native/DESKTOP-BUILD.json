@@ -1,0 +1,26 @@
+{
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "minimumMacOS": "14.2",
+  "signing": "ad-hoc, hardened runtime",
+  "sources": {
+    "native/DesktopMain.swift": "da39b4201a970bc46dda0617ffd5cc3153939b7a6c4ac9eba9807b38c7846913",
+    "native/DesktopView.swift": "b0523b3b7caa32d731d69e4d5247c7187ac33f3a60f8d711511a95bd9c99510a",
+    "native/ImmersiveCore.swift": "c50d344b56051c6bd9aee67e42f1d5aad103bf53c589cc0fcd471fd1ba13e2b0",
+    "scripts/build-desktop.py": "6bd4504790f38ab8d668f7ca2d5eb51f90b5c30f19e1d75cec963d4ca9f770d4"
+  },
+  "files": {
+    "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
+    "Contents/MacOS/Likeit Desktop": "0c457328a786d01ed98b3717d59fbc994588297d564b15937087aa0b5706dc10",
+    "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
+    "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
+    "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter": "765d305bc480b5a08bffdc319856251efc27b0a536737a683bb181598b81113a",
+    "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Resources/Info.plist": "599acb89ed048dedc60d9257e7f320195d418a5494ca8c81e79fc03bedcd6b1e",
+    "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Resources/LICENSE": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
+    "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/_CodeSignature/CodeResources": "5da1dac59eb6395e0e488df225718f360336a6a6da2f08dcd6c49a021bbe68ee",
+    "Contents/Resources/mediaremote-adapter.pl": "d97802e46db9535e2549e178c105ebf417a0254b3929fc32f08ecfd14d49a85f",
+    "Contents/_CodeSignature/CodeResources": "0d3ef51f1be9d81df2fcc7277a151ba110a3f967d0cde773ded9ab4f50a1a5c6"
+  }
+}

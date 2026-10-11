@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Likeit Desktop</string>
+	<key>CFBundleExecutable</key>
+	<string>Likeit Desktop</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.likeit.desktop</string>
+	<key>CFBundleName</key>
+	<string>Likeit Desktop</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.likeit.desktop.open</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>likeit-desktop</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.2</string>
+	<key>NSAudioCaptureUsageDescription</key>
+	<string>Likeit 仅分析网易云音乐的实时音频，让桌面音响随音乐律动。音频不录制、不保存、不上传。</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+</dict>
+</plist>
