@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "34c65bd3c21b1c90ea9103495184bba7e367d008",
+  "tests": 497,
+  "passed": 497,
+  "failed": 0,
+  "frozenManifests": 29,
+  "frozenEntries": 317,
+  "sourceHashes": 13,
+  "installedBundleHashes": 10,
+  "manifestSHA256": "00117036f3ffe8e26815a52ba5868e315d6794e12fdbf2a947d04b06e93ee99f",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "signing": "ad-hoc, hardened runtime",
+  "installedSignatureVerified": true,
+  "desktopRunningAfterInstall": false,
+  "userHTMLUnchanged": true,
+  "uiAcceptance": "pending theme coordinator"
+}
