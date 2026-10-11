@@ -166,10 +166,10 @@ struct DesktopView: View {
                         Text("LIKEIT").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(2)
                             .foregroundStyle(palette.ink.opacity(0.65)).lineLimit(1).minimumScaleFactor(0.7)
                         Spacer(minLength: 16)
-                        themeSelector
+                        themeSelector.labelsHidden()
                         Picker("透明场景", selection: Binding(get: { model.glassScene }, set: { model.selectGlassScene($0.rawValue) })) {
                             ForEach(DesktopGlassScene.allCases, id: \.self) { Text($0.title).tag($0) }
-                        }.pickerStyle(.segmented).frame(width: 240).accessibilityLabel("透明音响场景")
+                        }.pickerStyle(.segmented).labelsHidden().frame(width: 240).accessibilityLabel("透明音响场景")
                         exitButton
                     }
                     Spacer(minLength: 0)
@@ -217,7 +217,7 @@ struct DesktopView: View {
                     .frame(height: height * 0.09)
             }
             glassDriver(size: driverSize).position(x: width * 0.12, y: height * 0.24)
-            glassDriver(size: driverSize).position(x: width * 0.80, y: height * 0.72)
+            glassDriver(size: driverSize).position(x: width * 0.80, y: height * 0.64)
             glassLyrics(size: CGSize(width: width, height: height))
             LinearGradient(stops: [.init(color: .white.opacity(0.17), location: 0), .init(color: .white.opacity(0.17), location: 0.13), .init(color: .clear, location: 0.133), .init(color: .clear, location: 0.37), .init(color: .white.opacity(0.07), location: 0.373), .init(color: .white.opacity(0.07), location: 0.45), .init(color: .clear, location: 0.453)], startPoint: .topLeading, endPoint: .bottomTrailing)
                 .allowsHitTesting(false).accessibilityHidden(true)
@@ -273,35 +273,70 @@ struct DesktopView: View {
 
     private func glassScenery(size: CGSize) -> some View {
         Canvas { context, canvas in
-            switch model.glassScene {
-            case .celadon:
-                for (x, y, radius) in [(0.2, 0.3, 0.35), (0.75, 0.65, 0.4), (0.5, 0.1, 0.25)] {
-                    let center = CGPoint(x: canvas.width * x, y: canvas.height * y)
-                    let r = canvas.height * radius
-                    context.fill(Path(ellipseIn: CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)), with: .radialGradient(Gradient(colors: [.white.opacity(0.24), .clear]), center: center, startRadius: 0, endRadius: r))
-                }
-            case .dusk:
-                let sun = CGRect(x: canvas.width * 0.62, y: canvas.height * 0.18, width: canvas.height * 0.46, height: canvas.height * 0.46)
-                context.fill(Path(ellipseIn: sun), with: .color(Color(red: 1, green: 0.91, blue: 0.71).opacity(0.45)))
-            case .night:
-                for index in 0..<48 {
-                    let x = Double((index * 73 + 19) % 101) / 101 * canvas.width
-                    let y = Double((index * 37 + 11) % 97) / 97 * canvas.height * 0.85
-                    context.fill(Path(ellipseIn: CGRect(x: x, y: y, width: 2, height: 2)), with: .color(.white.opacity(0.35)))
-                }
-            case .paper:
-                for index in 0..<32 {
-                    let x = Double(index) * canvas.width / 32
-                    var line = Path()
-                    line.move(to: CGPoint(x: x, y: 0)); line.addLine(to: CGPoint(x: x, y: canvas.height))
-                    context.stroke(line, with: .color(.black.opacity(0.025)), lineWidth: 1)
-                }
-            }
+            drawGlassScenery(context: &context, size: canvas)
         }.frame(width: size.width, height: size.height).allowsHitTesting(false).accessibilityHidden(true)
     }
 
+    private func drawGlassScenery(context: inout GraphicsContext, size canvas: CGSize) {
+        let low = model.motionEnabled ? model.low : 0
+        let mid = model.motionEnabled ? model.mid : 0
+        let high = model.motionEnabled ? model.high : 0
+        let energy = (low + mid + high) / 3
+        let phase = model.lyricPosition ?? 0
+        switch model.glassScene {
+        case .celadon:
+            for (index, blob) in [(0.2, 0.3, 0.35), (0.75, 0.65, 0.4), (0.5, 0.1, 0.25)].enumerated() {
+                let drift = phase * 0.6 + Double(index) * 2
+                let center = CGPoint(x: canvas.width * (blob.0 + sin(drift) * energy * 0.07), y: canvas.height * (blob.1 + cos(drift) * energy * 0.08))
+                let r = canvas.height * blob.2 * (1 + low * 0.16 + mid * 0.08)
+                context.fill(Path(ellipseIn: CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)), with: .radialGradient(Gradient(colors: [.white.opacity(0.24 + high * 0.1), .clear]), center: center, startRadius: 0, endRadius: r))
+            }
+        case .dusk:
+            let radius = canvas.height * 0.23 * (1 + low * 0.1 + mid * 0.03)
+            let sun = CGRect(x: canvas.width * 0.75 - radius, y: canvas.height * 0.41 - radius, width: radius * 2, height: radius * 2)
+            context.fill(Path(ellipseIn: sun), with: .color(Color(red: 1, green: 0.91, blue: 0.71).opacity(0.45 + high * 0.1)))
+            context.blendMode = .clear
+            for stripe in 0..<6 {
+                let y = sun.midY + Double(stripe) * radius * 0.16
+                context.fill(Path(CGRect(x: sun.minX, y: y, width: sun.width, height: radius * (0.025 + Double(stripe) * 0.012))), with: .color(.black))
+            }
+        case .night:
+            for index in 0..<48 {
+                let x = Double((index * 73 + 19) % 101) / 101 * canvas.width
+                let y = Double((index * 37 + 11) % 97) / 97 * canvas.height * 0.85
+                let light = high * (0.5 + 0.5 * sin(phase * 1.4 + Double(index)))
+                context.fill(Path(ellipseIn: CGRect(x: x, y: y, width: 2 + light * 2, height: 2 + light * 2)), with: .color(.white.opacity(0.3 + light * 0.5)))
+            }
+            for wave in 0..<3 {
+                var path = Path()
+                for step in 0...120 {
+                    let x = Double(step) / 120
+                    let ripple = sin(x * 12 + Double(wave)) * 0.004 + sin(x * 16 + phase * 1.5 + Double(wave)) * energy * 0.025
+                    let point = CGPoint(x: x * canvas.width, y: canvas.height * (0.78 + Double(wave) * 0.025 + ripple))
+                    if step == 0 { path.move(to: point) } else { path.addLine(to: point) }
+                }
+                context.stroke(path, with: .color(.white.opacity(0.12 + mid * 0.2)), lineWidth: 1.5)
+            }
+        case .paper:
+            let bands = [low, mid, high]
+            let width = canvas.width / 36
+            for index in 0..<36 {
+                let x = Double(index) * width
+                var line = Path()
+                line.move(to: CGPoint(x: x, y: 0)); line.addLine(to: CGPoint(x: x, y: canvas.height))
+                context.stroke(line, with: .color(.black.opacity(0.025)), lineWidth: 1)
+                // Repeated low/mid/high bands, not a full frequency spectrum.
+                let height = bands[index % 3] * canvas.height * 0.26
+                context.fill(Path(CGRect(x: x + width * 0.14, y: canvas.height * 0.91 - height, width: width * 0.72, height: height)), with: .color(.black.opacity(0.12)))
+            }
+        }
+    }
+
     private func glassDriver(size: Double) -> some View {
-        ZStack {
+        let low = model.motionEnabled ? model.low : 0
+        let mid = model.motionEnabled ? model.mid : 0
+        let high = model.motionEnabled ? model.high : 0
+        return ZStack {
             Circle().strokeBorder(Color(white: 0.045), lineWidth: size * 0.19)
                 .shadow(color: .black.opacity(0.35), radius: size * 0.07, y: size * 0.035)
             ForEach(0..<4) { ring in
@@ -311,11 +346,11 @@ struct DesktopView: View {
             Circle().fill(RadialGradient(colors: [.white.opacity(0.38), .clear, .black.opacity(0.35)], center: .topLeading, startRadius: 0, endRadius: size * 0.65))
                 .overlay(Circle().stroke(.white.opacity(0.25), lineWidth: 2)).padding(size * 0.19)
             ForEach(0..<4) { ring in
-                Circle().stroke(.white.opacity(0.16 + model.mid * 0.2), lineWidth: 1).padding(size * (0.23 + Double(ring) * 0.065))
+                Circle().stroke(.white.opacity(0.16 + mid * 0.2), lineWidth: 1).padding(size * (0.23 + Double(ring) * 0.065))
             }
-            Ellipse().fill(.white.opacity(0.65 + model.high * 0.3)).frame(width: size * 0.18, height: size * 0.10)
+            Ellipse().fill(.white.opacity(0.65 + high * 0.3)).frame(width: size * 0.18, height: size * 0.10)
                 .rotationEffect(.degrees(-22)).offset(x: -size * 0.015, y: size * 0.11).blur(radius: 0.6)
-        }.frame(width: size, height: size).scaleEffect(1 + model.low * 0.035)
+        }.frame(width: size, height: size).scaleEffect(1 + low * 0.035)
             .accessibilityHidden(true).allowsHitTesting(false)
     }
 
