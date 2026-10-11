@@ -33,6 +33,17 @@
     }
   ],
   "tools": [],
+  "preferences": [
+    {
+      "name": "successConfetti",
+      "type": "checkbox",
+      "title": "Success Confetti",
+      "label": "Celebrate newly liked tracks",
+      "description": "Show confetti after a confirmed new favorite when macOS Reduce Motion is off.",
+      "default": true,
+      "required": false
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.104.20",
     "@raycast/utils": "^2.2.7"

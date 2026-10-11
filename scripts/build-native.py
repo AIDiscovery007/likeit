@@ -74,6 +74,16 @@ with tempfile.TemporaryDirectory(prefix="likeit-native-build-") as directory:
     run(["/usr/bin/codesign", "--force", "--sign", "-", str(controller)])
     run(["/usr/bin/codesign", "--verify", "--strict", str(controller)])
     run(["xcrun", "lipo", str(controller), "-verify_arch", "arm64", "x86_64"])
+    for arch in ["arm64", "x86_64"]:
+        run(["xcrun", "swiftc", "-O", "-target", arch + "-apple-macosx13.0", "-sdk", sdk,
+             str(ROOT / "native/ReduceMotion.swift"), "-framework", "AppKit",
+             "-o", str(stage / ("reduce-motion-" + arch))])
+    reduce_motion = stage / "likeit-reduce-motion"
+    run(["xcrun", "lipo", "-create", str(stage / "reduce-motion-arm64"), str(stage / "reduce-motion-x86_64"),
+         "-output", str(reduce_motion)])
+    run(["/usr/bin/codesign", "--force", "--sign", "-", str(reduce_motion)])
+    run(["/usr/bin/codesign", "--verify", "--strict", str(reduce_motion)])
+    run(["xcrun", "lipo", str(reduce_motion), "-verify_arch", "arm64", "x86_64"])
     ASSETS.mkdir(parents=True, exist_ok=True)
     destination = ASSETS / framework.name
     if destination.exists():
@@ -82,11 +92,13 @@ with tempfile.TemporaryDirectory(prefix="likeit-native-build-") as directory:
     shutil.copy2(SOURCE / "bin/mediaremote-adapter.pl", ASSETS / "mediaremote-adapter.pl")
     shutil.copy2(SOURCE / "LICENSE", ASSETS / "LICENSE-mediaremote-adapter")
     shutil.copy2(controller, ASSETS / "likeit-controller")
+    shutil.copy2(reduce_motion, ASSETS / "likeit-reduce-motion")
 
 (ASSETS / "BUILD.json").write_text(json.dumps({
     "sourceCommit": manifest["commit"],
     "architectures": ["arm64", "x86_64"],
     "controllerSourceSHA256": hashlib.sha256((ROOT / "native/LikeitController.swift").read_bytes()).hexdigest(),
+    "reduceMotionSourceSHA256": hashlib.sha256((ROOT / "native/ReduceMotion.swift").read_bytes()).hexdigest(),
     "buildScriptSHA256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     "compiler": subprocess.check_output(["xcrun", "clang", "--version"], text=True).strip(),
     "commands": [command.replace(str(ROOT), "<PROJECT>").replace(str(stage), "<BUILD>") for command in commands],
