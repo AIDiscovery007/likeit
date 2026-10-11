@@ -24,34 +24,6 @@
         "喜欢",
         "网易云"
       ]
-    },
-    {
-      "name": "preview-motion",
-      "title": "Preview Motion Mode (Development)",
-      "description": "Preview a Likeit motion mode without accessing music or changing saved preferences.",
-      "mode": "no-view",
-      "arguments": [
-        {
-          "name": "motionMode",
-          "type": "dropdown",
-          "placeholder": "动效模式",
-          "required": true,
-          "data": [
-            {
-              "title": "跟随系统",
-              "value": "system"
-            },
-            {
-              "title": "始终播放",
-              "value": "always"
-            },
-            {
-              "title": "关闭",
-              "value": "off"
-            }
-          ]
-        }
-      ]
     }
   ],
   "tools": [],

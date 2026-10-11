@@ -22,9 +22,9 @@ helper 以 `.accessory` 策略创建透明非激活 NSPanel，不能成为 key/m
 
 `src/confetti.ts` 第三参数默认 system，只有 system/always 启动无 shell 子进程，并将模式作为原生第二参数；无效值不启动。最多 1 秒等待关闭 stdout 的 `started\n` / `skipped\n`，总输出上限 64 字节；坏响应、错误或超时发送 SIGKILL，不重试。启动确认后解除 Node 等待，helper 依靠自身期限退出，不要求 Raycast Node 常驻。音乐锁早已在反馈调用前释放。
 
-## 三态隔离预览（本轮 review）
+## 三态隔离预览归档
 
-临时 **Preview Motion Mode (Development)** 命令带必填的三态 dropdown 参数；使用相同 `presentResult` 和 renderer，HUD 专门显示“Likeit 动效预览（不操作音乐）”。选择只影响本次预览，不读写音乐，也不改变扩展偏好或系统设置。system 遵守系统策略，always 可在 Reduce Motion 开启时验证动效，off 只显示预览 HUD。此入口将在保留可归档提交后从最终生产 manifest 和源码移除。
+三态预览保留在固定提交 `8bc28ae20ce70ca01f8925b847ebfe2b5b44a8f9`。reviewer 可归档该提交、安装依赖并运行 `npm run dev`，在 Raycast 选择 **Preview Motion Mode (Development)** 和必填三态 dropdown 参数。预览使用相同 `presentResult` 和 renderer，HUD 专门显示“Likeit 动效预览（不操作音乐）”。选择只影响本次预览，不读写音乐，也不改变扩展偏好或系统设置。system 遵守系统策略，always 可在 Reduce Motion 开启时验证动效，off 只显示预览 HUD。最终生产 manifest 和源码已移除此入口；预览验证后重新注册最终提交，恢复生产命令清单。
 
 ## 上轮隔离预览归档
 
