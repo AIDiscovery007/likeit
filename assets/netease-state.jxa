@@ -1,0 +1,32 @@
+// Read-only diagnostic. Run with: osascript -l JavaScript assets/netease-state.jxa
+function run() {
+  const snapshot = { state: "unknown", trackKey: null, liked: null };
+  try {
+    const processes = Application("System Events").applicationProcesses.whose({ bundleIdentifier: "com.netease.163music" })();
+    if (processes.length === 0) return JSON.stringify({ ...snapshot, state: "not-running" });
+    if (processes.length !== 1) return JSON.stringify(snapshot);
+    const process = processes[0];
+    const menus = process.menuBars[0].menuBarItems().map((item) => ({
+      title: item.name(),
+      items: item.menus().flatMap((menu) => {
+        const titles = menu.menuItems.name();
+        const enabled = menu.menuItems.enabled();
+        return titles.map((title, index) => ({ title, enabled: enabled[index] }));
+      }),
+    }));
+    const controls = menus.filter((menu) => menu.items.some((item) => ["Like", "Dislike", "喜欢歌曲", "取消喜欢"].includes(item.title)));
+    const likes = controls.flatMap((menu) => menu.items).filter((item) => item.enabled && ["Like", "Dislike", "喜欢歌曲", "取消喜欢"].includes(item.title));
+    snapshot.liked = likes.length === 1 ? ["Dislike", "取消喜欢"].includes(likes[0].title) : null;
+    return JSON.stringify({
+      ...snapshot,
+      evidence: { frontmost: process.frontmost(), windows: process.windows.name(), controls },
+      reason: "No verified track identity or playback source is available from this reader.",
+    });
+  } catch (error) {
+    return JSON.stringify({
+      ...snapshot,
+      state: [-1743, -25211].includes(error.errorNumber) ? "permission-required" : "unknown",
+      error: { number: error.errorNumber, message: String(error.message) },
+    });
+  }
+}
