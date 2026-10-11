@@ -82,11 +82,14 @@ private func number(_ value: Any) -> NSNumber? {
     return number
 }
 
+enum OpenAPILyricSource: String { case word, standard }
+
 struct OpenAPILyricConfiguration {
     let appID: String
     let accessToken: String
     let privateKeyPEM: String
     let device: [String: String]
+    var lyricSource: OpenAPILyricSource = .word
 
     static var defaultURL: URL {
         FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Likeit/netease-openapi.json")
@@ -121,13 +124,15 @@ struct OpenAPILyricConfiguration {
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let appID = json["appId"] as? String, nonblank(appID),
                   let accessToken = json["accessToken"] as? String, nonblank(accessToken),
+                  json["lyricSource"] == nil || json["lyricSource"] is String,
+                  let source = OpenAPILyricSource(rawValue: json["lyricSource"] as? String ?? "word"),
                   let path = json["privateKeyPath"] as? String, path.hasPrefix("/"), !path.utf8.contains(0),
                   let device = json["device"] as? [String: String], !device.isEmpty,
                   device.allSatisfy({ nonblank($0.key) && nonblank($0.value) }),
                   let pemData = try read(URL(fileURLWithPath: path)),
                   let pem = String(data: pemData, encoding: .utf8) else { throw OpenAPILyricError.configuration }
             _ = try openAPISignature(parameters: [:], privateKeyPEM: pem)
-            return OpenAPILyricConfiguration(appID: appID, accessToken: accessToken, privateKeyPEM: pem, device: device)
+            return OpenAPILyricConfiguration(appID: appID, accessToken: accessToken, privateKeyPEM: pem, device: device, lyricSource: source)
         } catch { throw OpenAPILyricError.configuration }
     }
 }
@@ -189,7 +194,8 @@ private struct OpenAPICommand {
                 guard let flag = boolean(value) else { throw OpenAPILyricError.manifest }
                 required = flag
             }
-            guard let value = fixed[name] ?? provided[name] else {
+            let fallback = parameter["default"].flatMap { $0 is NSNull ? nil : $0 }
+            guard let value = fixed[name] ?? provided[name] ?? fallback else {
                 if required { throw OpenAPILyricError.manifest }
                 continue
             }
@@ -263,22 +269,31 @@ final class OpenAPILyrics {
             return (manifests, try OpenAPICommand.resolve(manifests, resource: "search", name: "song", provided: ["keyword": keyword, "limit": 20], identity: "keyword"))
         }) { [weak self] manifests, command in
             self?.send(command, token: token, decode: { try Self.mappedID($0, originalID: originalID) }) { [weak self] id in
+                guard let self else { return }
+                if self.configuration.lyricSource == .standard {
+                    self.loadOrdinary(manifests: manifests, id: id, token: token)
+                    return
+                }
                 let word = OpenAPICommand(path: "/openapi/music/basic/song/lyric/word/by/word/get", method: "POST", authenticated: true, business: ["songId": id])
-                self?.send(word, token: token, decode: decodeOpenAPIWordLyrics) { [weak self] result in
+                self.send(word, token: token, decode: decodeOpenAPIWordLyrics) { [weak self] result in
                     guard let self else { return }
                     switch result {
                     case .lines(let lines): self.finish(.lines(lines))
                     case .apiError: self.finish(.unavailable(OpenAPILyricError.api.message))
                     case .malformed: self.finish(.unavailable(OpenAPILyricError.response.message))
                     case .noWordLyrics, .noSynchronizedLyrics:
-                        self.work(token: token, operation: {
-                            try OpenAPICommand.resolve(manifests, resource: "song", name: "lyric", provided: ["songId": id], identity: "songId")
-                        }) { [weak self] ordinary in
-                            self?.send(ordinary, token: token, decode: Self.ordinaryLyrics) { [weak self] in self?.finish($0) }
-                        }
+                        self.loadOrdinary(manifests: manifests, id: id, token: token)
                     }
                 }
             }
+        }
+    }
+
+    private func loadOrdinary(manifests: [String: Any], id: String, token: UUID) {
+        work(token: token, operation: {
+            try OpenAPICommand.resolve(manifests, resource: "song", name: "lyric", provided: ["songId": id], identity: "songId")
+        }) { [weak self] ordinary in
+            self?.send(ordinary, token: token, decode: Self.ordinaryLyrics) { [weak self] in self?.finish($0) }
         }
     }
 
@@ -354,8 +369,9 @@ final class OpenAPILyrics {
         let json = try json(data)
         let payload = json["data"]
         let container = payload as? [String: Any]
+        let records = container?["songs"] == nil && container?["list"] == nil && container?["records"] != nil
         let rows: [[String: Any]]
-        if let list = (container?["songs"] ?? container?["list"] ?? payload) as? [[String: Any]] { rows = list }
+        if let list = (container?["songs"] ?? container?["list"] ?? container?["records"] ?? payload) as? [[String: Any]] { rows = list }
         else if let map = container, map.keys.allSatisfy({ !$0.isEmpty && $0.utf8.allSatisfy { (48...57).contains($0) } }), let values = Array(map.values) as? [[String: Any]] { rows = values }
         else { throw OpenAPILyricError.mapping }
         guard rows.count <= 100 else { throw OpenAPILyricError.mapping }
@@ -367,7 +383,7 @@ final class OpenAPILyrics {
             else { original = nil }
             guard original == originalID else { continue }
             var ids = Set<String>()
-            for name in ["songId", "encryptedId"] {
+            for name in records ? ["songId", "encryptedId", "id"] : ["songId", "encryptedId"] {
                 guard let value = row[name] else { continue }
                 guard let text = value as? String, text.utf8.count == 32,
                       text.utf8.allSatisfy({ (48...57).contains($0) || (65...70).contains($0) || (97...102).contains($0) }) else { throw OpenAPILyricError.mapping }

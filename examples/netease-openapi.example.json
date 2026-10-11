@@ -1,6 +1,7 @@
 {
   "appId": "YOUR_APP_ID",
   "accessToken": "YOUR_ACCESS_TOKEN",
+  "lyricSource": "word",
   "privateKeyPath": "/absolute/private/path/netease-openapi-private.pem",
   "device": {
     "deviceId": "YOUR_OWN_DEVICE_ID",

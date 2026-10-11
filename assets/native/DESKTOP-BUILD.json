@@ -15,7 +15,7 @@
     "native/DesktopLyrics.swift": "02e84b361168bf7237798fb016a558c3cf56e37ddab6769614b9b7eef52f0a4f",
     "native/DesktopMain.swift": "97343730a379bc147b58160fcba2d957ba983c3122637013e20e082207f11574",
     "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
-    "native/DesktopOpenAPILyrics.swift": "09b1011366ad4cd1f6d87d0d3eb466300bac4b60605b35adac4ee1bd89b8f2d0",
+    "native/DesktopOpenAPILyrics.swift": "a1165850af434157ddad1cb1349b928166763e0a7416cfd7a7dcca288454e45d",
     "native/DesktopSession.swift": "a87babecf95c127b1e3f10a1fbbe68ab585ffbe7fe247656c146c5bc99827f9c",
     "native/DesktopView.swift": "8c576bdb0ba4a0e140f565c624fae1f265086bf85dd06c834531e0e6e1d7e46b",
     "native/ImmersiveCore.swift": "3241339575b4674f000e49d6ff77c83e940f15d787f3dbd139f0ddb458e64fd1",
@@ -24,7 +24,7 @@
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "ff3e98af777b750ce928c1256d80a13df5fd9b2d500fc727673dcb539429fc5e",
+    "Contents/MacOS/Likeit Desktop": "c23dc8eb2317add219dc6c953c34d19fecdffd87140003b2d6fd9c5d8e948f7b",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter": "18dccac5e74960c7bafd427b6329ec6480d471b910d788408655c4be8a037f22",
