@@ -23,9 +23,11 @@ function run() {
       reason: "No verified track identity or playback source is available from this reader.",
     });
   } catch (error) {
+    const permissionRequired = [-1743, -25211].includes(error.errorNumber) ||
+      (error.errorNumber === -1719 && /\bnot allowed assistive access\b/i.test(String(error.message)));
     return JSON.stringify({
       ...snapshot,
-      state: [-1743, -25211].includes(error.errorNumber) ? "permission-required" : "unknown",
+      state: permissionRequired ? "permission-required" : "unknown",
       error: { number: error.errorNumber, message: String(error.message) },
     });
   }
