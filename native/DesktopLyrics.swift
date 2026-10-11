@@ -108,7 +108,7 @@ final class DesktopLyrics {
               let album = (data["album"] as? [String: Any])?["name"] as? String,
               let duration = jsonNumber(data["duration"]), duration > 0 else { return nil }
         let names = artists.compactMap { $0["name"] as? String }
-        guard names.count == artists.count else { return nil }
+        guard names.count == artists.count, ([title, album] + names).allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else { return nil }
         return SongCandidate(id: String(format: "%.0f", id), metadata: TrackMetadata(title: title, artists: names, album: album, duration: duration / 1000))
     }
 }

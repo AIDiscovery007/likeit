@@ -48,9 +48,10 @@ final class DesktopSession {
 
     private func receive(_ value: DesktopSnapshot?) {
         guard running else { return }
+        // A same-track seek or pause is newer evidence too; discard any in-flight poll.
+        revision += 1
         if streamKey != value?.key {
             streamKey = value?.key
-            revision += 1
             clear()
             verify()
         }
