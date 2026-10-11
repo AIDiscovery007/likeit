@@ -281,11 +281,12 @@ struct DesktopView: View {
                 .overlay(Circle().fill(RadialGradient(colors: [.white.opacity(0.38), .clear, .black.opacity(0.35)], center: .topLeading, startRadius: 0, endRadius: size * 0.65)))
                 .overlay(Circle().stroke(.white.opacity(0.25), lineWidth: 2)).padding(size * 0.19)
             ForEach(0..<4) { ring in
-                Circle().stroke(.white.opacity(0.16), lineWidth: 1).padding(size * (0.23 + Double(ring) * 0.065))
+                Circle().stroke(.white.opacity(0.16 + model.mid * 0.2), lineWidth: 1).padding(size * (0.23 + Double(ring) * 0.065))
             }
-            Ellipse().fill(.white.opacity(0.85)).frame(width: size * 0.18, height: size * 0.10)
+            Ellipse().fill(.white.opacity(0.65 + model.high * 0.3)).frame(width: size * 0.18, height: size * 0.10)
                 .rotationEffect(.degrees(-22)).offset(x: -size * 0.015, y: size * 0.11).blur(radius: 0.6)
-        }.frame(width: size, height: size).accessibilityHidden(true).allowsHitTesting(false)
+        }.frame(width: size, height: size).scaleEffect(1 + model.low * 0.035)
+            .accessibilityHidden(true).allowsHitTesting(false)
     }
 
     private func speaker(size: Double) -> some View {
