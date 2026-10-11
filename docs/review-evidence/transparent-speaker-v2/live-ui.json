@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-11T14:04:07.270874+00:00",
+  "installedCommit": "9a74b398a8c439bf9fb8311bd7364d3837a636e1",
+  "mode": "cold launch; off; no audio capture",
+  "initialPreferences": {
+    "theme": "glass",
+    "scene": "dusk"
+  },
+  "restoredPreferences": {
+    "theme": "glass",
+    "scene": "dusk"
+  },
+  "shortcuts": {
+    "Cmd+1": true,
+    "Cmd+2": true
+  },
+  "scenes": {
+    "celadon": true,
+    "dusk": true,
+    "night": true,
+    "paper": true
+  },
+  "sceneAXLabelPreserved": true,
+  "themeRoundTrips": 10,
+  "allRoundTripsPreservedSceneCachedLyricsAndMode": true,
+  "noLyricsReloadObserved": true,
+  "pidBeforeAndAfterRoundTrips": 38944,
+  "glassAndSceneSurviveRestart": true,
+  "classicSurvivesRestart": true,
+  "exitViaEsc": true,
+  "exitViaCmdQ": true,
+  "exitViaButton": true,
+  "noDesktopProcessAfterEachExit": true,
+  "realAudioCaptureRetested": false,
+  "changedMusicPlaybackPermissionsOrSystemSettings": false,
+  "limitations": [
+    "Motion images use production View with synthetic inputs, not a live audio recording.",
+    "System Reduce Motion and capture permission failure were verified through frozen code tests, not changed on this machine.",
+    "Focus restoration was not independently measured in this pass."
+  ]
+}
