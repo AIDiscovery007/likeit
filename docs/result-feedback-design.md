@@ -22,8 +22,8 @@ helper 以 `.accessory` 策略创建透明非激活 NSPanel，不能成为 key/m
 
 `src/confetti.ts` 使用无 shell 子进程，最多 1 秒等待关闭 stdout 的 `started\n` / `skipped\n`，总输出上限 64 字节；坏响应、错误或超时发送 SIGKILL，不重试。启动确认后解除 Node 等待，helper 依靠自身期限退出，不要求 Raycast Node 常驻。音乐锁早已在反馈调用前释放。
 
-## 隔离预览（review 阶段）
+## 隔离预览归档
 
-在仓库执行 `npm run dev` 注册命令后，从 Raycast 运行 **Preview Confetti (Development)**。预览只显示专用 HUD、读取 Reduce Motion 并调用同一原生 renderer；不调用收藏入口或伪造成功，不绕过系统设置。协调者独占执行桌面预览；开发者未触发动效。预览命令暂留供 C3 实测，最终生产 manifest 必须移除。
+最终生产 manifest 和源码已移除开发预览。需要隔离预览时，reviewer 可归档固定 C3 提交 `c003c37272a15181bd4b482837330f3c5eff628d`，在归档目录安装依赖并执行 `npm run dev`，从 Raycast 运行 **Preview Confetti (Development)**。预览只显示专用 HUD、读取 Reduce Motion 并调用同一原生 renderer；不调用收藏入口或伪造成功，不绕过系统设置。协调者独占执行桌面预览；开发者未触发动效。验收后应重新注册最终提交，恢复仅有 Like Current Track 的生产清单。
 
 焦点、输入穿透、Space、多屏、真实时长和无残留仍待协调者实测，不用编译或 started 响应替代验收。
