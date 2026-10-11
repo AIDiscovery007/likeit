@@ -23,6 +23,12 @@ struct DesktopLyricCue: Hashable {
     let start: Double
 }
 
+struct DesktopLyricSample: Equatable {
+    let position: Double
+    let sampledAt: Double
+    let rate: Double
+}
+
 struct DesktopGlassLyricLine: Equatable {
     let cue: DesktopLyricCue
     let text: String
@@ -32,6 +38,7 @@ final class DesktopModel: ObservableObject {
     @Published var glassPage: [DesktopGlassLyricLine] = []
     @Published var lyricCue: DesktopLyricCue?
     @Published var lyricPosition: Double?
+    @Published var lyricSample: DesktopLyricSample?
     @Published var motionEnabled = false
     @Published private(set) var theme: DesktopTheme
     @Published private(set) var glassScene: DesktopGlassScene
@@ -461,7 +468,7 @@ private struct DesktopGlassPoster: View {
     private struct Input: Equatable {
         let page: [DesktopGlassLyricLine]
         let cue: DesktopLyricCue?
-        let position: Double?
+        let sample: DesktopLyricSample?
         let enabled: Bool
     }
     private struct Arrival {
@@ -474,7 +481,6 @@ private struct DesktopGlassPoster: View {
     let size: CGSize
     // Input is the last rendered observation, never a second lyric clock.
     @State private var previous: Input?
-    @State private var observedAt = 0.0
     // At most one 500ms entrance and one 320ms outgoing page; cancelled together.
     @State private var arrival: Arrival?
     @State private var layout = GlassPosterLayout()
@@ -483,7 +489,7 @@ private struct DesktopGlassPoster: View {
     private var driverRadius: CGFloat { min(size.width * 0.175, size.height * 0.28) * 1.012 / 2 }
     private var readingInset: CGFloat { size.width * 0.0725 + driverRadius + 20 }
     private var readingWidth: CGFloat { max(1, size.width * 0.615 - driverRadius * 2 - 40) }
-    private var input: Input { Input(page: model.glassPage, cue: model.lyricCue, position: model.lyricPosition, enabled: model.motionEnabled) }
+    private var input: Input { Input(page: model.glassPage, cue: model.lyricCue, sample: model.lyricSample, enabled: model.motionEnabled) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -529,7 +535,7 @@ private struct DesktopGlassPoster: View {
                 arrival = nil
                 layout = GlassPosterLayout(page: model.glassPage, size: size)
             }
-            .onDisappear { arrival = nil; previous = nil; observedAt = 0 }
+            .onDisappear { arrival = nil; previous = nil }
             .task(id: arrival?.id) {
                 guard let id = arrival?.id else { return }
                 try? await Task.sleep(for: .milliseconds(320))
@@ -542,18 +548,20 @@ private struct DesktopGlassPoster: View {
     }
 
     private func receive(_ value: Input) {
-        let now = ProcessInfo.processInfo.systemUptime
         let changed = previous?.page != value.page
         let oldLayout = layout
         if changed { layout = GlassPosterLayout(page: value.page, size: size) }
         var continuous = false
-        if value.enabled, previous?.enabled == true, let position = value.position, let oldPosition = previous?.position {
-            let advance = position - oldPosition
-            continuous = advance >= 0 && advance <= 0.5 && abs(advance - (now - observedAt)) <= 0.25
+        if value.enabled, previous?.enabled == true, let sample = value.sample, let old = previous?.sample,
+           sample.rate == old.rate, sample.rate > 0 {
+            let interval = sample.sampledAt - old.sampledAt
+            let advance = sample.position - old.position
+            // Compare source samples; display scheduling must not masquerade as a seek.
+            continuous = interval > 0 && interval <= 0.5 && advance >= 0 && abs(advance - old.rate * interval) <= 0.005
         }
         if value.cue != previous?.cue {
-            if continuous, let cue = value.cue, let oldPosition = previous?.position,
-               oldPosition < cue.start, value.position.map({ $0 >= cue.start }) == true,
+            if continuous, let cue = value.cue, let oldPosition = previous?.sample?.position,
+               oldPosition < cue.start, value.sample.map({ $0.position >= cue.start }) == true,
                (previous?.cue.map { $0.trackKey == cue.trackKey && $0.index + 1 == cue.index } ?? (cue.index == 0)) {
                 arrival = Arrival(cue: cue, departing: changed && !oldLayout.lines.isEmpty ? oldLayout : nil)
             } else {
@@ -563,7 +571,6 @@ private struct DesktopGlassPoster: View {
             arrival = nil
         }
         previous = value
-        observedAt = now
     }
 
     private func page(_ page: GlassPosterLayout, elapsed: Double, departing: Bool = false) -> some View {

@@ -46,7 +46,7 @@ final class DesktopSession {
 
     private func clearDisplayedLyrics() {
         if !model.glassPage.isEmpty { model.glassPage = [] }
-        model.lyricCue = nil; model.lyricPosition = nil
+        model.lyricCue = nil; model.lyricPosition = nil; model.lyricSample = nil
         model.lyric = ""; model.previousLine = ""; model.nextLine = ""
         model.timedLyric = nil; model.translation = ""; model.plainLyrics = nil
     }
@@ -190,12 +190,13 @@ final class DesktopSession {
 
     private func render() {
         guard let snapshot else { return }
-        guard neteasePID() == snapshot.pid, ProcessInfo.processInfo.systemUptime - snapshot.sampledAt <= 5 else { clear(); return }
+        let now = ProcessInfo.processInfo.systemUptime
+        guard neteasePID() == snapshot.pid, now - snapshot.sampledAt <= 5 else { clear(); return }
         model.plainLyrics = communityDocument?.plainText
         if communityDocument?.instrumental == true { model.lyric = "纯音乐" }
         guard let elapsed = snapshot.elapsed, let rate = snapshot.rate,
-              let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {
-            model.lyricCue = nil; model.lyricPosition = nil
+              let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: now, duration: snapshot.metadata.duration) else {
+            model.lyricCue = nil; model.lyricPosition = nil; model.lyricSample = nil
             if !model.glassPage.isEmpty { model.glassPage = [] }
             model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""
             model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""
@@ -205,6 +206,7 @@ final class DesktopSession {
             return
         }
         model.lyricPosition = position
+        model.lyricSample = DesktopLyricSample(position: position, sampledAt: now, rate: rate)
         let progress = position / snapshot.metadata.duration
         if model.progress != progress { model.progress = progress }
         let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")
