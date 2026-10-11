@@ -272,13 +272,13 @@ struct DesktopView: View {
 
     private func glassDriver(size: Double) -> some View {
         ZStack {
-            Circle().fill(Color(white: 0.045)).shadow(color: .black.opacity(0.35), radius: size * 0.07, y: size * 0.035)
+            Circle().strokeBorder(Color(white: 0.045), lineWidth: size * 0.19)
+                .shadow(color: .black.opacity(0.35), radius: size * 0.07, y: size * 0.035)
             ForEach(0..<4) { ring in
                 Circle().stroke(Color(white: ring.isMultiple(of: 2) ? 0.17 : 0.055), lineWidth: size * 0.024)
                     .padding(Double(ring) * size * 0.033 + size * 0.02)
             }
-            Circle().fill(LinearGradient(colors: [model.glassScene.colors[0].opacity(0.95), model.glassScene.colors[1].opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing))
-                .overlay(Circle().fill(RadialGradient(colors: [.white.opacity(0.38), .clear, .black.opacity(0.35)], center: .topLeading, startRadius: 0, endRadius: size * 0.65)))
+            Circle().fill(RadialGradient(colors: [.white.opacity(0.38), .clear, .black.opacity(0.35)], center: .topLeading, startRadius: 0, endRadius: size * 0.65))
                 .overlay(Circle().stroke(.white.opacity(0.25), lineWidth: 2)).padding(size * 0.19)
             ForEach(0..<4) { ring in
                 Circle().stroke(.white.opacity(0.16 + model.mid * 0.2), lineWidth: 1).padding(size * (0.23 + Double(ring) * 0.065))
