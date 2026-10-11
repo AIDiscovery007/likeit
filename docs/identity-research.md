@@ -23,3 +23,23 @@
 [build]: https://github.com/ungive/mediaremote-adapter/blob/797729d9b16316dc313844476c153d7a107ca0df/CMakeLists.txt#L35-L76
 [license]: https://github.com/ungive/mediaremote-adapter/blob/797729d9b16316dc313844476c153d7a107ca0df/LICENSE#L1-L28
 [cli]: https://github.com/ungive/media-control/blob/3cfd5dcf78e7a619f7a42a3e2f29b06eb41027ea/bin/media-control#L1-L25
+
+## 隔离本机验证补充
+
+经协调者批准，使用上述 adapter 固定提交做了一次临时探针构建。源码 HEAD 已核对，上游源码保持原样、BSD 许可保留，未将 helper 纳入项目或安装到系统。本机没有 CMake，因此使用已有 Apple Clang 17.0.0（clang-1700.4.4.1）手工构建；SDK 为 `/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk`，系统为 macOS 26.6.2（25G83）。
+
+构建采用 CMake 中显式 `ADAPTER_SOURCES` 列表，`-dynamiclib -arch arm64 -fobjc-arc -fvisibility=default`，`include` / `src` 搜索路径，链接 Foundation、AppKit、UniformTypeIdentifiers；组装 `Versions/A` framework、Info.plist、公开 header 和 LICENSE 后执行 ad-hoc 签名。签名校验通过，产物仅为 **arm64**，未验证 x86_64，也不代表与上游全部构建属性等价。签名后二进制 SHA-256 为 `72050d06378ccca0538bc8ba076a57bb9d9417e814185acd31a84e301be0567a`。完整命令、布局、工具版本和逐文件摘要已在临时验证记录中交给协调者；未提交二进制或原始输出。
+
+仅运行三次系统 Perl 调用 adapter 的 `get --no-artwork`，间隔三秒；外层限制每次四秒，超时强制结束进程组，stdout 与 stderr 合计上限 64 KiB。未构建或运行 TestClient，未运行其他媒体命令或改变播放、账号、权限。三次耗时分别为 1.492、0.054、0.053 秒，均返回 318 字节、stderr 为空。必要字段三次相同：
+
+| 字段                    | 真实观测                                           |
+| ----------------------- | -------------------------------------------------- |
+| 来源                    | `com.netease.163music`，PID 5511                   |
+| 播放状态                | `playing=false`                                    |
+| 曲目信息                | 《恋人》，李荣浩，《黑马》，时长 275.96803125 秒   |
+| `uniqueIdentifier`      | 字段缺失，不是显式 `null`                          |
+| `contentItemIdentifier` | JSON 字符串 `A3390CFE-7E82-4A22-8809-00E3DA654A78` |
+
+这证明该 arm64 探针能在本机读取一次网易云媒体会话，且字段在此次短时间采样中一致。它不证明 UUID 与原生歌曲 ID 的映射、跨曲／重播稳定性或播放与身份的原子一致性。产品仍保持 `trackKey=null`，未接入 MediaRemote 或真实收藏。
+
+随后协调者提供了用户确认的歌曲 ID `1377163127` 及正在播放 Antisocial 的观测，并授权两次只读窗口检查。本会话仅检查已存在的窗口：网易云前台、一个 `AXStandardWindow`；其 `AXChildren`、`AXChildrenInNavigationOrder`、`AXSections` 均为空，`AXDocument` 不可读，属性列表未暴露 `AXURL`、`AXIdentifier`，窗口标题未包含当前曲名或该歌曲 ID。没有发现可核实的原生歌曲链接或当前播放控件。未打开窗口、点击、读取剪贴板或再次运行媒体 helper；这仅是当前 AX 暴露范围内未找到证据，不证明客户端内部没有歌曲 ID。
