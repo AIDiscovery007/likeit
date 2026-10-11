@@ -5,7 +5,7 @@ func desktopMotionEnabled(mode: String, reduceMotion: Bool?) -> Bool {
     mode == "always" || (mode == "system" && reduceMotion == false)
 }
 
-struct LyricLine { let time: Double; let text: String }
+struct LyricLine: Codable { let time: Double; let text: String }
 
 func parseLRC(_ text: String) -> [LyricLine] {
     guard text.utf8.count <= 1_048_576 else { return [] }

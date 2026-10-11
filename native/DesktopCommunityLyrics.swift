@@ -15,6 +15,8 @@ final class CommunityLyrics {
     // Source policy is fixed to AMLL -> LRCLIB within this provider.
     private var cache: [(CacheKey, CommunityLyricOutcome)] = []
     private var cacheKey: CacheKey?
+    private let diskCache: LyricDiskCache?
+    private var diskKey: String?
     private static var cooldowns: [String: Date] = [:]
     private let sessionConfiguration: URLSessionConfiguration
     private var request: LyricRequest?
@@ -22,7 +24,8 @@ final class CommunityLyrics {
     private var generation = UUID()
     private var completion: ((CommunityLyricOutcome) -> Void)?
 
-    init(sessionConfiguration: URLSessionConfiguration = .ephemeral) {
+    init(sessionConfiguration: URLSessionConfiguration = .ephemeral, cacheDirectory: URL? = nil, cacheNow: @escaping () -> Date = Date.init) {
+        diskCache = cacheDirectory.map { LyricDiskCache(directory: $0, now: cacheNow) }
         self.sessionConfiguration = sessionConfiguration.copy() as! URLSessionConfiguration
         self.sessionConfiguration.httpAdditionalHeaders = nil
     }
@@ -32,6 +35,7 @@ final class CommunityLyrics {
         generation = UUID()
         completion = nil
         cacheKey = nil
+        diskKey = nil
         request?.cancel(); request = nil
         deadline?.cancel(); deadline = nil
     }
@@ -51,9 +55,15 @@ final class CommunityLyrics {
         guard matchedSongID(for: metadata, candidates: [SongCandidate(id: "1", metadata: metadata)]) != nil else {
             finish(nil, message: "社区歌词暂不可用 · 歌曲信息不完整"); return
         }
+        diskKey = LyricDiskCache.key(metadata: metadata, namespace: "community-amll-lrclib", neteaseID: neteaseID)
+        if let diskCache, let diskKey, let cached = diskCache.load(CommunityLyricOutcome.self, key: diskKey),
+           let document = cached.document, Self.validCachedDocument(document) {
+            cancel()
+            completion(CommunityLyricOutcome(document: document, message: cached.message + " · 本地缓存")); return
+        }
         let identity = CacheKey(trackKey: key, title: metadata.title, artists: metadata.artists, album: metadata.album, duration: metadata.duration, neteaseID: neteaseID)
         cacheKey = identity
-        if let cached = cache.first(where: { $0.0 == identity }) {
+        if diskCache == nil, let cached = cache.first(where: { $0.0 == identity }) {
             finish(cached.1.document, message: cached.1.message); return
         }
         let token = generation
@@ -78,7 +88,9 @@ final class CommunityLyrics {
     private func finish(_ document: CommunityLyricDocument?, message: String) {
         let callback = completion
         let outcome = CommunityLyricOutcome(document: document, message: message)
-        if document != nil, let key = cacheKey {
+        if let diskCache, let diskKey, let document, Self.validCachedDocument(document) {
+            diskCache.store(outcome, key: diskKey)
+        } else if diskCache == nil, document != nil, let key = cacheKey {
             cache.removeAll { $0.0 == key }
             cache.append((key, outcome))
             if cache.count > 20 { cache.removeFirst() }
@@ -167,6 +179,29 @@ final class CommunityLyrics {
                     guard let self, self.generation == token else { return }
                     completion(value)
                 }
+            }
+        }
+    }
+
+    private static func validCachedDocument(_ document: CommunityLyricDocument) -> Bool {
+        if document.instrumental { return document.source == .lrclib && document.lines.isEmpty && document.plainText == nil }
+        if let plain = document.plainText {
+            return document.source == .lrclib && document.lines.isEmpty && !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        guard !document.lines.isEmpty, document.lines.count + document.lines.reduce(0, { $0 + $1.words.count }) <= 20_000,
+              document.lines.contains(where: { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
+              zip(document.lines, document.lines.dropFirst()).allSatisfy({ $0.start <= $1.start }) else { return false }
+        return document.lines.allSatisfy { line in
+            guard line.start.isFinite, line.end.isFinite, line.start >= 0, line.end >= line.start else { return false }
+            var previousEnd = 0
+            return line.words.allSatisfy { word in
+                guard document.source == .amll, word.start.isFinite, word.end.isFinite, word.start >= line.start,
+                      word.end > word.start, word.end <= line.end, let recorded = word.utf16Range,
+                      recorded.location >= previousEnd, recorded.location <= line.text.utf16.count,
+                      recorded.length > 0, recorded.length <= line.text.utf16.count - recorded.location,
+                      let range = Range(recorded, in: line.text), line.text[range] == word.text else { return false }
+                previousEnd = recorded.location + recorded.length
+                return true
             }
         }
     }

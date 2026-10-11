@@ -1,6 +1,6 @@
 import Foundation
 
-struct CommunityLyricWord {
+struct CommunityLyricWord: Codable {
     let start: Double
     let end: Double
     let text: String
@@ -10,10 +10,10 @@ struct CommunityLyricWord {
         self.start = start; self.end = end; self.text = text; self.utf16Range = utf16Range
     }
 }
-struct CommunityLyricLine { let start: Double; let end: Double; let text: String; let translation: String?; let words: [CommunityLyricWord] }
-enum CommunityLyricSource: String { case amll, lrclib }
-struct CommunityLyricDocument { let source: CommunityLyricSource; let lines: [CommunityLyricLine]; let plainText: String?; let instrumental: Bool }
-struct CommunityLyricOutcome { let document: CommunityLyricDocument?; let message: String }
+struct CommunityLyricLine: Codable { let start: Double; let end: Double; let text: String; let translation: String?; let words: [CommunityLyricWord] }
+enum CommunityLyricSource: String, Codable { case amll, lrclib }
+struct CommunityLyricDocument: Codable { let source: CommunityLyricSource; let lines: [CommunityLyricLine]; let plainText: String?; let instrumental: Bool }
+struct CommunityLyricOutcome: Codable { let document: CommunityLyricDocument?; let message: String }
 
 func communityWordProgress(_ word: CommunityLyricWord, at position: Double) -> Double {
     guard [word.start, word.end, position].allSatisfy(\.isFinite), word.start >= 0, word.end > word.start, position >= 0 else { return 0 }
