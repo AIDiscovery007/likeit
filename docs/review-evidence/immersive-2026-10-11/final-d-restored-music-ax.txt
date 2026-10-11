@@ -1,0 +1,17 @@
+Window: "", App: NetEaseMusic.
+0 Controls, Secondary Actions: Cancel, Pick
+	1 menu Secondary Actions: Cancel
+		2 Play, ID: controlItemTriggered:
+		3 Next, ID: controlItemTriggered:
+		4 Previous, ID: controlItemTriggered:
+		5 Increase Volume, ID: controlItemTriggered:
+		6 Decrease Volume, ID: controlItemTriggered:
+		7 Like, ID: controlItemTriggered:
+		8 Repeat, ID: controlItemTriggered:
+			9 menu Secondary Actions: Cancel
+				10 Off, ID: controlItemTriggered:
+				11 One, ID: controlItemTriggered:
+				12 All, ID: controlItemTriggered:
+		13 Shuffle, ID: controlItemTriggered:
+		14 Show/Hide Lyrics, ID: controlItemTriggered:
+		15 Customize Touch Bar, ID: controlItemTriggered:

@@ -1,0 +1,15 @@
+{
+  "pauseImageSize": [
+    3600,
+    2338
+  ],
+  "speakerRegion": [
+    0,
+    420,
+    1000,
+    1920
+  ],
+  "changedPixels": 0,
+  "regionPixels": 1500000,
+  "boundedToSpeaker": true
+}

@@ -1,0 +1,12 @@
+Window: "", App: Likeit Desktop.
+0 window Secondary Actions: Raise
+	1 container
+		2 text LIKEIT / MUSIC ROOM
+		3 button 退出沉浸桌面
+		4 text Sweet Boy Sweet Boy Malcolm Todd 正在匹配歌词 · 已暂停
+		5 progress indicator 0.8863461265921362
+		6 text 等待网易云播放 · 保持静态
+7 menu bar
+	8 Likeit Desktop
+
+The focused UI element is 0 window Secondary Actions: Raise

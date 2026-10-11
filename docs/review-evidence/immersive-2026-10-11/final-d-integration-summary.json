@@ -1,0 +1,18 @@
+{
+  "observedDurationSeconds": 200.984,
+  "continuousActiveTenMinutesPassed": false,
+  "endReason": "coordinator explicitly clicked desktop exit button",
+  "rssFirstMiB": 197.828125,
+  "rssLastMiB": 126.140625,
+  "rssPeakMiB": 219.3125,
+  "reportedCPUMin": 0.0,
+  "reportedCPUMax": 75.2,
+  "automaticExitReproduced": false,
+  "foregroundChangedTo": "company.thebrowser.Browser",
+  "restoredDesktopMotion": "system",
+  "successMotionUnchanged": "always",
+  "musicPausedVerified": true,
+  "backgroundButtonLastVisibleToGoneSeconds": 0.14294812499792897,
+  "escLastVisibleToGoneSeconds": 0.11425466666696593,
+  "cmdQLastVisibleToGoneSeconds": 0.10635174999697483
+}

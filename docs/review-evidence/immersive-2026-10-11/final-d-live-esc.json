@@ -1,0 +1,35 @@
+{
+  "firstVisible" : 3.7041667383164167e-05,
+  "frames" : [
+    "{\n    Height = 1169;\n    Width = 1800;\n    X = 0;\n    Y = 0;\n}"
+  ],
+  "lastVisible" : 3.1280620416691818,
+  "observedPIDs" : [
+    85109
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        85109
+      ],
+      "front" : "company.thebrowser.Browser",
+      "seconds" : 3.7041667383164167e-05
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "company.thebrowser.Browser",
+      "seconds" : 3.2423167083361477
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 8.5540009583346546
+    }
+  ],
+  "visibleSamples" : 97
+}

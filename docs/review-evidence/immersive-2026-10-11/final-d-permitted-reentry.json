@@ -1,0 +1,28 @@
+{
+  "firstVisible" : 2.4291668523801491e-05,
+  "frames" : [
+    "{\n    Height = 1169;\n    Width = 1800;\n    X = 0;\n    Y = 0;\n}"
+  ],
+  "lastVisible" : 29.986994999999297,
+  "observedPIDs" : [
+    54580
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        54580
+      ],
+      "front" : "com.todesktop.230313mzl4w4u92",
+      "seconds" : 2.4291668523801491e-05
+    },
+    {
+      "desktopPIDs" : [
+        54580
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 3.2802687916664581
+    }
+  ],
+  "visibleSamples" : 878
+}

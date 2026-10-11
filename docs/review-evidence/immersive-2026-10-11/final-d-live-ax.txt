@@ -1,0 +1,4 @@
+The following is a diff from the previous accessibility tree for Window: "" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~		5 progress indicator 0.7648231751874852
+~		6 text 网易云实时音频律动
+The focused UI element is 0 window Secondary Actions: Raise

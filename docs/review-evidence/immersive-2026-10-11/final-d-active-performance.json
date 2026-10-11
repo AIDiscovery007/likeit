@@ -1,0 +1,150 @@
+{
+  "pid": 54580,
+  "durationTarget": 600,
+  "samples": [
+    {
+      "seconds": 0.005,
+      "present": true,
+      "cpuSeconds": 71.35,
+      "rssKiB": 197008,
+      "reportedCPU": 56.7,
+      "front": [
+        "com.likeit.desktop"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 28
+    },
+    {
+      "seconds": 6.034,
+      "present": true,
+      "cpuSeconds": 72.14,
+      "rssKiB": 131392,
+      "reportedCPU": 0.5,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 28
+    },
+    {
+      "seconds": 12.172,
+      "present": true,
+      "cpuSeconds": 72.21000000000001,
+      "rssKiB": 126832,
+      "reportedCPU": 0.1,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 25
+    },
+    {
+      "seconds": 18.222,
+      "present": true,
+      "cpuSeconds": 72.26,
+      "rssKiB": 125408,
+      "reportedCPU": 0.1,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 29
+    },
+    {
+      "seconds": 24.279,
+      "present": true,
+      "cpuSeconds": 72.33,
+      "rssKiB": 125920,
+      "reportedCPU": 0.1,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 29
+    },
+    {
+      "seconds": 30.332,
+      "present": true,
+      "cpuSeconds": 72.38,
+      "rssKiB": 125744,
+      "reportedCPU": 1.4,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 27
+    },
+    {
+      "seconds": 36.362,
+      "present": true,
+      "cpuSeconds": 72.44,
+      "rssKiB": 125408,
+      "reportedCPU": 1.8,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 27
+    },
+    {
+      "seconds": 42.389,
+      "present": true,
+      "cpuSeconds": 72.5,
+      "rssKiB": 125472,
+      "reportedCPU": 0.7,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 26
+    },
+    {
+      "seconds": 48.442,
+      "present": true,
+      "cpuSeconds": 72.55,
+      "rssKiB": 125696,
+      "reportedCPU": 0.9,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 28
+    },
+    {
+      "seconds": 54.638,
+      "present": true,
+      "cpuSeconds": 72.67,
+      "rssKiB": 128848,
+      "reportedCPU": 0.8,
+      "front": [
+        "company.thebrowser.Browser"
+      ],
+      "desktopPIDs": [
+        54580
+      ],
+      "visibleSamples": 25
+    },
+    {
+      "seconds": 60.686,
+      "present": false
+    }
+  ]
+}

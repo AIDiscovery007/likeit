@@ -1,0 +1,28 @@
+{
+  "firstVisible" : 6.8875000579282641e-05,
+  "frames" : [
+    "{\n    Height = 1169;\n    Width = 1800;\n    X = 0;\n    Y = 0;\n}"
+  ],
+  "lastVisible" : 4.8697403333353577,
+  "observedPIDs" : [
+    54580
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        54580
+      ],
+      "front" : "company.thebrowser.Browser",
+      "seconds" : 6.8875000579282641e-05
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "company.thebrowser.Browser",
+      "seconds" : 5.0126884583332867
+    }
+  ],
+  "visibleSamples" : 132
+}
