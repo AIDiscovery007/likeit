@@ -128,7 +128,7 @@ struct DesktopView: View {
                     }
                 }.padding(40)
             }.foregroundStyle(.white)
-        }.ignoresSafeArea()
+        }.ignoresSafeArea().preferredColorScheme(.dark)
     }
 
     private var themeSelector: some View {
