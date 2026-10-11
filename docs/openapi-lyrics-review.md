@@ -2,6 +2,8 @@
 
 本迭代用户已确认自有应用与接口权限，先要求开发、随后提供了自有应用凭据。未复用先前文档样例 token/sign，未读取账号缓存，未对音乐 UI、收藏、播放和系统权限做任何操作。离线验收与后续真实认证探针分别记录如下。
 
+当前结论：产品 `1e50525` 已安装，私密配置显式启用 standard；245项离线测试通过，Popular的真实完整取词链返回79行。逐字接口对该应用未授权；Die For You的旧身份解析仍不能确认唯一歌曲。没有宣称这首当前歌曲已显示歌词，也没有做本轮全屏UI显示验收。
+
 ## O1：签名与响应解析
 
 - 冻结：`5fcca2c`，`docs/openapi-lyrics-core.sha256`，开发前缺少产品文件的 red 已记录。
@@ -27,7 +29,7 @@
 - 最后 Standards 指出原始字节扫描与 Foundation 自动UTF-16转码不一致。主会话探针证实 UTF-16/UTF-16LE 绕过，并在 `8cad54a` 先冻结新增编码回归（2行为red、2行为green，含父项5 tests、3 fail）。开发者 `f673898` 在入口拒绝原始NUL；合法UTF-8转义字符串保留。
 - 最终双线review仅复核最后修复：Standards确认其已关闭所报告编码风险；Spec确认符合新增契约，均无新增发现。审查只读，实际运行结果由主会话独立提供，真实平台验证仍不在静态review结论内。
 
-## 最终离线验收
+## f673898阶段离线验收
 
 - 协调者在 `f673898` 运行 `node --test acceptance/*.test.mjs`：**229/229 tests通过，无fail/skip/cancel**。涵盖旧收藏/彩带/动效/沉浸路径及新增官方签名、配置、实际桌面分支、ID、fallback、取消、错误、实际GET编码、精度与响应编码回归。输出留存于本机 `/tmp/likeit-openapi-release-final.tap`。
 - 所有新旧冻结文件保持不变，共61项、14份独立清单。新增用例均由协调者编写/执行，开发者没有跑测试，没有为迁就实现修改旧断言。
@@ -42,10 +44,30 @@
 
 该响应不能证明签名已被服务端接受，不能确定单个错误字段，也不能证明网关的鉴权合约等价。主会话已请求用户提供该应用登记的device公共参数约定，没有改成CLI身份碰运气。尚未生成或启用运行时 `netease-openapi.json`，现有无配置公开歌词行为保持。官方认证证据见 `docs/netease-openapi-auth-research.md`。
 
-真实API尚未接通。应用的公共参数、用户token、动态清单、真实参数schema、官方双ID命中、当前歌曲歌词显示与token失效行为仍待验证。离线测试通过与本地密钥匹配都不等于真实歌词请求成功。
+截至首次认证探针，真实API尚未接通。应用的公共参数、用户token、动态清单、真实参数schema、官方双ID命中、当前歌曲歌词显示与token失效行为仍待验证。离线测试通过与本地密钥匹配都不等于真实歌词请求成功。
 
 ## 用户确认个人开发者入口后的进展
 
 用户明确确认凭据来自官方个人开发者入口后，主会话沿官方客户端协议profile继续验证，保留Likeit自己的稳定deviceId。公共参数使用该协议的 `os/channel/brand=ncmcli` 后，服务端明确要求clientIp；补入本机当前网络接口的真实地址，openncm网关匿名认证业务200成功。随后二维码获取业务200成功。此时只确认匿名认证和二维码路径；匿名token请求manifest仍返回301“用户未授权当前接口”，等待用户手机扫码确认。详情与证据边界见认证研究的后续章节。
 
 没有修改产品或冻结测试，229项离线验收结论仍对应f673898。临时验收辅助程序和所有凭据保留仓库外，没有激活默认运行时配置或改变音乐播放状态。
+
+## 手机授权后的真实协议修复与最终验收
+
+用户扫码确认后，服务端返回status803，用户token保存在仓库外；两个HTTPS官方网关均接受该token并返回相同search/song目标描述。真实协议与原离线支持范围有三处差异，均先追加BDD/测试，再由原high开发会话实现，没有修改旧断言：
+
+1. `0f3c96c`冻结真实manifest的fixed_params=null；修复前4 tests中1 pass、3 fail（含父项）。`e99dcee`仅让null等价于缺省空对象，新测试转绿，错误类型仍拒绝。
+2. 真实搜索仅keyword/limit时HTTP400空body；携清单声明的offset、qualityFlag、trialScene默认值后业务200。数据位于records，带独立originalId和32hex id，命中用户指定Popular的数字ID。
+3. 逐字endpoint业务300“应用未授权当前接口”；清单中的普通歌词endpoint业务200，原文79个时间标记。`5b65e2e`预先冻结默认值、records双ID及显式standard来源契约：12 tests中4 pass、8 fail（含父项）。`1e50525`实现，standard直接请求普通歌词，默认word和所有授权错误行为仍保持；没有把授权失败改成空歌词或静默fallback。
+
+主会话在 `1e50525ba3a9ca44b8419967efce1979741e187e` 运行全部测试：**245/245通过，0 fail/skip/cancel**，日志本机 `/tmp/likeit-personal-all.tap`。16份冻结清单共68项均匹配；10项源码与10项bundle摘要、arm64/x86_64、严格深层签名独立核对通过。Standards与Spec两名代理只读复核固定范围f673898..1e50525，均无发现；开发者只实现、构建、lint、提交，没有运行测试。
+
+真实验证使用实际产品源码编译的验收入口，没有替换网络响应：
+
+- `OpenAPILyrics` standard：Popular可信数字ID经官方manifest/search/ordinary返回79行。
+- `DesktopLyrics`完整流程：由用户样本的网易详情元数据开始，经原公开完整搜索、详情复验、官方manifest/search/ordinary返回79行，来源提示“歌词按歌曲信息匹配”，耗时11.58秒，未绕过旧resolver。
+- 只读MediaRemote取到正在播放的Die For You，The Weeknd、Starboy、260.253333秒。实际DesktopLyrics返回“搜索结果不完整”，0行。公开搜索声明147条、首页100条。主会话额外只读取第2页47条，全部147个ID互异、总数稳定，但仍有11条缺少必要元数据，且2个不同ID匹配当前完整元数据；因此简单分页或选第一个都不能满足既有唯一性契约。保持明确失败，未挑版本、改测试或放宽匹配。
+
+`npm run build`已更新本机Raycast扩展；安装包10项摘要及签名再核对一致。默认私密配置 `~/Library/Application Support/Likeit/netease-openapi.json` 已按0600新建，显式lyricSource=standard，私钥仍在仓库外0700目录、0600文件中。未上传私钥或app secret，未将实际凭据提交Git，未改变音乐播放、收藏、动效偏好或系统权限。
+
+剩余边界：该应用逐字权限未开通，本轮只有普通逐行歌词；真实UI显示尚未复验；当前Die For You身份无法唯一确认；用户token返回expireTime=86400，产品仍无自动续期，过期需重新取得有效token。上述限制不被245项离线通过或单个真实样本成功掩盖。
