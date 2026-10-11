@@ -1,0 +1,4 @@
+eda1c0b93b8178269f76739288bbe90b4df2bf7b47e26e79847be25c8fde78ad  docs/openapi-personal-manifest.md
+b941bd6ba097280e82dc88d2261e3c2c7bb7d18693e1fb736d5397ec121831e2  acceptance/openapi-personal-manifest.test.mjs
+439a1a38b6c8b33cae0298197aef019ef9ace02ed14a1cab0a235922f5f62ceb  acceptance/openapi-personal-manifest-driver.swift
+faaec923f671c567d12209dd8f42abdebb1cbbebbc1b115365d7f722687ef779  acceptance/fixtures/openapi/personal-manifest.json

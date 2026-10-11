@@ -1,0 +1,102 @@
+{
+  "manifests": {
+    "root": {
+      "sub_resources": [
+        {
+          "name": "song",
+          "description": "歌曲相关命令",
+          "path": "song",
+          "min_cli_version": null
+        },
+        {
+          "name": "search",
+          "description": "搜索命令（歌曲、专辑、歌单、综合）",
+          "path": "search",
+          "min_cli_version": null
+        }
+      ]
+    },
+    "search": {
+      "methods": [
+        {
+          "name": "song",
+          "description": "搜索歌曲",
+          "path": "/openapi/music/basic/search/song/get/v3",
+          "parameters": [
+            {
+              "name": "keyword",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "搜索关键字",
+              "hidden": false
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "type": "number",
+              "required": false,
+              "description": "返回数量",
+              "hidden": false,
+              "default": 30
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "type": "number",
+              "required": false,
+              "description": "偏移量",
+              "hidden": false,
+              "default": 0
+            },
+            {
+              "name": "qualityFlag",
+              "in": "query",
+              "type": "boolean",
+              "required": false,
+              "description": "是否返回音质信息",
+              "hidden": true,
+              "default": false
+            },
+            {
+              "name": "trialScene",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "试听场景",
+              "hidden": true,
+              "default": "cli"
+            }
+          ],
+          "http_method": "GET",
+          "auth_required": true,
+          "fixed_params": null,
+          "min_cli_version": null
+        }
+      ]
+    },
+    "song": {
+      "methods": [
+        {
+          "name": "lyric",
+          "description": "获取歌曲歌词（逐行歌词、翻译歌词、非滚动歌词）",
+          "path": "/openapi/music/basic/song/lyric/get/v2",
+          "parameters": [
+            {
+              "name": "songId",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "加密歌曲ID",
+              "hidden": false
+            }
+          ],
+          "http_method": "GET",
+          "auth_required": true,
+          "fixed_params": null,
+          "min_cli_version": null
+        }
+      ]
+    }
+  }
+}
