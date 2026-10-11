@@ -2,7 +2,11 @@ import AppKit
 
 final class DesktopSession {
     let model: DesktopModel
-    private let lyrics = DesktopLyrics()
+    private var lyrics: DesktopLyrics?
+    private let communityLyrics = CommunityLyrics()
+    private var lyricsSource: String
+    private var communityDocument: CommunityLyricDocument?
+    private var lyricGeneration = UUID()
     private var state = LyricState()
     private var stream: DesktopMediaProcess?
     private var reader: DesktopMediaProcess?
@@ -18,7 +22,54 @@ final class DesktopSession {
     private var lyricStatus = "等待网易云歌曲信息"
     var sourceChanged: ((DesktopSnapshot?) -> Void)?
 
-    init(model: DesktopModel) { self.model = model }
+    init(model: DesktopModel, lyricsSource: String = "netease") {
+        self.model = model
+        self.lyricsSource = lyricsSource == "community" ? "community" : "netease"
+    }
+
+    func setLyricsSource(_ source: String) {
+        lyricsSource = source == "community" ? "community" : "netease"
+        lyrics?.stop(); lyrics = nil
+        communityLyrics.cancel()
+        resetLyrics()
+        if let snapshot, running { loadLyrics(snapshot); render() }
+    }
+
+    private func resetLyrics() {
+        lyricGeneration = UUID()
+        communityDocument = nil
+        state = LyricState()
+        clearDisplayedLyrics()
+    }
+
+    private func clearDisplayedLyrics() {
+        model.lyric = ""; model.previousLine = ""; model.nextLine = ""
+        model.timedLyric = nil; model.translation = ""; model.plainLyrics = nil
+    }
+
+    private func loadLyrics(_ value: DesktopSnapshot) {
+        lyrics?.cancel()
+        communityLyrics.cancel()
+        resetLyrics()
+        state.beginTrack(value.key)
+        lyricStatus = "正在匹配歌词"
+        let token = lyricGeneration
+        if lyricsSource == "community" {
+            communityLyrics.load(key: value.key, metadata: value.metadata) { [weak self] outcome in
+                guard let self, self.running, self.lyricGeneration == token, self.state.trackKey == value.key else { return }
+                self.communityDocument = outcome.document
+                self.lyricStatus = outcome.message
+                self.render()
+            }
+        } else {
+            if lyrics == nil { lyrics = DesktopLyrics() }
+            lyrics?.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in
+                guard let self, self.running, self.lyricGeneration == token, self.state.accept(lines, for: value.key) else { return }
+                self.lyricStatus = message
+                self.render()
+            }
+        }
+    }
 
     func start() {
         guard !running else { return }
@@ -59,7 +110,8 @@ final class DesktopSession {
         clock?.invalidate(); clock = nil
         stream?.stop(); stream = nil
         reader?.stop(); reader = nil
-        lyrics.stop()
+        lyrics?.stop(); lyrics = nil
+        communityLyrics.stop()
         clear()
     }
 
@@ -107,15 +159,7 @@ final class DesktopSession {
         if model.title != value.metadata.title { model.title = value.metadata.title }
         let artists = value.metadata.artists.joined(separator: " / ")
         if model.artist != artists { model.artist = artists }
-        if changed {
-            model.lyric = ""; model.previousLine = ""; model.nextLine = ""
-            lyricStatus = "正在匹配歌词"
-            lyrics.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in
-                guard let self, self.running, self.state.accept(lines, for: value.key) else { return }
-                self.lyricStatus = message
-                self.render()
-            }
-        }
+        if changed { loadLyrics(value) }
         sourceChanged?(value)
         render()
     }
@@ -123,22 +167,36 @@ final class DesktopSession {
     private func clear() {
         snapshot = nil
         scheduleClock()
-        state.beginTrack(nil)
-        lyrics.cancel()
+        resetLyrics()
+        lyrics?.cancel()
+        communityLyrics.cancel()
         sourceChanged?(nil)
         model.title = "Likeit"
         model.artist = "仅支持网易云音乐"
-        model.lyric = ""; model.previousLine = ""; model.nextLine = ""
         model.progress = 0
         model.status = "暂无可靠网易云播放信息"
+    }
+
+    private func renderCommunity(_ lines: [CommunityLyricLine], at position: Double) {
+        let index = lines.lastIndex { $0.start <= position }
+        let current = index.map { lines[$0] }
+        model.lyric = current?.text ?? ""
+        model.translation = current?.translation ?? ""
+        model.previousLine = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""
+        model.nextLine = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")
+        model.timedLyric = current.map { communityHighlightedText($0, at: position) }
     }
 
     private func render() {
         guard let snapshot else { return }
         guard neteasePID() == snapshot.pid, ProcessInfo.processInfo.systemUptime - snapshot.sampledAt <= 5 else { clear(); return }
+        model.plainLyrics = communityDocument?.plainText
+        if communityDocument?.instrumental == true { model.lyric = "纯音乐" }
         guard let elapsed = snapshot.elapsed, let rate = snapshot.rate,
               let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {
-            model.lyric = ""; model.previousLine = ""; model.nextLine = ""
+            model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""
+            model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""
+            model.progress = 0
             model.status = lyricStatus + " · 播放进度不可用"
             return
         }
@@ -146,6 +204,11 @@ final class DesktopSession {
         if model.progress != progress { model.progress = progress }
         let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")
         if model.status != status { model.status = status }
+        if let document = communityDocument {
+            if document.plainText != nil || document.instrumental { return }
+            renderCommunity(document.lines, at: position)
+            return
+        }
         let lines = state.lines
         let index = activeLyricIndex(in: lines, at: position)
         let current = index.map { lines[$0].text } ?? ""

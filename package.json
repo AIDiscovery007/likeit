@@ -83,6 +83,24 @@
       ],
       "default": "system",
       "required": false
+    },
+    {
+      "name": "desktopLyricsSource",
+      "type": "dropdown",
+      "title": "沉浸桌面歌词来源",
+      "description": "网易歌词保留原有公开或官方配置；社区歌词优先 AMLL，未命中时严格匹配 LRCLIB。",
+      "data": [
+        {
+          "title": "网易歌词",
+          "value": "netease"
+        },
+        {
+          "title": "社区歌词（AMLL / LRCLIB）",
+          "value": "community"
+        }
+      ],
+      "default": "netease",
+      "required": false
     }
   ],
   "dependencies": {

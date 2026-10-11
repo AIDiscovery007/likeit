@@ -6,6 +6,9 @@ final class DesktopModel: ObservableObject {
     @Published var lyric = ""
     @Published var previousLine = ""
     @Published var nextLine = ""
+    @Published var timedLyric: AttributedString?
+    @Published var translation = ""
+    @Published var plainLyrics: String?
     @Published var status = "等待网易云歌曲信息"
     @Published var audioStatus = ""
     @Published var canRetryAudio = false
@@ -30,15 +33,27 @@ struct DesktopView: View {
                     Spacer(minLength: size.width * 0.18)
                     speaker(size: min(size.width * 0.34, size.height * 0.65))
                 }.padding(.horizontal, -size.width * 0.06).opacity(0.72)
-                VStack(spacing: 24) {
-                    Text(model.previousLine).font(.system(size: 23, weight: .light)).foregroundStyle(.white.opacity(0.35)).lineLimit(2).frame(height: 58)
-                    Text(model.lyric.isEmpty ? model.title : model.lyric)
-                        .font(.system(size: min(104, max(64, size.width * 0.065)), weight: .medium, design: .rounded))
-                        .multilineTextAlignment(.center).lineLimit(3).minimumScaleFactor(0.24)
-                        .foregroundStyle(.white.opacity(0.96)).frame(height: size.height * 0.38)
-                        .shadow(color: .black, radius: 22)
-                    Text(model.nextLine).font(.system(size: 23, weight: .light)).foregroundStyle(.white.opacity(0.35)).lineLimit(2).frame(height: 58)
-                }.frame(width: size.width * 0.62)
+                if let plain = model.plainLyrics {
+                    ScrollView {
+                        Text(plain).font(.system(size: 28, weight: .regular)).lineSpacing(12)
+                            .multilineTextAlignment(.center).frame(maxWidth: .infinity).padding(24)
+                    }.frame(width: size.width * 0.62, height: size.height * 0.60)
+                        .accessibilityLabel("未同步歌词")
+                } else {
+                    VStack(spacing: 16) {
+                        Text(model.previousLine).font(.system(size: 23, weight: .light)).foregroundStyle(.white.opacity(0.35)).lineLimit(2).frame(height: 58)
+                        (model.timedLyric.map { Text($0) } ?? Text(model.lyric.isEmpty ? model.title : model.lyric))
+                            .font(.system(size: min(104, max(64, size.width * 0.065)), weight: .medium, design: .rounded))
+                            .multilineTextAlignment(.center).lineLimit(3).minimumScaleFactor(0.24)
+                            .foregroundStyle(.white.opacity(0.96)).frame(height: size.height * 0.30)
+                            .shadow(color: .black, radius: 22)
+                        if !model.translation.isEmpty {
+                            Text(model.translation).font(.system(size: 24)).foregroundStyle(.white.opacity(0.8))
+                                .multilineTextAlignment(.center).lineLimit(3).minimumScaleFactor(0.65)
+                        }
+                        Text(model.nextLine).font(.system(size: 23, weight: .light)).foregroundStyle(.white.opacity(0.35)).lineLimit(2).frame(height: 58)
+                    }.frame(width: size.width * 0.62)
+                }
                 VStack {
                     HStack {
                         Text("LIKEIT / MUSIC ROOM").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(3).foregroundStyle(.white.opacity(0.55))
@@ -80,4 +95,19 @@ struct DesktopView: View {
             Circle().fill(.white.opacity(0.07)).frame(width: size * 0.12).blur(radius: 5)
         }.frame(width: size, height: size * 1.22)
     }
+}
+
+// Find each timed word in the original line, preserving all intervening text.
+func communityHighlightedText(_ line: CommunityLyricLine, at position: Double) -> AttributedString {
+    var result = AttributedString(), cursor = line.text.startIndex
+    for word in line.words {
+        guard !word.text.isEmpty, let range = line.text.range(of: word.text, range: cursor..<line.text.endIndex) else { continue }
+        result.append(AttributedString(String(line.text[cursor..<range.lowerBound])))
+        var text = AttributedString(String(line.text[range]))
+        text.foregroundColor = .white.opacity(0.35 + 0.65 * communityWordProgress(word, at: position))
+        result.append(text)
+        cursor = range.upperBound
+    }
+    result.append(AttributedString(String(line.text[cursor...])))
+    return result
 }
