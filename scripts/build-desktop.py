@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib
 import json
+import os
 import plistlib
 import shutil
 import subprocess
@@ -10,6 +11,24 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 DESTINATION = ROOT / "assets/native/Likeit Desktop.app"
+identity = os.environ.get("LIKEIT_DESKTOP_SIGNING_IDENTITY")
+if identity is None:
+    identity = "-"
+    print("Warning: ad-hoc desktop signing cannot guarantee privacy permission continuity across builds.", flush=True)
+elif not identity.strip() or identity.strip() == "-":
+    raise SystemExit("LIKEIT_DESKTOP_SIGNING_IDENTITY must identify an existing code-signing identity")
+else:
+    identity = identity.strip()
+
+
+def designated_requirement(bundle, arch):
+    result = subprocess.run(["codesign", "-d", "-r-", "--arch", arch, str(bundle)], check=True, capture_output=True, text=True)
+    for line in (result.stdout + "\n" + result.stderr).splitlines():
+        if line.startswith(("designated => ", "# designated => ")):
+            return line.split("=> ", 1)[1]
+    raise SystemExit(f"Missing designated requirement for {bundle.name} ({arch})")
+
+
 adapter = json.loads((ROOT / "assets/native/BUILD.json").read_text())
 for name, expected in adapter["sha256"].items():
     if name.startswith("MediaRemoteAdapter.framework/") or name in ["mediaremote-adapter.pl", "LICENSE-mediaremote-adapter"]:
@@ -42,7 +61,7 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
             subprocess.run(["xcrun", "install_name_tool", "-id",
                             "@rpath/MediaRemoteAdapter.framework/MediaRemoteAdapter",
                             str(framework / "MediaRemoteAdapter")], check=True)
-            subprocess.run(["codesign", "--force", "--sign", "-", str(framework)], check=True)
+            subprocess.run(["codesign", "--force", "--sign", identity, str(framework)], check=True)
             subprocess.run(["codesign", "--verify", "--strict", str(framework)], check=True)
         else:
             shutil.copy2(source, resources / name)
@@ -61,9 +80,18 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     subprocess.run(["xcrun", "lipo", "-create", str(stage / "arm64"), str(stage / "x86_64"), "-output", str(binary)], check=True)
     entitlements = stage / "desktop.entitlements"
     entitlements.write_bytes(plistlib.dumps({"com.apple.security.device.audio-input": True}))
-    subprocess.run(["codesign", "--force", "--deep", "--options", "runtime", "--entitlements", str(entitlements), "--sign", "-", str(app)], check=True)
+    subprocess.run(["codesign", "--force", "--deep", "--options", "runtime", "--entitlements", str(entitlements), "--sign", identity, str(app)], check=True)
     subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
     subprocess.run(["xcrun", "lipo", str(binary), "-verify_arch", "arm64", "x86_64"], check=True)
+    details = subprocess.run(["codesign", "-d", "--verbose=4", str(app)], check=True, capture_output=True, text=True)
+    ad_hoc = "Signature=adhoc" in (details.stdout + "\n" + details.stderr).splitlines()
+    if ad_hoc != (identity == "-"):
+        raise SystemExit("Desktop signing type does not match the configured identity")
+    signing = "ad-hoc" if ad_hoc else "code-signing identity"
+    requirements = {
+        name: {arch: designated_requirement(bundle, arch) for arch in ["arm64", "x86_64"]}
+        for name, bundle in [("app", app), ("framework", resources / "MediaRemoteAdapter.framework")]
+    }
     if any(path.is_symlink() for path in app.rglob("*")):
         raise SystemExit("Desktop bundle must not contain symlinks")
     if DESTINATION.exists():
@@ -75,7 +103,8 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     "sdkVersion": subprocess.check_output(["xcrun", "--show-sdk-version"], text=True).strip(),
     "buildCommand": "python3 scripts/build-desktop.py",
     "adapterLayout": "flat framework, no symlinks; install name adjusted before signing",
-    "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": "ad-hoc, hardened runtime",
+    "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": signing + ", hardened runtime",
+    "designatedRequirements": requirements,
     "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__)]},
     "files": {str(p.relative_to(DESTINATION)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(DESTINATION.rglob("*")) if p.is_file() and not p.is_symlink()},
 }, indent=2) + "\n")

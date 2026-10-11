@@ -10,6 +10,16 @@
   ],
   "minimumMacOS": "14.2",
   "signing": "ad-hoc, hardened runtime",
+  "designatedRequirements": {
+    "app": {
+      "arm64": "cdhash H\"a635e7f38da45c35ab5b0a72f1b37dbf19f47f38\"",
+      "x86_64": "cdhash H\"1453f916a8b0519f9432ae1c0a94e588b0b8e65d\""
+    },
+    "framework": {
+      "arm64": "cdhash H\"a7a5d506ef57bd15d5c22640f4f6fd05c54dd1cb\"",
+      "x86_64": "cdhash H\"a2410aaa771abd0df910ec0f252cc0c1e375dfa2\""
+    }
+  },
   "sources": {
     "native/DesktopAudio.swift": "3a13a8e41b1a1fd18f7b1325195153dc5e89c6983b0d30f619e131bc27f7eec2",
     "native/DesktopLyrics.swift": "02e84b361168bf7237798fb016a558c3cf56e37ddab6769614b9b7eef52f0a4f",
@@ -20,7 +30,7 @@
     "native/DesktopView.swift": "82b0493c372913639afe0614daa7e1b928828d83bdecb78cff3de716ae1f731b",
     "native/ImmersiveCore.swift": "3241339575b4674f000e49d6ff77c83e940f15d787f3dbd139f0ddb458e64fd1",
     "native/OpenAPILyricCore.swift": "fd41a47516ac1b59cce173e11ef9d0b3ad5f7a7dbdf6e8c54d4f06dfb9c7b845",
-    "scripts/build-desktop.py": "c37cef11c75008da019e94da8ce2dc87e58f69f587505995b55c50a476537051"
+    "scripts/build-desktop.py": "29239519f9d062a32508b64cd2bbfd42eae609fe59617f42d539f3af6e0942bb"
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
