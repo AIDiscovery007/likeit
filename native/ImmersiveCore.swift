@@ -123,7 +123,7 @@ private final class SpectrumAnalyzer {
 
     func analyze(_ samples: [Float], sampleRate: Double, rms: Double) -> AudioFeatures {
         for index in 0..<count {
-            real[index] = index < samples.count ? samples[index] * window[index] : 0
+            real[index] = index < samples.count ? min(1, max(-1, samples[index])) * window[index] : 0
             imaginary[index] = 0
         }
         real.withUnsafeMutableBufferPointer { real in

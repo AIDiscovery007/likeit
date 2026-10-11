@@ -1,4 +1,8 @@
 {
+  "adapterCommit": "797729d9b16316dc313844476c153d7a107ca0df",
+  "compiler": "Apple Swift version 6.2.1 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)\nTarget: arm64-apple-macosx26.0",
+  "sdkVersion": "26.1",
+  "buildCommand": "python3 scripts/build-desktop.py",
   "architectures": [
     "arm64",
     "x86_64"
@@ -6,18 +10,18 @@
   "minimumMacOS": "14.2",
   "signing": "ad-hoc, hardened runtime",
   "sources": {
-    "native/DesktopAudio.swift": "ac4b2a5971b7866fcc6ddaa2f5b2b958addce03050b16a21b27df3694b076115",
-    "native/DesktopLyrics.swift": "563660fc0fcd28b61334ee7408e907ff211c9ecd60351a44991f45e06fb2dd52",
-    "native/DesktopMain.swift": "8c5534d460a5e2deb46a80cd13b56fe6daeccb0b90e91f325773417bcbc1e697",
+    "native/DesktopAudio.swift": "66746e133895b9b8b06098afe76d0e63a31df20cb226ba756d9939052e827010",
+    "native/DesktopLyrics.swift": "57165c5816374792b04af8f90ab4956dbc34e987868132e0ac063dd3651db413",
+    "native/DesktopMain.swift": "97343730a379bc147b58160fcba2d957ba983c3122637013e20e082207f11574",
     "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
-    "native/DesktopSession.swift": "74e6f92400d6ccd50f8c9861ea35ab75aa934cf611eeb66eb6f200c12323016d",
+    "native/DesktopSession.swift": "a87babecf95c127b1e3f10a1fbbe68ab585ffbe7fe247656c146c5bc99827f9c",
     "native/DesktopView.swift": "8c576bdb0ba4a0e140f565c624fae1f265086bf85dd06c834531e0e6e1d7e46b",
-    "native/ImmersiveCore.swift": "0c1a358046237be4a833b8322ecaefa33fa646d7fe4a76a3193968a9965ac265",
-    "scripts/build-desktop.py": "6bd4504790f38ab8d668f7ca2d5eb51f90b5c30f19e1d75cec963d4ca9f770d4"
+    "native/ImmersiveCore.swift": "3241339575b4674f000e49d6ff77c83e940f15d787f3dbd139f0ddb458e64fd1",
+    "scripts/build-desktop.py": "1763f6d94d83e3c5d5e195ab1c4c45ea43da5200a9b8136535753c0e10d664ff"
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "92049ef2023ec6b28cfa00bf641f42ae2d42cea6c46fb4a8c3684d3785542a15",
+    "Contents/MacOS/Likeit Desktop": "a1bb966d42c5944fe79895ef70374fad3524f62d4bfa9a3b5021e04854db25d4",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter": "765d305bc480b5a08bffdc319856251efc27b0a536737a683bb181598b81113a",

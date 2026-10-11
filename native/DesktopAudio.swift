@@ -83,7 +83,8 @@ final class DesktopAudio {
             try read(tap, kAudioTapPropertyFormat, into: &format)
             guard format.mFormatID == kAudioFormatLinearPCM, format.mFormatFlags & kAudioFormatFlagIsFloat != 0,
                   format.mFormatFlags & kAudioFormatFlagIsBigEndian == 0, format.mBitsPerChannel == 32,
-                  format.mChannelsPerFrame > 0, format.mChannelsPerFrame <= 2, format.mSampleRate.isFinite, format.mSampleRate > 0 else { throw CaptureError.format }
+                  format.mChannelsPerFrame > 0, format.mChannelsPerFrame <= 2, format.mSampleRate.isFinite, format.mSampleRate > 0,
+                  format.mBytesPerFrame == (format.mFormatFlags & kAudioFormatFlagIsNonInterleaved != 0 ? 4 : 4 * format.mChannelsPerFrame) else { throw CaptureError.format }
             sampleRate = format.mSampleRate
             let composition: [String: Any] = [
                 kAudioAggregateDeviceNameKey: "Likeit Private Audio",
@@ -188,6 +189,7 @@ final class DesktopAudio {
         releaseCapture()
         publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备变化 · 正在重新核对")
         if let pid = desiredPID, !failed, !stopped { start(pid) }
+        else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备不稳定 · 保持静态，退出后可重试") }
     }
 
     private func releaseCapture() {

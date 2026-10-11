@@ -10,6 +10,11 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 DESTINATION = ROOT / "assets/native/Likeit Desktop.app"
+adapter = json.loads((ROOT / "assets/native/BUILD.json").read_text())
+for name, expected in adapter["sha256"].items():
+    if name.startswith("MediaRemoteAdapter.framework/") or name in ["mediaremote-adapter.pl", "LICENSE-mediaremote-adapter"]:
+        if hashlib.sha256((ROOT / "assets/native" / name).read_bytes()).hexdigest() != expected:
+            raise SystemExit(f"Bundled adapter checksum mismatch: {name}")
 sdk = subprocess.check_output(["xcrun", "--show-sdk-path"], text=True).strip()
 sources = sorted((ROOT / "native").glob("Desktop*.swift")) + [ROOT / "native/ImmersiveCore.swift"]
 with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
@@ -48,6 +53,10 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
         shutil.rmtree(DESTINATION)
     shutil.copytree(app, DESTINATION, symlinks=True)
 (ROOT / "assets/native/DESKTOP-BUILD.json").write_text(json.dumps({
+    "adapterCommit": adapter["sourceCommit"],
+    "compiler": subprocess.check_output(["xcrun", "swiftc", "--version"], text=True).strip(),
+    "sdkVersion": subprocess.check_output(["xcrun", "--show-sdk-version"], text=True).strip(),
+    "buildCommand": "python3 scripts/build-desktop.py",
     "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": "ad-hoc, hardened runtime",
     "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__)]},
     "files": {str(p.relative_to(DESTINATION)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(DESTINATION.rglob("*")) if p.is_file() and not p.is_symlink()},

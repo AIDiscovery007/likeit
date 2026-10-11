@@ -9,6 +9,8 @@ final class DesktopSession {
     private var snapshot: DesktopSnapshot?
     private var heartbeat: Timer?
     private var clock: Timer?
+    private var visible = true
+    private var clockInterval = 0.0
     private var running = false
     private var checking = false
     private var revision = 0
@@ -31,8 +33,23 @@ final class DesktopSession {
             }
         }
         heartbeat = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in self?.verify() }
-        clock = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in self?.render() }
+        scheduleClock()
         verify()
+    }
+
+    func setVisible(_ value: Bool) {
+        guard visible != value else { return }
+        visible = value
+        scheduleClock()
+    }
+
+    private func scheduleClock() {
+        guard running else { return }
+        let interval = visible && snapshot?.playing == true ? 0.1 : 1.0
+        guard clockInterval != interval else { return }
+        clockInterval = interval
+        clock?.invalidate()
+        clock = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in self?.render() }
     }
 
     func stop() {
@@ -85,9 +102,11 @@ final class DesktopSession {
     private func apply(_ value: DesktopSnapshot) {
         let changed = state.trackKey != value.key
         snapshot = value
+        scheduleClock()
         state.beginTrack(value.key)
-        model.title = value.metadata.title
-        model.artist = value.metadata.artists.joined(separator: " / ")
+        if model.title != value.metadata.title { model.title = value.metadata.title }
+        let artists = value.metadata.artists.joined(separator: " / ")
+        if model.artist != artists { model.artist = artists }
         if changed {
             model.lyric = ""; model.previousLine = ""; model.nextLine = ""
             lyricStatus = "正在匹配歌词"
@@ -103,6 +122,7 @@ final class DesktopSession {
 
     private func clear() {
         snapshot = nil
+        scheduleClock()
         state.beginTrack(nil)
         lyrics.cancel()
         sourceChanged?(nil)
@@ -122,17 +142,17 @@ final class DesktopSession {
             model.status = lyricStatus + " · 播放进度不可用"
             return
         }
-        model.progress = position / snapshot.metadata.duration
-        model.status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")
+        let progress = position / snapshot.metadata.duration
+        if model.progress != progress { model.progress = progress }
+        let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")
+        if model.status != status { model.status = status }
         let lines = state.lines
-        if let index = activeLyricIndex(in: lines, at: position) {
-            model.lyric = lines[index].text
-            model.previousLine = index > 0 ? lines[index - 1].text : ""
-            model.nextLine = index + 1 < lines.count ? lines[index + 1].text : ""
-        } else {
-            model.lyric = ""
-            model.previousLine = ""
-            model.nextLine = lines.first?.text ?? ""
-        }
+        let index = activeLyricIndex(in: lines, at: position)
+        let current = index.map { lines[$0].text } ?? ""
+        let previous = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""
+        let next = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")
+        if model.lyric != current { model.lyric = current }
+        if model.previousLine != previous { model.previousLine = previous }
+        if model.nextLine != next { model.nextLine = next }
     }
 }

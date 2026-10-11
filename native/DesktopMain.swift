@@ -44,10 +44,10 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         session = DesktopSession(model: model)
         audio.output = { [weak self] features, message in
             guard let self, !self.terminating, self.allowAudio else { return }
-            self.model.low = features.low
-            self.model.mid = features.mid
-            self.model.high = features.high
-            self.model.audioStatus = message
+            if self.model.low != features.low { self.model.low = features.low }
+            if self.model.mid != features.mid { self.model.mid = features.mid }
+            if self.model.high != features.high { self.model.high = features.high }
+            if self.model.audioStatus != message { self.model.audioStatus = message }
         }
         session?.sourceChanged = { [weak self] value in
             self?.snapshot = value
@@ -85,6 +85,7 @@ final class DesktopDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         guard !terminating else { return }
         let enabled = desktopMotionEnabled(mode: mode, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         let visible = NSApp.isActive && window?.occlusionState.contains(.visible) == true
+        session?.setVisible(visible)
         allowAudio = enabled && visible && snapshot?.playing == true
         let reason = !enabled ? "桌面动效已关闭 · 不采集音频" : !visible ? "桌面不可见 · 采集已停止" : "等待网易云播放 · 保持静态"
         if !allowAudio {
