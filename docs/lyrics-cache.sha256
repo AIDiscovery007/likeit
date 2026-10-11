@@ -1,0 +1,4 @@
+8b86b5b052816921878f06aaf7521ef3079308efc69cebd98634e82f3427c2b8  docs/lyrics-cache-plan.md
+3ad2f01eb50036e77964035b5980beff3171f699edfacaa824c792be1c769a47  docs/lyrics-cache.feature
+22f5c656dc2d0ddc7ea323de03e7aa04f4b467432905f8fb90fc20e8ee9b568d  acceptance/lyrics-cache-driver.swift
+12b88b482f90dbf5035524ad5e5e8d79ab3d47931f67ff1abbda053a0279f801  acceptance/lyrics-cache.test.mjs
