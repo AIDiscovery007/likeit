@@ -409,11 +409,29 @@ private struct GlassPosterLayout {
 }
 
 private struct DesktopGlassPoster: View {
+    private struct Input: Equatable {
+        let page: [DesktopGlassLyricLine]
+        let cue: DesktopLyricCue?
+        let position: Double?
+        let enabled: Bool
+    }
+    private struct Arrival {
+        let id = UUID()
+        let cue: DesktopLyricCue
+        let started = Date()
+        var departing: GlassPosterLayout?
+    }
     @ObservedObject var model: DesktopModel
     let size: CGSize
+    // Input is the last rendered observation, never a second lyric clock.
+    @State private var previous: Input?
+    @State private var observedAt = 0.0
+    // At most one 500ms entrance and one 320ms outgoing page; cancelled together.
+    @State private var arrival: Arrival?
     @State private var layout = GlassPosterLayout()
 
     private var stage: CGSize { CGSize(width: size.width * 0.92, height: size.height * 0.61) }
+    private var input: Input { Input(page: model.glassPage, cue: model.lyricCue, position: model.lyricPosition, enabled: model.motionEnabled) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -424,7 +442,17 @@ private struct DesktopGlassPoster: View {
                             .lineSpacing(10).frame(maxWidth: .infinity, alignment: .leading)
                     }.accessibilityLabel("未同步歌词")
                 } else if !model.glassPage.isEmpty {
-                    page
+                    TimelineView(.animation(minimumInterval: 1.0 / 60, paused: arrival == nil)) { context in
+                        let elapsed = arrival.map { max(0, context.date.timeIntervalSince($0.started)) } ?? 1
+                        ZStack(alignment: .topLeading) {
+                            if let departing = arrival?.departing, model.motionEnabled {
+                                page(departing, elapsed: 1, departing: true)
+                                    .opacity(0.24 * (1 - UnitCurve.bezier(startControlPoint: UnitPoint(x: 0.25, y: 0.1), endControlPoint: UnitPoint(x: 0.25, y: 1)).value(at: min(1, elapsed / 0.32))))
+                                    .allowsHitTesting(false).accessibilityHidden(true)
+                            }
+                            page(layout, elapsed: elapsed)
+                        }
+                    }
                 } else {
                     Text(model.lyric.isEmpty ? model.title : model.lyric)
                         .font(.system(size: min(88, size.width * 0.075), weight: .black))
@@ -439,23 +467,65 @@ private struct DesktopGlassPoster: View {
         }.foregroundStyle(model.glassScene.ink)
             .frame(width: stage.width, alignment: .leading)
             .position(x: size.width * 0.5, y: size.height * 0.5)
-            .onChange(of: model.glassPage, initial: true) { _, page in layout = GlassPosterLayout(page: page, size: size) }
-            .onChange(of: size) { _, _ in layout = GlassPosterLayout(page: model.glassPage, size: size) }
+            .onChange(of: input, initial: true) { _, value in receive(value) }
+            .onChange(of: size) { _, _ in
+                arrival = nil
+                layout = GlassPosterLayout(page: model.glassPage, size: size)
+            }
+            .onDisappear { arrival = nil; previous = nil; observedAt = 0 }
+            .task(id: arrival?.id) {
+                guard let id = arrival?.id else { return }
+                try? await Task.sleep(for: .milliseconds(320))
+                guard !Task.isCancelled, arrival?.id == id else { return }
+                arrival?.departing = nil
+                try? await Task.sleep(for: .milliseconds(180))
+                guard !Task.isCancelled, arrival?.id == id else { return }
+                arrival = nil
+            }
     }
 
-    private var page: some View {
+    private func receive(_ value: Input) {
+        let now = ProcessInfo.processInfo.systemUptime
+        let changed = previous?.page != value.page
+        let oldLayout = layout
+        if changed { layout = GlassPosterLayout(page: value.page, size: size) }
+        var continuous = false
+        if value.enabled, previous?.enabled == true, let position = value.position, let oldPosition = previous?.position {
+            let advance = position - oldPosition
+            continuous = advance >= 0 && advance <= 0.5 && abs(advance - (now - observedAt)) <= 0.25
+        }
+        if value.cue != previous?.cue {
+            if continuous, let cue = value.cue, let oldPosition = previous?.position,
+               oldPosition < cue.start, value.position.map({ $0 >= cue.start }) == true,
+               (previous?.cue.map { $0.trackKey == cue.trackKey && $0.index + 1 == cue.index } ?? (cue.index == 0)) {
+                arrival = Arrival(cue: cue, departing: changed && !oldLayout.lines.isEmpty ? oldLayout : nil)
+            } else {
+                arrival = nil
+            }
+        } else if !continuous || changed {
+            arrival = nil
+        }
+        previous = value
+        observedAt = now
+    }
+
+    private func page(_ page: GlassPosterLayout, elapsed: Double, departing: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(layout.lines, id: \.cue) { line in
-                let visible = model.lyricCue.map { $0.trackKey == line.cue.trackKey && $0.index >= line.cue.index } ?? false
+            ForEach(page.lines, id: \.cue) { line in
+                let visible = departing || (previous?.cue.map { $0.trackKey == line.cue.trackKey && $0.index >= line.cue.index } ?? false)
+                let entering = !departing && model.motionEnabled && arrival?.cue == line.cue
+                let opacity = entering ? UnitCurve.bezier(startControlPoint: UnitPoint(x: 0.25, y: 0.1), endControlPoint: UnitPoint(x: 0.25, y: 1)).value(at: min(1, elapsed / 0.22)) : 1
+                let travel = entering ? 1 - UnitCurve.bezier(startControlPoint: UnitPoint(x: 0.2, y: 0.8), endControlPoint: UnitPoint(x: 0.2, y: 1)).value(at: min(1, elapsed / 0.5)) : 0
                 Group {
                     if line.contentHeight > line.height {
-                        ScrollView { Text(highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading) }
+                        ScrollView { Text(departing ? line.text : highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading) }
                     } else {
-                        Text(highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading)
+                        Text(departing ? line.text : highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading)
                     }
                 }.frame(width: line.width, height: line.height, alignment: .leading)
                     .padding(.leading, line.x).frame(width: stage.width, alignment: .leading)
-                    .opacity(visible ? 1 : 0).accessibilityHidden(!visible).allowsHitTesting(visible)
+                    .opacity(visible ? opacity : 0).offset(x: -min(18, line.textWidth * 0.025) * travel)
+                    .accessibilityHidden(!visible).allowsHitTesting(visible && !departing)
             }
         }
     }
