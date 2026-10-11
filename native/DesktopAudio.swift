@@ -22,7 +22,6 @@ final class DesktopAudio {
     private var desiredPID: pid_t?
     private var failed = false
     private var stopped = false
-    private var startedAt = 0.0
     private var rebuilds = 0
     private var lastRebuild = 0.0
     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
@@ -98,7 +97,7 @@ final class DesktopAudio {
                 self?.receive(input)
             })
             currentPID = pid
-            startedAt = ProcessInfo.processInfo.systemUptime
+            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 如有系统音频授权提示，请由你选择")
             try checked(AudioDeviceStart(device, ioProc))
             for (object, selector) in [
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice),
@@ -151,10 +150,15 @@ final class DesktopAudio {
         guard let pid = currentPID, neteasePID() == pid else { releaseCapture(); publish(.init(rms: 0, low: 0, mid: 0, high: 0), "网易云来源已变化"); return }
         let now = ProcessInfo.processInfo.systemUptime
         guard bufferLock.try() else { return }
+        let receivedPCM = lastPCM > 0
         let age = now - lastPCM
         let samples = filled == 2048 && age < 0.15 ? (0..<2048).map { buffer[(cursor + $0) % 2048] } : []
         bufferLock.unlock()
-        if age > 2 && now - startedAt > 2 {
+        if !receivedPCM {
+            publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云音频 · 可检查系统音频权限或直接退出")
+            return
+        }
+        if age > 2 {
             failed = true
             releaseCapture()
             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "未收到音频 · 可能未授权、静音或设备不可用；退出后可重试")
