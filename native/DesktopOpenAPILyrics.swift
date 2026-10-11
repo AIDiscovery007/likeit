@@ -170,7 +170,7 @@ private struct OpenAPICommand {
             }
         } else { throw OpenAPILyricError.manifest }
         let fixed: [String: Any]
-        if let value = descriptor["fixed_params"] {
+        if let value = descriptor["fixed_params"], !(value is NSNull) {
             guard let values = value as? [String: Any], values.values.allSatisfy(Self.scalar), method != "GET" || values.isEmpty else { throw OpenAPILyricError.manifest }
             fixed = values
         } else { fixed = [:] }
