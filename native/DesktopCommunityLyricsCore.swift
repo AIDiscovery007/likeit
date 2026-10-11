@@ -1,6 +1,15 @@
 import Foundation
 
-struct CommunityLyricWord { let start: Double; let end: Double; let text: String }
+struct CommunityLyricWord {
+    let start: Double
+    let end: Double
+    let text: String
+    let utf16Range: NSRange?
+
+    init(start: Double, end: Double, text: String, utf16Range: NSRange? = nil) {
+        self.start = start; self.end = end; self.text = text; self.utf16Range = utf16Range
+    }
+}
 struct CommunityLyricLine { let start: Double; let end: Double; let text: String; let translation: String?; let words: [CommunityLyricWord] }
 enum CommunityLyricSource: String { case amll, lrclib }
 struct CommunityLyricDocument { let source: CommunityLyricSource; let lines: [CommunityLyricLine]; let plainText: String?; let instrumental: Bool }
@@ -120,10 +129,12 @@ func parseCommunityTTML(_ text: String) -> [CommunityLyricLine] {
                     continue
                 }
                 guard span.role == nil else { return nil }
-                text += span.text
+                let spanText = span.text
+                let range = NSRange(location: text.utf16.count, length: spanText.utf16.count)
+                text += spanText
                 if let (begin, stop) = timing {
                     guard begin >= start, stop <= end, begin >= (words.last?.start ?? start) else { return nil }
-                    if !span.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { words.append(CommunityLyricWord(start: begin, end: stop, text: span.text)) }
+                    if !spanText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { words.append(CommunityLyricWord(start: begin, end: stop, text: spanText, utf16Range: range)) }
                 }
             }
         }
