@@ -23,7 +23,13 @@ struct DesktopLyricCue: Hashable {
     let start: Double
 }
 
+struct DesktopGlassLyricLine: Equatable {
+    let cue: DesktopLyricCue
+    let text: String
+}
+
 final class DesktopModel: ObservableObject {
+    @Published var glassPage: [DesktopGlassLyricLine] = []
     @Published var lyricCue: DesktopLyricCue?
     @Published var lyricPosition: Double?
     @Published var motionEnabled = false
@@ -72,7 +78,6 @@ struct DesktopView: View {
     @ObservedObject var model: DesktopModel
     let retryAudio: () -> Void
     let exit: () -> Void
-    @State private var lyricArrival: (cue: DesktopLyricCue, position: Double)?
 
     var body: some View {
         if model.theme == .glass {
@@ -162,15 +167,30 @@ struct DesktopView: View {
             ZStack {
                 glassPanel(size: size)
                 VStack(spacing: 20) {
-                    HStack {
+                    HStack(spacing: 10) {
                         Text("LIKEIT").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(2)
                             .foregroundStyle(palette.ink.opacity(0.65)).lineLimit(1).minimumScaleFactor(0.7)
                         Spacer(minLength: 16)
-                        themeSelector.labelsHidden()
-                        Picker("透明场景", selection: Binding(get: { model.glassScene }, set: { model.selectGlassScene($0.rawValue) })) {
-                            ForEach(DesktopGlassScene.allCases, id: \.self) { Text($0.title).tag($0) }
-                        }.pickerStyle(.segmented).labelsHidden().frame(width: 240).accessibilityLabel("透明音响场景")
-                        exitButton
+                        Picker("音响主题", selection: Binding(get: { model.theme }, set: { model.selectTheme($0.rawValue) })) {
+                            ForEach(DesktopTheme.allCases, id: \.self) { Text($0.title).tag($0) }
+                        }.pickerStyle(.segmented).controlSize(.small).labelsHidden().frame(width: 180)
+                        HStack(spacing: 2) {
+                            ForEach(DesktopGlassScene.allCases, id: \.self) { scene in
+                                Button { model.selectGlassScene(scene.rawValue) } label: {
+                                    HStack(spacing: 5) {
+                                        Circle().fill(scene.colors[0]).overlay(Circle().strokeBorder(palette.ink.opacity(0.25), lineWidth: 0.5)).frame(width: 7, height: 7)
+                                        Text(scene.title).font(.system(size: 11, weight: model.glassScene == scene ? .semibold : .regular))
+                                    }.padding(.horizontal, 9).frame(height: 30)
+                                        .background(palette.ink.opacity(model.glassScene == scene ? 0.10 : 0), in: RoundedRectangle(cornerRadius: 5))
+                                }.buttonStyle(.plain).accessibilityLabel("透明场景：" + scene.title)
+                                    .accessibilityAddTraits(model.glassScene == scene ? .isSelected : [])
+                            }
+                        }.padding(2).background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 7))
+                            .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(palette.ink.opacity(0.16), lineWidth: 0.5))
+                        Button(action: exit) {
+                            Text("退出 · Esc").font(.system(size: 11, weight: .medium)).padding(.horizontal, 14).frame(height: 34)
+                        }.buttonStyle(.plain).background(.white.opacity(0.07), in: Capsule())
+                            .overlay(Capsule().strokeBorder(palette.ink.opacity(0.2), lineWidth: 0.5)).accessibilityLabel("退出沉浸桌面")
                     }
                     Spacer(minLength: 0)
                     HStack(alignment: .top, spacing: 24) {
@@ -191,16 +211,6 @@ struct DesktopView: View {
                 }.padding(margin)
             }.foregroundStyle(palette.ink)
                 .preferredColorScheme(palette == .night ? .dark : .light)
-                .onAppear { lyricArrival = nil }
-                .onDisappear { lyricArrival = nil }
-                .onChange(of: model.lyricCue) { _, cue in
-                    lyricArrival = model.motionEnabled ? cue.flatMap { cue in model.lyricPosition.map { (cue, $0) } } : nil
-                }
-                .onChange(of: model.lyricPosition) { old, position in
-                    guard let position else { lyricArrival = nil; return }
-                    if let old, position < old, lyricArrival?.position != position { lyricArrival = nil }
-                }
-                .onChange(of: model.motionEnabled) { _, _ in lyricArrival = nil }
         }.ignoresSafeArea()
     }
 
@@ -216,59 +226,19 @@ struct DesktopView: View {
                 LinearGradient(colors: [.clear, Color(red: 0.48, green: 0.34, blue: 0.21).opacity(0.5), Color(red: 0.33, green: 0.22, blue: 0.13).opacity(0.8)], startPoint: .top, endPoint: .bottom)
                     .frame(height: height * 0.09)
             }
-            glassDriver(size: driverSize).position(x: width * 0.12, y: height * 0.24)
-            glassDriver(size: driverSize).position(x: width * 0.80, y: height * 0.64)
             glassLyrics(size: CGSize(width: width, height: height))
-            LinearGradient(stops: [.init(color: .white.opacity(0.17), location: 0), .init(color: .white.opacity(0.17), location: 0.13), .init(color: .clear, location: 0.133), .init(color: .clear, location: 0.37), .init(color: .white.opacity(0.07), location: 0.373), .init(color: .white.opacity(0.07), location: 0.45), .init(color: .clear, location: 0.453)], startPoint: .topLeading, endPoint: .bottomTrailing)
+            glassDriver(size: driverSize).position(x: width * 0.1125, y: height * 0.24)
+            glassDriver(size: driverSize).position(x: width * 0.7275, y: height * 0.64)
+            LinearGradient(stops: [.init(color: .white.opacity(0.17), location: 0), .init(color: .white.opacity(0.17), location: 0.13), .init(color: .clear, location: 0.133), .init(color: .clear, location: 0.37), .init(color: .white.opacity(0.07), location: 0.373), .init(color: .white.opacity(0.07), location: 0.45), .init(color: .clear, location: 0.453)], startPoint: UnitPoint(x: 0, y: 0.25), endPoint: UnitPoint(x: 1, y: 0.65))
                 .allowsHitTesting(false).accessibilityHidden(true)
         }.frame(width: width, height: height).clipped()
+            .overlay(Rectangle().strokeBorder(.black.opacity(0.12), lineWidth: 28).blur(radius: 18).allowsHitTesting(false))
+            .overlay(Rectangle().inset(by: max(6, width * 0.005)).strokeBorder(.white.opacity(0.3), lineWidth: 1).allowsHitTesting(false))
             .overlay(Rectangle().strokeBorder(Color(white: 0.045), lineWidth: max(6, width * 0.005)).allowsHitTesting(false))
     }
 
     private func glassLyrics(size: CGSize) -> some View {
-        let ink = model.glassScene.ink
-        let height = size.height * 0.68
-        let elapsed = lyricEntranceElapsed
-        return Group {
-            if let plain = model.plainLyrics {
-                ScrollView {
-                    Text(plain).font(.system(size: max(19, size.width * 0.028), weight: .semibold)).lineSpacing(10)
-                        .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 8)
-                }.frame(width: size.width * 0.48, height: height * 0.77)
-                    .accessibilityLabel("未同步歌词")
-            } else {
-                VStack(alignment: .leading, spacing: height * 0.02) {
-                    Text(model.previousLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
-                        .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
-                        .frame(height: height * 0.12, alignment: .bottomLeading)
-                    VStack(alignment: .leading, spacing: height * 0.02) {
-                        (model.timedLyric.map { Text(glassHighlightedText($0, ink: ink)) } ?? Text(model.lyric.isEmpty ? model.title : model.lyric))
-                            .font(.system(size: size.width * 0.081, weight: .black, design: .default))
-                            .lineLimit(4).minimumScaleFactor(0.22).tracking(-0.5)
-                            .frame(maxWidth: .infinity, alignment: .leading).frame(height: height * 0.38)
-                        if !model.translation.isEmpty {
-                            Text(model.translation).font(.system(size: max(16, size.width * 0.025), weight: .medium))
-                                .foregroundStyle(ink.opacity(0.85)).lineLimit(3).minimumScaleFactor(0.55)
-                                .frame(maxHeight: height * 0.14)
-                        }
-                    }.opacity(min(1, elapsed / 0.22))
-                        .offset(x: -size.width * 0.48 * 0.025 * pow(1 - min(1, elapsed / 0.5), 3))
-                        .animation(model.motionEnabled && lyricArrival != nil ? .linear(duration: 0.1) : nil, value: model.lyricPosition)
-                        .transaction { if !model.motionEnabled { $0.disablesAnimations = true } }
-                        .id(model.lyricCue)
-                    Text(model.nextLine).font(.system(size: max(16, size.width * 0.023), weight: .medium))
-                        .foregroundStyle(ink.opacity(0.65)).lineLimit(2).minimumScaleFactor(0.65)
-                        .frame(height: height * 0.12, alignment: .topLeading)
-                }.frame(width: size.width * 0.48, height: height * 0.82)
-            }
-        }.foregroundStyle(ink).multilineTextAlignment(.leading)
-            .position(x: size.width * 0.46, y: size.height * 0.47)
-    }
-
-    private var lyricEntranceElapsed: Double {
-        guard model.motionEnabled, let arrival = lyricArrival, arrival.cue == model.lyricCue,
-              let position = model.lyricPosition, position >= arrival.position else { return 1 }
-        return position - arrival.position
+        DesktopGlassPoster(model: model, size: size)
     }
 
     private func glassScenery(size: CGSize) -> some View {
@@ -369,6 +339,143 @@ struct DesktopView: View {
     }
 }
 
+// Fixed row bands avoid the two fixed driver bounds, including their maximum travel.
+// Measurement runs only when page content or viewport size changes.
+private struct GlassPosterLayout {
+    struct Line {
+        let cue: DesktopLyricCue
+        let text: AttributedString
+        let x: CGFloat
+        let width: CGFloat
+        let textWidth: CGFloat
+        let height: CGFloat
+        let contentHeight: CGFloat
+    }
+    var lines: [Line] = []
+
+    init(page: [DesktopGlassLyricLine] = [], size: CGSize = .zero) {
+        guard !page.isEmpty, size.width > 0 else { return }
+        let stage = CGRect(x: size.width * 0.04, y: size.height * 0.15, width: size.width * 0.92, height: size.height * 0.61)
+        let rowHeight = stage.height / CGFloat(page.count)
+        let diameter = min(size.width * 0.175, size.height * 0.28) * 1.012
+        let drivers = [(0.1125, 0.24), (0.7275, 0.64)].map { x, y in
+            CGRect(x: size.width * x - diameter / 2, y: size.height * y - diameter / 2, width: diameter, height: diameter).insetBy(dx: -20, dy: -16)
+        }
+        func prepare(_ text: String, _ pointSize: CGFloat) -> (AttributedString, NSAttributedString) {
+            var display = AttributedString()
+            let measured = NSMutableAttributedString(string: "")
+            let latin = NSFont(name: "Impact", size: pointSize) ?? .systemFont(ofSize: pointSize, weight: .black)
+            let other = NSFont.systemFont(ofSize: pointSize, weight: .black)
+            for character in text {
+                let font = character.unicodeScalars.allSatisfy { $0.value < 0x0250 } ? latin : other
+                var run = AttributedString(String(character))
+                run.font = Font(font)
+                display.append(run)
+                measured.append(NSAttributedString(string: String(character), attributes: [.font: font]))
+            }
+            return (display, measured)
+        }
+        lines = page.enumerated().map { index, line in
+            let top = stage.minY + CGFloat(index) * rowHeight
+            var intervals = [stage.minX...stage.maxX]
+            for driver in drivers where driver.minY < top + rowHeight && driver.maxY > top {
+                intervals = intervals.flatMap { interval -> [ClosedRange<CGFloat>] in
+                    guard driver.minX < interval.upperBound && driver.maxX > interval.lowerBound else { return [interval] }
+                    var remaining: [ClosedRange<CGFloat>] = []
+                    if driver.minX > interval.lowerBound { remaining.append(interval.lowerBound...driver.minX) }
+                    if driver.maxX < interval.upperBound { remaining.append(driver.maxX...interval.upperBound) }
+                    return remaining
+                }
+            }
+            let interval = intervals.max { $0.upperBound - $0.lowerBound < $1.upperBound - $1.lowerBound } ?? stage.minX...stage.maxX
+            let width = interval.upperBound - interval.lowerBound
+            func bounds(_ value: NSAttributedString) -> CGRect {
+                value.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesFontLeading])
+            }
+            let maximum = min(size.width * 0.24, rowHeight * 0.95)
+            let natural = prepare(line.text, maximum).1
+            var pointSize = max(24, maximum * min(1, width / max(1, natural.size().width)))
+            for _ in 0..<3 {
+                let height = ceil(bounds(prepare(line.text, pointSize).1).height) + 4
+                guard height > rowHeight else { break }
+                pointSize = max(24, pointSize * rowHeight / height)
+            }
+            let (text, measured) = prepare(line.text, pointSize)
+            let rect = bounds(measured)
+            return Line(cue: line.cue, text: text, x: interval.lowerBound - stage.minX, width: width,
+                        textWidth: min(width, ceil(rect.width)), height: rowHeight, contentHeight: ceil(rect.height) + 4)
+        }
+    }
+}
+
+private struct DesktopGlassPoster: View {
+    @ObservedObject var model: DesktopModel
+    let size: CGSize
+    @State private var layout = GlassPosterLayout()
+
+    private var stage: CGSize { CGSize(width: size.width * 0.92, height: size.height * 0.61) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Group {
+                if let plain = model.plainLyrics {
+                    ScrollView {
+                        Text(plain).font(.system(size: max(24, size.width * 0.022), weight: .semibold))
+                            .lineSpacing(10).frame(maxWidth: .infinity, alignment: .leading)
+                    }.accessibilityLabel("未同步歌词")
+                } else if !model.glassPage.isEmpty {
+                    page
+                } else {
+                    Text(model.lyric.isEmpty ? model.title : model.lyric)
+                        .font(.system(size: min(88, size.width * 0.075), weight: .black))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                }
+            }.frame(width: stage.width, height: stage.height)
+            ScrollView {
+                Text(model.translation).font(.system(size: min(24, max(16, size.width * 0.017)), weight: .medium))
+                    .foregroundStyle(model.glassScene.ink.opacity(0.78))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }.frame(height: size.height * 0.075).padding(.top, size.height * 0.015)
+        }.foregroundStyle(model.glassScene.ink)
+            .frame(width: stage.width, alignment: .leading)
+            .position(x: size.width * 0.5, y: size.height * 0.5)
+            .onChange(of: model.glassPage, initial: true) { _, page in layout = GlassPosterLayout(page: page, size: size) }
+            .onChange(of: size) { _, _ in layout = GlassPosterLayout(page: model.glassPage, size: size) }
+    }
+
+    private var page: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(layout.lines, id: \.cue) { line in
+                let visible = model.lyricCue.map { $0.trackKey == line.cue.trackKey && $0.index >= line.cue.index } ?? false
+                Group {
+                    if line.contentHeight > line.height {
+                        ScrollView { Text(highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading) }
+                    } else {
+                        Text(highlighted(line)).fixedSize(horizontal: false, vertical: true).frame(width: line.width, alignment: .leading)
+                    }
+                }.frame(width: line.width, height: line.height, alignment: .leading)
+                    .padding(.leading, line.x).frame(width: stage.width, alignment: .leading)
+                    .opacity(visible ? 1 : 0).accessibilityHidden(!visible).allowsHitTesting(visible)
+            }
+        }
+    }
+
+    private func highlighted(_ line: GlassPosterLayout.Line) -> AttributedString {
+        guard line.cue == model.lyricCue, let timed = model.timedLyric,
+              String(timed.characters) == String(line.text.characters) else { return line.text }
+        var result = line.text
+        for run in timed.runs {
+            let offset = timed.characters.distance(from: timed.startIndex, to: run.range.lowerBound)
+            let length = timed.characters.distance(from: run.range.lowerBound, to: run.range.upperBound)
+            let start = result.characters.index(result.startIndex, offsetBy: offset)
+            let end = result.characters.index(start, offsetBy: length)
+            let opacity = run.foregroundColor.map { NSColor($0).alphaComponent } ?? 1
+            result[start..<end].foregroundColor = model.glassScene.ink.opacity(0.6 + 0.4 * Double(opacity))
+        }
+        return result
+    }
+}
+
 // Only parser-recorded ranges may receive timing; all other text stays unchanged.
 func communityHighlightedText(_ line: CommunityLyricLine, at position: Double) -> AttributedString {
     var result = AttributedString(), cursor = line.text.startIndex
@@ -406,14 +513,4 @@ private extension DesktopGlassScene {
         }
     }
 
-}
-
-// Recolor a presentation copy; timing, text and the session's attributes stay intact.
-private func glassHighlightedText(_ lyric: AttributedString, ink: Color) -> AttributedString {
-    var result = lyric
-    for run in lyric.runs {
-        let opacity = run.foregroundColor.map { NSColor($0).alphaComponent } ?? 1
-        result[run.range].foregroundColor = ink.opacity(0.6 + 0.4 * Double(opacity))
-    }
-    return result
 }

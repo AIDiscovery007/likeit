@@ -45,6 +45,7 @@ final class DesktopSession {
     }
 
     private func clearDisplayedLyrics() {
+        if !model.glassPage.isEmpty { model.glassPage = [] }
         model.lyricCue = nil; model.lyricPosition = nil
         model.lyric = ""; model.previousLine = ""; model.nextLine = ""
         model.timedLyric = nil; model.translation = ""; model.plainLyrics = nil
@@ -173,6 +174,13 @@ final class DesktopSession {
         let index = lines.lastIndex { $0.start <= position }
         let current = index.map { lines[$0] }
         model.lyricCue = index.flatMap { index in snapshot.map { DesktopLyricCue(trackKey: $0.key, index: index, start: lines[index].start) } }
+        let page: [DesktopGlassLyricLine] = index.flatMap { index in snapshot.map { snapshot in
+            let start = index / 4 * 4
+            return (start..<min(start + 4, lines.count)).map {
+                DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: snapshot.key, index: $0, start: lines[$0].start), text: lines[$0].text)
+            }
+        } } ?? []
+        if model.glassPage != page { model.glassPage = page }
         model.lyric = current?.text ?? ""
         model.translation = current?.translation ?? ""
         model.previousLine = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""
@@ -188,6 +196,7 @@ final class DesktopSession {
         guard let elapsed = snapshot.elapsed, let rate = snapshot.rate,
               let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {
             model.lyricCue = nil; model.lyricPosition = nil
+            if !model.glassPage.isEmpty { model.glassPage = [] }
             model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""
             model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""
             model.plainLyrics = readableText
@@ -201,13 +210,24 @@ final class DesktopSession {
         let status = lyricStatus + (snapshot.playing ? "" : " · 已暂停")
         if model.status != status { model.status = status }
         if let document = communityDocument {
-            if document.plainText != nil || document.instrumental { model.lyricCue = nil; return }
+            if document.plainText != nil || document.instrumental {
+                model.lyricCue = nil
+                if !model.glassPage.isEmpty { model.glassPage = [] }
+                return
+            }
             renderCommunity(document.lines, at: position)
             return
         }
         let lines = state.lines
         let index = activeLyricIndex(in: lines, at: position)
         model.lyricCue = index.map { DesktopLyricCue(trackKey: snapshot.key, index: $0, start: lines[$0].time) }
+        let page: [DesktopGlassLyricLine] = index.map { index in
+            let start = index / 4 * 4
+            return (start..<min(start + 4, lines.count)).map {
+                DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: snapshot.key, index: $0, start: lines[$0].time), text: lines[$0].text)
+            }
+        } ?? []
+        if model.glassPage != page { model.glassPage = page }
         let current = index.map { lines[$0].text } ?? ""
         let previous = index.flatMap { $0 > 0 ? lines[$0 - 1].text : nil } ?? ""
         let next = index.flatMap { $0 + 1 < lines.count ? lines[$0 + 1].text : nil } ?? (index == nil ? lines.first?.text ?? "" : "")
