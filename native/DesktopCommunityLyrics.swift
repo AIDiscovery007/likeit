@@ -85,6 +85,17 @@ final class CommunityLyrics {
         }
     }
 
+    // The recovery flow supplies an ID verified by Netease detail and owns source order.
+    func loadVerifiedAMLL(id: String, completion: @escaping (CommunityLyricOutcome) -> Void) {
+        cancel()
+        self.completion = completion
+        guard Self.validID(id) else { finish(nil, message: "AMLL 暂不可用"); return }
+        fetch(host: "api.amll.dev", path: "/v1/lyrics/get", query: ["ncmMusicId": id], token: generation,
+              decode: { Self.amllDocument($0, id: id) }) { [weak self] document in
+            self?.finish(document, message: document == nil ? "AMLL 暂不可用" : "AMLL · 社区网易 ID 关联")
+        }
+    }
+
     private func finish(_ document: CommunityLyricDocument?, message: String) {
         let callback = completion
         let outcome = CommunityLyricOutcome(document: document, message: message)
@@ -119,10 +130,7 @@ final class CommunityLyrics {
 
     private func loadAMLL(id: String, metadata: TrackMetadata, token: UUID) {
         fetch(host: "api.amll.dev", path: "/v1/lyrics/get", query: ["ncmMusicId": id], token: token, decode: { json -> CommunityLyricDocument? in
-            guard jsonNumber(json["status"]) == 200, let data = json["data"] as? [String: Any], data["format"] as? String == "ttml",
-                  let ids = data["ncmMusicIds"] as? [String], ids.contains(id), let text = data["lyrics"] as? String else { return nil }
-            let lines = parseCommunityTTML(text)
-            return lines.isEmpty ? nil : CommunityLyricDocument(source: .amll, lines: lines, plainText: nil, instrumental: false)
+            Self.amllDocument(json, id: id)
         }) { [weak self] document in
             guard let self else { return }
             if let document { self.finish(document, message: "AMLL · 社区网易 ID 关联 · " + (document.lines.contains { !$0.words.isEmpty } ? "逐词歌词" : "逐行歌词")) }
@@ -134,22 +142,11 @@ final class CommunityLyrics {
         let artists = metadata.artists.joined(separator: " / ")
         fetch(host: "lrclib.net", path: "/api/get", query: ["track_name": metadata.title, "artist_name": artists, "album_name": metadata.album, "duration": String(metadata.duration)], token: token, decode: { json -> CommunityLyricDocument? in
             guard let title = json["trackName"] as? String, let artist = json["artistName"] as? String, let album = json["albumName"] as? String,
-                  let duration = jsonNumber(json["duration"]), let flag = json["instrumental"] as? NSNumber, CFGetTypeID(flag) == CFBooleanGetTypeID() else { return nil }
+                  let duration = jsonNumber(json["duration"]) else { return nil }
             let current = TrackMetadata(title: metadata.title, artists: [artists], album: metadata.album, duration: metadata.duration)
             let candidate = SongCandidate(id: "1", metadata: TrackMetadata(title: title, artists: [artist], album: album, duration: duration))
             guard matchedSongID(for: current, candidates: [candidate]) != nil else { return nil }
-            for field in ["syncedLyrics", "plainLyrics"] {
-                if let value = json[field], !(value is NSNull), !(value is String) { return nil }
-            }
-            let synced = json["syncedLyrics"] as? String ?? "", plain = json["plainLyrics"] as? String ?? ""
-            let hasSynced = !synced.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let hasPlain = !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            if flag.boolValue {
-                return hasSynced || hasPlain ? nil : CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
-            }
-            let lines = communityLRCLines(synced, duration: metadata.duration)
-            if !lines.isEmpty { return CommunityLyricDocument(source: .lrclib, lines: lines, plainText: nil, instrumental: false) }
-            return hasPlain ? CommunityLyricDocument(source: .lrclib, lines: [], plainText: plain, instrumental: false) : nil
+            return Self.lrclibDocument(json, duration: metadata.duration)
         }) { [weak self] document in
             let kind = document.map { $0.instrumental ? "纯音乐" : $0.plainText != nil ? "未同步歌词" : "逐行歌词" }
             self?.finish(document, message: kind.map { "LRCLIB · 完整歌曲信息匹配 · " + $0 } ?? "社区歌词暂不可用 · 未找到匹配内容或服务不可用")
@@ -170,7 +167,7 @@ final class CommunityLyrics {
         let request = LyricRequest(sessionConfiguration: sessionConfiguration)
         self.request = request
         request.start(payload, responseReceived: { response in
-            if response.statusCode == 429 { Self.cooldowns[host] = Self.retryDate(response.value(forHTTPHeaderField: "Retry-After")) }
+            if response.statusCode == 429 { Self.cooldowns[host] = LyricRequest.retryDate(response.value(forHTTPHeaderField: "Retry-After")) }
         }) { [weak self] result in
             guard let self, self.generation == token else { return }
             communityParsing.async {
@@ -183,7 +180,30 @@ final class CommunityLyrics {
         }
     }
 
-    private static func validCachedDocument(_ document: CommunityLyricDocument) -> Bool {
+    static func amllDocument(_ json: [String: Any], id: String) -> CommunityLyricDocument? {
+        guard jsonNumber(json["status"]) == 200, let data = json["data"] as? [String: Any], data["format"] as? String == "ttml",
+              let ids = data["ncmMusicIds"] as? [String], ids.contains(id), let text = data["lyrics"] as? String else { return nil }
+        let lines = parseCommunityTTML(text)
+        return lines.isEmpty ? nil : CommunityLyricDocument(source: .amll, lines: lines, plainText: nil, instrumental: false)
+    }
+
+    static func lrclibDocument(_ json: [String: Any], duration: Double) -> CommunityLyricDocument? {
+        guard let flag = json["instrumental"] as? NSNumber, CFGetTypeID(flag) == CFBooleanGetTypeID() else { return nil }
+        for field in ["syncedLyrics", "plainLyrics"] {
+            if let value = json[field], !(value is NSNull), !(value is String) { return nil }
+        }
+        let synced = json["syncedLyrics"] as? String ?? "", plain = json["plainLyrics"] as? String ?? ""
+        let hasSynced = !synced.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasPlain = !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        if flag.boolValue {
+            return hasSynced || hasPlain ? nil : CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true)
+        }
+        let lines = communityLRCLines(synced, duration: duration)
+        if !lines.isEmpty { return CommunityLyricDocument(source: .lrclib, lines: lines, plainText: nil, instrumental: false) }
+        return hasPlain ? CommunityLyricDocument(source: .lrclib, lines: [], plainText: plain, instrumental: false) : nil
+    }
+
+    static func validCachedDocument(_ document: CommunityLyricDocument) -> Bool {
         if document.instrumental { return document.source == .lrclib && document.lines.isEmpty && document.plainText == nil }
         if let plain = document.plainText {
             return document.source == .lrclib && document.lines.isEmpty && !plain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -211,12 +231,5 @@ final class CommunityLyrics {
         id.utf8.first.map { (49...57).contains($0) } == true && id.utf8.allSatisfy { (48...57).contains($0) }
     }
 
-    private static func retryDate(_ value: String?) -> Date {
-        if let value, let seconds = Double(value), seconds.isFinite, seconds >= 0 { return Date().addingTimeInterval(seconds) }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
-        return value.flatMap(formatter.date(from:)).map { max(Date(), $0) } ?? Date().addingTimeInterval(60)
-    }
+
 }

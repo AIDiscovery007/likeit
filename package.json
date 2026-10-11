@@ -88,14 +88,14 @@
       "name": "desktopLyricsSource",
       "type": "dropdown",
       "title": "沉浸桌面歌词来源",
-      "description": "网易歌词保留原有公开或官方配置；社区歌词优先 AMLL，未命中时严格匹配 LRCLIB。",
+      "description": "旧选项保留兼容；现在统一按网易 → AMLL → LRCLIB 自动获取，任一成功即停止。",
       "data": [
         {
-          "title": "网易歌词",
+          "title": "自动获取（网易优先）",
           "value": "netease"
         },
         {
-          "title": "社区歌词（AMLL / LRCLIB）",
+          "title": "自动获取（兼容旧社区选项）",
           "value": "community"
         }
       ],

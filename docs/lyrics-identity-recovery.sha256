@@ -1,0 +1,4 @@
+62d6d3d564dcaf4de755c76bcf7a5a2b03e57406ae8348b6bcb2c6adfd30c88d  docs/lyrics-identity-recovery-plan.md
+a337c33268df968ee31c443897a9259ed661c398e6bb6cc542e4ec0ec31dbd2c  docs/lyrics-identity-recovery.feature
+d7430f357ec3227a67b7dca6ed17f6b8a518a8bb1fe462f0cc6d7c5523eeaf7e  acceptance/lyrics-identity-recovery.test.mjs
+94f9b4c93553128e816d25a74c4f187f41a881c245a8aebe19a74665350789ab  acceptance/lyrics-identity-recovery.swift

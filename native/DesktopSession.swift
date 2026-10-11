@@ -2,8 +2,10 @@ import AppKit
 
 final class DesktopSession {
     let model: DesktopModel
-    private var lyrics: DesktopLyrics?
+    private let lyrics = DesktopLyrics(cacheDirectory: LyricDiskCache.defaultDirectory)
     private let communityLyrics = CommunityLyrics(cacheDirectory: LyricDiskCache.defaultDirectory)
+    private lazy var recovery = DesktopLyricRecovery(lyrics: lyrics, community: communityLyrics, cacheDirectory: LyricDiskCache.defaultDirectory)
+    private var readableText: String?
     private var lyricsSource: String
     private var communityDocument: CommunityLyricDocument?
     private var lyricGeneration = UUID()
@@ -29,8 +31,7 @@ final class DesktopSession {
 
     func setLyricsSource(_ source: String) {
         lyricsSource = source == "community" ? "community" : "netease"
-        lyrics?.stop(); lyrics = nil
-        communityLyrics.cancel()
+        recovery.stop()
         resetLyrics()
         if let snapshot, running { loadLyrics(snapshot); render() }
     }
@@ -38,6 +39,7 @@ final class DesktopSession {
     private func resetLyrics() {
         lyricGeneration = UUID()
         communityDocument = nil
+        readableText = nil
         state = LyricState()
         clearDisplayedLyrics()
     }
@@ -48,26 +50,17 @@ final class DesktopSession {
     }
 
     private func loadLyrics(_ value: DesktopSnapshot) {
-        lyrics?.cancel()
-        communityLyrics.cancel()
+        recovery.cancel()
         resetLyrics()
         state.beginTrack(value.key)
-        lyricStatus = "正在匹配歌词"
+        lyricStatus = "正在获取歌词"
         let token = lyricGeneration
-        if lyricsSource == "community" {
-            communityLyrics.load(key: value.key, metadata: value.metadata) { [weak self] outcome in
-                guard let self, self.running, self.lyricGeneration == token, self.state.trackKey == value.key else { return }
-                self.communityDocument = outcome.document
-                self.lyricStatus = outcome.message
-                self.render()
-            }
-        } else {
-            if lyrics == nil { lyrics = DesktopLyrics(cacheDirectory: LyricDiskCache.defaultDirectory) }
-            lyrics?.load(key: value.key, metadata: value.metadata) { [weak self] lines, message in
-                guard let self, self.running, self.lyricGeneration == token, self.state.accept(lines, for: value.key) else { return }
-                self.lyricStatus = message
-                self.render()
-            }
+        recovery.load(key: value.key, metadata: value.metadata, preferredSource: lyricsSource) { [weak self] result in
+            guard let self, self.running, self.lyricGeneration == token, self.state.accept(result.lines, for: value.key) else { return }
+            self.communityDocument = result.community
+            self.readableText = result.readableText
+            self.lyricStatus = result.message
+            self.render()
         }
     }
 
@@ -79,7 +72,7 @@ final class DesktopSession {
         self.stream = stream
         DispatchQueue.global(qos: .utility).async { [weak self] in
             stream.run(stream: true) { data in
-                let value = data.flatMap(DesktopSnapshot.init)
+                let value = data.flatMap { DesktopSnapshot($0) }
                 DispatchQueue.main.async { self?.receive(value) }
             }
         }
@@ -110,8 +103,7 @@ final class DesktopSession {
         clock?.invalidate(); clock = nil
         stream?.stop(); stream = nil
         reader?.stop(); reader = nil
-        lyrics?.stop(); lyrics = nil
-        communityLyrics.stop()
+        recovery.stop()
         clear()
     }
 
@@ -137,8 +129,8 @@ final class DesktopSession {
         self.reader = reader
         DispatchQueue.global(qos: .utility).async { [weak self] in
             var first: DesktopSnapshot?, second: DesktopSnapshot?
-            reader.run(stream: false) { first = $0.flatMap(DesktopSnapshot.init) }
-            reader.run(stream: false) { second = $0.flatMap(DesktopSnapshot.init) }
+            reader.run(stream: false) { first = $0.flatMap { DesktopSnapshot($0) } }
+            reader.run(stream: false) { second = $0.flatMap { DesktopSnapshot($0) } }
             let verified = first?.key == second?.key && first?.playing == second?.playing ? second : nil
             DispatchQueue.main.async {
                 guard let self else { return }
@@ -168,8 +160,7 @@ final class DesktopSession {
         snapshot = nil
         scheduleClock()
         resetLyrics()
-        lyrics?.cancel()
-        communityLyrics.cancel()
+        recovery.cancel()
         sourceChanged?(nil)
         model.title = "Likeit"
         model.artist = "仅支持网易云音乐"
@@ -196,8 +187,9 @@ final class DesktopSession {
               let position = playbackPosition(elapsed: elapsed, rate: rate, sampledAt: snapshot.sampledAt, now: ProcessInfo.processInfo.systemUptime, duration: snapshot.metadata.duration) else {
             model.lyric = communityDocument?.instrumental == true ? "纯音乐" : ""
             model.previousLine = ""; model.nextLine = ""; model.timedLyric = nil; model.translation = ""
+            model.plainLyrics = readableText
             model.progress = 0
-            model.status = lyricStatus + " · 播放进度不可用"
+            model.status = lyricStatus + " · 播放进度不可用，静态显示"
             return
         }
         let progress = position / snapshot.metadata.duration

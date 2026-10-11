@@ -29,18 +29,21 @@ final class DesktopLyrics {
         do {
             let configuration = try OpenAPILyricConfiguration.load(from: configurationURL)
             official = configuration.map { OpenAPILyrics(configuration: $0, sessionConfiguration: sessionConfiguration) }
-            if let configuration {
-                let fields: [String: Any] = ["appID": configuration.appID, "token": configuration.accessToken,
-                                             "device": configuration.device, "privateKey": configuration.privateKeyPEM,
-                                             "lyricSource": configuration.lyricSource.rawValue]
-                cacheNamespace = "netease-official:" + LyricDiskCache.digest(try JSONSerialization.data(withJSONObject: fields, options: .sortedKeys))
-            } else { cacheNamespace = "netease-public" }
+            cacheNamespace = try Self.namespace(for: configuration)
             configurationInvalid = false
         } catch {
             official = nil
             configurationInvalid = true
             cacheNamespace = nil
         }
+    }
+
+    static func namespace(for configuration: OpenAPILyricConfiguration?) throws -> String {
+        guard let configuration else { return "netease-public" }
+        let fields: [String: Any] = ["appID": configuration.appID, "token": configuration.accessToken,
+                                     "device": configuration.device, "privateKey": configuration.privateKeyPEM,
+                                     "lyricSource": configuration.lyricSource.rawValue]
+        return "netease-official:" + LyricDiskCache.digest(try JSONSerialization.data(withJSONObject: fields, options: .sortedKeys))
     }
 
     func cancel() {
@@ -51,13 +54,25 @@ final class DesktopLyrics {
     }
     func stop() { cancel(); cache.removeAll() }
 
+    // A cache-only lookup validates current configuration but never starts a provider.
+    func cachedLyrics(metadata: TrackMetadata) -> (lines: [LyricLine], message: String)? {
+        guard diskCache != nil,
+              let namespace = try? Self.namespace(for: OpenAPILyricConfiguration.load(from: configurationURL)) else { return nil }
+        return cachedLyrics(metadata: metadata, namespace: namespace)
+    }
+
+    private func cachedLyrics(metadata: TrackMetadata, namespace: String) -> (lines: [LyricLine], message: String)? {
+        guard let diskCache, let key = LyricDiskCache.key(metadata: metadata, namespace: namespace),
+              let cached = diskCache.load(CachedLyrics.self, key: key), Self.validCachedLines(cached.lines) else { return nil }
+        return (cached.lines, cached.message + " · 本地缓存")
+    }
+
     func load(key: String, metadata: TrackMetadata, completion: @escaping ([LyricLine], String) -> Void) {
         cancel()
         if diskCache != nil { configure() }
         let diskKey = cacheNamespace.flatMap { LyricDiskCache.key(metadata: metadata, namespace: $0) }
-        if let diskCache, let diskKey, let cached = diskCache.load(CachedLyrics.self, key: diskKey),
-           Self.validCachedLines(cached.lines) {
-            completion(cached.lines, cached.message + " · 本地缓存"); return
+        if let cacheNamespace, let cached = cachedLyrics(metadata: metadata, namespace: cacheNamespace) {
+            completion(cached.lines, cached.message); return
         }
         if diskCache == nil, let cached = cache.first(where: { $0.0 == key }) { completion(cached.1, cached.1.isEmpty ? "暂无可用歌词" : "歌词按歌曲信息匹配"); return }
         let token = generation
@@ -126,7 +141,7 @@ final class DesktopLyrics {
         }
     }
 
-    private static func validCachedLines(_ lines: [LyricLine]) -> Bool {
+    static func validCachedLines(_ lines: [LyricLine]) -> Bool {
         !lines.isEmpty && lines.count <= 20_000 && lines.contains { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             && lines.allSatisfy { $0.time.isFinite && $0.time >= 0 }
             && zip(lines, lines.dropFirst()).allSatisfy { $0.time <= $1.time }
@@ -163,9 +178,9 @@ final class LyricDiskCache {
 
     static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
 
-    static func key(metadata: TrackMetadata, namespace: String, neteaseID: String? = nil) -> String? {
-        guard !metadata.artists.isEmpty, ([metadata.title, metadata.album] + metadata.artists).allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
-              metadata.duration.isFinite, metadata.duration > 0 else { return nil }
+    static func key(metadata: TrackMetadata, namespace: String, neteaseID: String? = nil, allowsIncomplete: Bool = false) -> String? {
+        guard !metadata.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, metadata.duration.isFinite,
+              allowsIncomplete || (!metadata.artists.isEmpty && ([metadata.album] + metadata.artists).allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) && metadata.duration > 0) else { return nil }
         let fields: [String: Any] = ["title": metadata.title, "artists": metadata.artists, "album": metadata.album,
                                      "duration": metadata.duration, "namespace": namespace, "neteaseID": neteaseID as Any? ?? NSNull()]
         return (try? JSONSerialization.data(withJSONObject: fields, options: .sortedKeys)).map(digest)
