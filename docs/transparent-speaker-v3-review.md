@@ -66,3 +66,9 @@ node --test --test-concurrency=2 acceptance/*.test.mjs
 从合并源码重新运行 `scripts/build-desktop.py` 构建 arm64/x86_64，保持既有 ad-hoc hardened runtime 签名。确认桌面进程不存在后执行 `npm run build` 安装。13 项源码和 10 项包文件摘要一致，安装 manifest 与仓库逐字节一致；已安装包通过 strict deep codesign 和双架构校验。完整摘要见 `review-evidence/transparent-speaker-v3/main-installation.json`。
 
 安装过程没有启动桌面、控制音乐、修改签名身份或系统权限；安装后确认无桌面进程。UI 锁交回主题协调会话，实际原生操作与音频表现的验收边界由后续实机记录说明，本节不把安装成功记作实机通过。
+
+## 原生操作验收
+
+在重建安装 `db8e4b5c9c5f8f82545248a8303fcaf5df3289f3` 上通过 CUA 操作真实 app。检查前偏好为 glass/paper，桌面未运行。全屏纸页画面、四场景名称与选中 AX 状态均核对；Cmd+1/2 连续切换 10 次全部正确，切换前后 PID 均为 59751。鼠标主题选择、透明与经典各自退出重开记忆均正常。Esc、Cmd+Q、退出按钮之后分别确认进程消失。最后恢复 glass/paper，退出并释放 UI。详见 `review-evidence/transparent-speaker-v3/live-ui.json`。
+
+当前没有可靠网易云播放来源，冷启动保持 mode off；实机界面如实显示未知来源及不采集音频。本次没有更改音乐播放、系统减少动态效果或权限，不能声称真实声卡律动或权限失败已实测。焦点恢复与屏幕持续 60fps 未独立测量。动态行为由真实 View 合成帧和冻结生产方法测试验证。源码与原生操作验收完成，这些边界保留在交付记录中。

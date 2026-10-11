@@ -1,0 +1,31 @@
+{
+  "before": {
+    "theme": "glass",
+    "scene": "paper",
+    "desktopRunning": false
+  },
+  "installedCommit": "db8e4b5c9c5f8f82545248a8303fcaf5df3289f3",
+  "checks": [
+    "Cold launch restored glass/paper; unknown NetEase source and mode off were honestly shown.",
+    "Cmd+1 selected classic; Cmd+2 returned to glass without changing paper scene.",
+    "All four native scene buttons updated selected accessibility state; paper full-screen screenshot inspected.",
+    "Ten consecutive Cmd+1/Cmd+2 switches preserved paper; native selected states all matched; PID remained 59751.",
+    "Esc terminated process; reopening restored glass/paper.",
+    "Native theme radio selected classic; Cmd+Q terminated process.",
+    "Reopening restored classic; clicking glass restored glass/paper.",
+    "Exit button terminated process; original glass/paper preferences restored."
+  ],
+  "limitations": [
+    "No reliable NetEase playback source was available during native QA; cold launch mode remained off. Live audio capture, permission failures, and live music response were not revalidated.",
+    "Native focus restoration and real-screen sustained 60fps were not independently measured.",
+    "Motion was validated through actual production SwiftUI rendered with isolated synthetic lyric/band inputs and frozen production-method BDD."
+  ],
+  "pidBeforeSwitches": 59751,
+  "pidAfterSwitches": 59751,
+  "completedAt": "2026-10-11 15:28:07 UTC",
+  "after": {
+    "theme": "glass",
+    "scene": "paper",
+    "desktopRunning": false
+  }
+}
