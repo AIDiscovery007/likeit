@@ -4,6 +4,17 @@ private let communityParsing = DispatchQueue(label: "com.likeit.desktop.communit
 
 // All mutable lifecycle state, including process-wide source cooldowns, lives on main.
 final class CommunityLyrics {
+    private struct CacheKey: Equatable {
+        let trackKey: String
+        let title: String
+        let artists: [String]
+        let album: String
+        let duration: Double
+        let neteaseID: String?
+    }
+    // Source policy is fixed to AMLL -> LRCLIB within this provider.
+    private var cache: [(CacheKey, CommunityLyricOutcome)] = []
+    private var cacheKey: CacheKey?
     private static var cooldowns: [String: Date] = [:]
     private let sessionConfiguration: URLSessionConfiguration
     private var request: LyricRequest?
@@ -20,11 +31,16 @@ final class CommunityLyrics {
         guard Thread.isMainThread else { DispatchQueue.main.async { self.cancel() }; return }
         generation = UUID()
         completion = nil
+        cacheKey = nil
         request?.cancel(); request = nil
         deadline?.cancel(); deadline = nil
     }
 
-    func stop() { cancel() }
+    func stop() {
+        guard Thread.isMainThread else { DispatchQueue.main.async { self.stop() }; return }
+        cancel()
+        cache.removeAll()
+    }
 
     func load(key: String, metadata: TrackMetadata, neteaseID: String? = nil, completion: @escaping (CommunityLyricOutcome) -> Void) {
         guard Thread.isMainThread else {
@@ -34,6 +50,11 @@ final class CommunityLyrics {
         self.completion = completion
         guard matchedSongID(for: metadata, candidates: [SongCandidate(id: "1", metadata: metadata)]) != nil else {
             finish(nil, message: "社区歌词暂不可用 · 歌曲信息不完整"); return
+        }
+        let identity = CacheKey(trackKey: key, title: metadata.title, artists: metadata.artists, album: metadata.album, duration: metadata.duration, neteaseID: neteaseID)
+        cacheKey = identity
+        if let cached = cache.first(where: { $0.0 == identity }) {
+            finish(cached.1.document, message: cached.1.message); return
         }
         let token = generation
         let timeout = DispatchWorkItem { [weak self] in
@@ -56,8 +77,14 @@ final class CommunityLyrics {
 
     private func finish(_ document: CommunityLyricDocument?, message: String) {
         let callback = completion
+        let outcome = CommunityLyricOutcome(document: document, message: message)
+        if document != nil, let key = cacheKey {
+            cache.removeAll { $0.0 == key }
+            cache.append((key, outcome))
+            if cache.count > 20 { cache.removeFirst() }
+        }
         cancel()
-        callback?(CommunityLyricOutcome(document: document, message: message))
+        callback?(outcome)
     }
 
     private func resolveID(metadata: TrackMetadata, token: UUID, completion: @escaping (String?) -> Void) {
