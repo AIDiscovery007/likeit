@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: lyric continuity uses source samples instead of View observation timing
+not ok 1 - lyric continuity uses source samples instead of View observation timing
+  ---
+  duration_ms: 6561.409666
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-continuity.test.mjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: xcrun swiftc native/ImmersiveCore.swift native/DesktopCommunityLyricsCore.swift native/DesktopView.swift /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/acceptance
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:206:78: error: cannot find type 'DesktopLyricSample' in scope
+    204 |     var enteringCue: DesktopLyricCue? { arrival?.cue }
+    205 |     var hasDeparture: Bool { arrival?.departing != nil }
+    206 |     func submit(page: [DesktopGlassLyricLine], cue: DesktopLyricCue, sample: DesktopLyricSample?, enabled: Bool = true) {
+        |                                                                              `- error: cannot find type 'DesktopLyricSample' in scope
+    207 |         receive(Input(page: page, cue: cue, sample: sample, enabled: enabled))
+    208 |     }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:207:22: error: incorrect argument label in call (have 'page:cue:sample:enabled:', expected 'page:cue:position:enabled:')
+    205 |     var hasDeparture: Bool { arrival?.departing != nil }
+    206 |     func submit(page: [DesktopGlassLyricLine], cue: DesktopLyricCue, sample: DesktopLyricSample?, enabled: Bool = true) {
+    207 |         receive(Input(page: page, cue: cue, sample: sample, enabled: enabled))
+        |                      `- error: incorrect argument label in call (have 'page:cue:sample:enabled:', expected 'page:cue:position:enabled:')
+    208 |     }
+    209 |     func seedOngoingTransition() { arrival = Arrival(cue: previous!.cue!, departing: layout) }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:218:81: error: cannot find 'observedAt' in scope
+    216 |         if value.enabled, previous?.enabled == true, let position = value.position, let oldPosition = previous?.position {
+    217 |             let advance = position - oldPosition
+    218 |             continuous = advance >= 0 && advance <= 0.5 && abs(advance - (now - observedAt)) <= 0.25
+        |                                                                                 `- error: cannot find 'observedAt' in scope
+    219 |         }
+    220 |         if value.cue != previous?.cue {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:232:9: error: cannot find 'observedAt' in scope
+    230 |         }
+    231 |         previous = value
+    232 |         observedAt = now
+        |         `- error: cannot find 'observedAt' in scope
+    233 |     }
+    234 | }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:240:80: error: cannot find type 'DesktopLyricSample' in scope
+    238 |         var results: [[String: Any]] = []
+    239 |         func check(_ name: String, _ passed: Bool) { results.append(["name": name, "passed": passed]) }
+    240 |         func sample(_ position: Double, _ time: Double, _ rate: Double = 1) -> DesktopLyricSample {
+        |                                                                                `- error: cannot find type 'DesktopLyricSample' in scope
+    241 |             DesktopLyricSample(position: position, sampledAt: time, rate: rate)
+    242 |         }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:251:26: error: cannot find type 'DesktopLyricSample' in scope
+    249 |             }
+    250 |         }
+    251 |         func feed(_ old: DesktopLyricSample?, _ next: DesktopLyricSample?, oldCue: DesktopLyricCue = DesktopLyricCue(trackKey: "track-a", index: 3, start: 3), newCue: DesktopLyricCue = DesktopLyricCue(trackKey: "track-a", index: 4, start: 4), enabled: Bool = true, delay: Double = 0) -> ContinuityProbe {
+        |                          `- error: cannot find type 'DesktopLyricSample' in scope
+    252 |             let probe = ContinuityProbe()
+    253 |             probe.submit(page: page(oldCue), cue: oldCue, sample: old)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:251:55: error: cannot find type 'DesktopLyricSample' in scope
+    249 |             }
+    250 |         }
+    251 |         func feed(_ old: DesktopLyricSample?, _ next: DesktopLyricSample?, oldCue: DesktopLyricCue = DesktopLyricCue(trackKey: "track-a", index: 3, start: 3), newCue: DesktopLyricCue = DesktopLyricCue(trackKey: "track-a", index: 4, start: 4), enabled: Bool = true, delay: Double = 0) -> ContinuityProbe {
+        |                                                       `- error: cannot find type 'DesktopLyricSample' in scope
+    252 |             let probe = ContinuityProbe()
+    253 |             probe.submit(page: page(oldCue), cue: oldCue, sample: old)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:270:79: error: cannot find type 'DesktopLyricSample' in scope
+    268 |         }
+    269 |         check("receive: a rate change cancels an existing transition", cancelled(feed(sample(3.9, 100), sample(4, 100.1, 2))))
+    270 |         let missing = [(nil, sample(4, 100.1)), (sample(3.9, 100), nil)] as [(DesktopLyricSample?, DesktopLyricSample?)]
+        |                                                                               `- error: cannot find type 'DesktopLyricSample' in scope
+    271 |         check("receive: either missing source sample cancels old entrance and departure", missing.map { cancelled(feed($0.0, $0.1)) }.allSatisfy { $0 })
+    272 |         for (name, time) in [("backward", 99.9), ("zero", 100.0), ("over 500ms", 100.501)] {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:270:100: error: cannot find type 'DesktopLyricSample' in scope
+    268 |         }
+    269 |         check("receive: a rate change cancels an existing transition", cancelled(feed(sample(3.9, 100), sample(4, 100.1, 2))))
+    270 |         let missing = [(nil, sample(4, 100.1)), (sample(3.9, 100), nil)] as [(DesktopLyricSample?, DesktopLyricSample?)]
+        |                                                                                                    `- error: cannot find type 'DesktopLyricSample' in scope
+    271 |         check("receive: either missing source sample cancels old entrance and departure", missing.map { cancelled(feed($0.0, $0.1)) }.allSatisfy { $0 })
+    272 |         for (name, time) in [("backward", 99.9), ("zero", 100.0), ("over 500ms", 100.501)] {
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:290:36: error: value of type 'DesktopModel' has no member 'lyricSample'
+    288 |         let render = RenderProbe(DesktopModel(themeDefaults: defaults))
+    289 |         let model = render.model
+    290 |         let initiallyEmpty = model.lyricSample == nil
+        |                                    `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    291 |         func source(_ position: Double?, rate: Double = 1) -> DesktopSnapshot {
+    292 |             var data: [String: Any] = [
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:312:31: error: value of type 'DesktopModel' has no member 'lyricSample'
+    310 |         render.refresh()
+    311 |         let after = ProcessInfo.processInfo.systemUptime
+    312 |         let generated = model.lyricSample
+        |                               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    313 |         let expectedPosition = generated.flatMap {
+    314 |             playbackPosition(elapsed: moving.elapsed!, rate: moving.rate!, sampledAt: moving.sampledAt, now: $0.sampledAt, duration: moving.metadata.duration)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:319:89: error: value of type 'DesktopModel' has no member 'lyricSample'
+    317 |         load(source(2.5, rate: 0))
+    318 |         render.refresh()
+    319 |         check("session: paused rate zero is preserved with its trusted position", model.lyricSample?.rate == 0 && model.lyricSample?.position == 2.5 && model.lyricPosition == 2.5)
+        |                                                                                         `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    320 |         let documents: [CommunityLyricDocument?] = [nil,
+    321 |             CommunityLyricDocument(source: .lrclib, lines: [], plainText: "静态全文", instrumental: false),
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:319:121: error: value of type 'DesktopModel' has no member 'lyricSample'
+    317 |         load(source(2.5, rate: 0))
+    318 |         render.refresh()
+    319 |         check("session: paused rate zero is preserved with its trusted position", model.lyricSample?.rate == 0 && model.lyricSample?.position == 2.5 && model.lyricPosition == 2.5)
+        |                                                                                                                         `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    320 |         let documents: [CommunityLyricDocument?] = [nil,
+    321 |             CommunityLyricDocument(source: .lrclib, lines: [], plainText: "静态全文", instrumental: false),
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:326:26: error: value of type 'DesktopModel' has no member 'lyricSample'
+    324 |             load(source(document == nil ? 0.5 : 2, rate: 0), document: document)
+    325 |             render.refresh()
+    326 |             return model.lyricSample != nil && model.glassPage.isEmpty && model.lyricCue == nil
+        |                          `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    327 |         }
+    328 |         check("session: before-first plain and instrumental states keep a sample without inventing a page", staticSamples.allSatisfy { $0 })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:330:15: error: value of type 'DesktopModel' has no member 'lyricSample'
+    328 |         check("session: before-first plain and instrumental states keep a sample without inventing a page", staticSamples.allSatisfy { $0 })
+    329 |         load(source(nil))
+    330 |         model.lyricSample = sample(2, 100)
+        |               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    331 |         render.refresh()
+    332 |         let noPosition = model.lyricSample == nil && model.lyricPosition == nil
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:332:32: error: value of type 'DesktopModel' has no member 'lyricSample'
+    330 |         model.lyricSample = sample(2, 100)
+    331 |         render.refresh()
+    332 |         let noPosition = model.lyricSample == nil && model.lyricPosition == nil
+        |                                `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    333 |         load(source(2))
+    334 |         model.lyricSample = sample(2, 100)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:334:15: error: value of type 'DesktopModel' has no member 'lyricSample'
+    332 |         let noPosition = model.lyricSample == nil && model.lyricPosition == nil
+    333 |         load(source(2))
+    334 |         model.lyricSample = sample(2, 100)
+        |               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    335 |         musicPID = nil
+    336 |         render.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:338:97: error: value of type 'DesktopModel' has no member 'lyricSample'
+    336 |         render.refresh()
+    337 |         musicPID = 77
+    338 |         check("session: unknown progress or lost source clears the sample", noPosition && model.lyricSample == nil && model.lyricPosition == nil)
+        |                                                                                                 `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    339 |         model.lyricSample = sample(2, 100)
+    340 |         render.clearDisplay()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:339:15: error: value of type 'DesktopModel' has no member 'lyricSample'
+    337 |         musicPID = 77
+    338 |         check("session: unknown progress or lost source clears the sample", noPosition && model.lyricSample == nil && model.lyricPosition == nil)
+    339 |         model.lyricSample = sample(2, 100)
+        |               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    340 |         render.clearDisplay()
+    341 |         let displayCleared = model.lyricSample == nil
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:341:36: error: value of type 'DesktopModel' has no member 'lyricSample'
+    339 |         model.lyricSample = sample(2, 100)
+    340 |         render.clearDisplay()
+    341 |         let displayCleared = model.lyricSample == nil
+        |                                    `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    342 |         model.lyricSample = sample(2, 100)
+    343 |         render.clearAll()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:342:15: error: value of type 'DesktopModel' has no member 'lyricSample'
+    340 |         render.clearDisplay()
+    341 |         let displayCleared = model.lyricSample == nil
+    342 |         model.lyricSample = sample(2, 100)
+        |               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    343 |         render.clearAll()
+    344 |         let sourceCleared = model.lyricSample == nil
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:344:35: error: value of type 'DesktopModel' has no member 'lyricSample'
+    342 |         model.lyricSample = sample(2, 100)
+    343 |         render.clearAll()
+    344 |         let sourceCleared = model.lyricSample == nil
+        |                                   `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    345 |         model.lyricSample = sample(2, 100)
+    346 |         render.stop()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:345:15: error: value of type 'DesktopModel' has no member 'lyricSample'
+    343 |         render.clearAll()
+    344 |         let sourceCleared = model.lyricSample == nil
+    345 |         model.lyricSample = sample(2, 100)
+        |               `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    346 |         render.stop()
+    347 |         check("session: display clear source clear and stop remove the old sample", displayCleared && sourceCleared && model.lyricSample == nil && !render.running)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-lyric-continuity-yjsNx0/driver.swift:347:126: error: value of type 'DesktopModel' has no member 'lyricSample'
+    345 |         model.lyricSample = sample(2, 100)
+    346 |         render.stop()
+    347 |         check("session: display clear source clear and stop remove the old sample", displayCleared && sourceCleared && model.lyricSample == nil && !render.running)
+        |                                                                                                                              `- error: value of type 'DesktopModel' has no member 'lyricSample'
+    348 |         print(String(decoding: try! JSONSerialization.data(withJSONObject: results, options: [.sortedKeys]), as: UTF8.self))
+    349 |     }
+    
+  code: 1
+  stack: |-
+    genericNodeError (node:internal/errors:985:15)
+    wrappedFn (node:internal/errors:539:14)
+    ChildProcess.exithandler (node:child_process:417:12)
+    ChildProcess.emit (node:events:509:28)
+    maybeClose (node:internal/child_process:1141:16)
+    ChildProcess._handle.onexit (node:internal/child_process:306:5)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6619.857125
