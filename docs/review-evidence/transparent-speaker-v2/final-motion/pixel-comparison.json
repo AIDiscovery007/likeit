@@ -1,0 +1,19 @@
+{
+  "celadon": {
+    "energy_changes_pixels": true,
+    "zero_exactly_rest": true
+  },
+  "dusk": {
+    "energy_changes_pixels": true,
+    "zero_exactly_rest": true
+  },
+  "night": {
+    "energy_changes_pixels": true,
+    "zero_exactly_rest": true
+  },
+  "paper": {
+    "energy_changes_pixels": true,
+    "zero_exactly_rest": true
+  },
+  "off_immediate_stable": true
+}
