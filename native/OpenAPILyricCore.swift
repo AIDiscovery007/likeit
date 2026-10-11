@@ -76,6 +76,25 @@ enum OpenAPIWordLyricResult {
     case malformed
 }
 
+// Decode numeric tokens directly to Decimal before Foundation can round to Double.
+private struct OpenAPIJSONValue: Decodable {
+    let value: Any
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() { value = NSNull() }
+        else if let boolean = try? container.decode(Bool.self) { value = boolean }
+        else if let string = try? container.decode(String.self) { value = string }
+        else if let decimal = try? container.decode(Decimal.self) { value = NSDecimalNumber(decimal: decimal) }
+        else if let array = try? container.decode([Self].self) { value = array.map(\.value) }
+        else { value = try container.decode([String: Self].self).mapValues(\.value) }
+    }
+}
+
+func decodeOpenAPIJSON(_ data: Data) throws -> Any {
+    try JSONDecoder().decode(OpenAPIJSONValue.self, from: data).value
+}
+
 // Keep comparisons in Decimal: NSNumber.compare can round decimal JSON values.
 func openAPIInteger(_ value: Any?) -> Int? {
     guard let number = value as? NSNumber, CFGetTypeID(number) != CFBooleanGetTypeID(),
@@ -88,7 +107,7 @@ func openAPIInteger(_ value: Any?) -> Int? {
 
 func decodeOpenAPIWordLyrics(_ data: Data) -> OpenAPIWordLyricResult {
     guard data.count <= 1_048_576,
-          let response = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let response = try? decodeOpenAPIJSON(data) as? [String: Any],
           let code = openAPIInteger(response["code"]) else { return .malformed }
     guard code == 200 else { return .apiError(code) }
     guard let value = response["data"] else { return .malformed }

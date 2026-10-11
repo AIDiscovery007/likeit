@@ -175,7 +175,7 @@ private struct OpenAPICommand {
             fixed = values
         } else { fixed = [:] }
         for (name, value) in fixed {
-            if let input = provided[name], !(value as AnyObject).isEqual(input) { throw OpenAPILyricError.manifest }
+            if let input = provided[name], !Self.equalScalars(value, input) { throw OpenAPILyricError.manifest }
         }
         var names = Set<String>(), business: [String: Any] = [:]
         for parameter in parameters {
@@ -214,6 +214,13 @@ private struct OpenAPICommand {
     }
 
     private static func scalar(_ value: Any) -> Bool { value is String || boolean(value) != nil || number(value) != nil }
+
+    private static func equalScalars(_ lhs: Any, _ rhs: Any) -> Bool {
+        if let left = lhs as? String, let right = rhs as? String { return left == right }
+        if let left = boolean(lhs), let right = boolean(rhs) { return left == right }
+        guard let left = number(lhs), let right = number(rhs) else { return false }
+        return left.decimalValue == right.decimalValue
+    }
 }
 
 private let openAPIParsing = DispatchQueue(label: "com.likeit.desktop.openapi", qos: .userInitiated)
@@ -335,7 +342,7 @@ final class OpenAPILyrics {
     }
 
     private static func json(_ data: Data, codeRequired: Bool = true) throws -> [String: Any] {
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { throw OpenAPILyricError.response }
+        guard let json = try decodeOpenAPIJSON(data) as? [String: Any] else { throw OpenAPILyricError.response }
         if let value = json["code"] {
             guard let code = openAPIInteger(value) else { throw OpenAPILyricError.response }
             guard code == 200 else { throw OpenAPILyricError.api }
