@@ -1,0 +1,4 @@
+03ff90cb2f91fcce3286291496526d36dd33a4afe6024fd789d54e44f919cc7c  docs/immersive-audio-recovery.feature
+c9d97ba5b7b6dc658bc3202e001716e1e702e2f38697087b9118b412eddcbbe8  docs/immersive-audio-recovery-baseline.md
+c12ff3002dc780cac26863599b0a1e8fdc00e98d2c2ff7bfab15093701c98c8a  acceptance/immersive-audio-driver.swift
+4aa1ddd7ad59f8dbbfd56dce7170efa98c91130b9d7a3f352f1d78beb6f91537  acceptance/immersive-audio-recovery.test.mjs
