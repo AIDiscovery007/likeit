@@ -1,0 +1,29 @@
+{
+  "productCommit": "7d72ec3799605ceece66fa7e2142ea7fc8796384",
+  "installedManifestSHA256": "7ecaa079350ae8f1bc6ea45c5c4f30e4de2727f5321727352889436934fcba83",
+  "track": "50 Feet",
+  "artist": "SoMo",
+  "mode": "off",
+  "firstOpen": {
+    "source": "LRCLIB",
+    "cache": false,
+    "loadingAfterCompletion": false,
+    "noMatch": false,
+    "paused": true,
+    "audioCaptureOff": true,
+    "lyricsVisuallyPresent": true
+  },
+  "restart": {
+    "oldProcessExited": true,
+    "source": "LRCLIB",
+    "cache": true,
+    "loading": false,
+    "sameSong": true,
+    "sameAXContentApartFromCacheLabel": true,
+    "audioCaptureOff": true
+  },
+  "finalProcessExited": true,
+  "finalExitMethod": "fresh app binding Cmd+Q then process inspection",
+  "neteasePlaybackControlsUsed": false,
+  "screenshotStoredInRepository": false
+}
