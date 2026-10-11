@@ -97,11 +97,15 @@ struct DesktopView: View {
     }
 }
 
-// Find each timed word in the original line, preserving all intervening text.
+// Only parser-recorded ranges may receive timing; all other text stays unchanged.
 func communityHighlightedText(_ line: CommunityLyricLine, at position: Double) -> AttributedString {
     var result = AttributedString(), cursor = line.text.startIndex
+    let length = line.text.utf16.count
     for word in line.words {
-        guard !word.text.isEmpty, let range = line.text.range(of: word.text, range: cursor..<line.text.endIndex) else { continue }
+        guard let recorded = word.utf16Range, recorded.location >= 0, recorded.location <= length,
+              recorded.length > 0, recorded.length <= length - recorded.location,
+              let range = Range(recorded, in: line.text), range.lowerBound >= cursor,
+              line.text[range] == word.text else { continue }
         result.append(AttributedString(String(line.text[cursor..<range.lowerBound])))
         var text = AttributedString(String(line.text[range]))
         text.foregroundColor = .white.opacity(0.35 + 0.65 * communityWordProgress(word, at: position))
