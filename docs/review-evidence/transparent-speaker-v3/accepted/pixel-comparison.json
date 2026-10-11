@@ -1,0 +1,19 @@
+{
+  "celadon": {
+    "rest_equals_zero": true,
+    "pulse_differs": true
+  },
+  "dusk": {
+    "rest_equals_zero": true,
+    "pulse_differs": true
+  },
+  "night": {
+    "rest_equals_zero": true,
+    "pulse_differs": true
+  },
+  "paper": {
+    "rest_equals_zero": true,
+    "pulse_differs": true
+  },
+  "interrupted_off_stable": true
+}
