@@ -22,7 +22,6 @@ final class DesktopAudio {
     private var desiredPID: pid_t?
     private var failed = false
     private var stopped = false
-    private var rebuilds = 0
     private var lastRebuild = 0.0
     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
     var output: ((AudioFeatures, String) -> Void)?
@@ -103,7 +102,6 @@ final class DesktopAudio {
             for (object, selector) in [
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice),
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyServiceRestarted),
-                (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyProcessObjectList),
                 (process, kAudioProcessPropertyDevices),
                 (tap, kAudioTapPropertyFormat),
                 (device, kAudioDevicePropertyDeviceIsAlive)
@@ -181,11 +179,10 @@ final class DesktopAudio {
     private func routeChanged() {
         guard currentPID != nil else { return }
         let now = ProcessInfo.processInfo.systemUptime
-        // At most one reconstruction per second; repeated failure stays static until a fresh launch.
+        // At most one reconstruction per second. start() latches an actual failure;
+        // successful route changes never exhaust a lifetime attempt budget.
         guard now - lastRebuild > 1 else { return }
         lastRebuild = now
-        rebuilds += 1
-        if rebuilds > 3 { failed = true }
         releaseCapture()
         publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备变化 · 正在重新核对")
         if let pid = desiredPID, !failed, !stopped { start(pid) }

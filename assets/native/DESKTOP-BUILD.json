@@ -10,7 +10,7 @@
   "minimumMacOS": "14.2",
   "signing": "ad-hoc, hardened runtime",
   "sources": {
-    "native/DesktopAudio.swift": "66746e133895b9b8b06098afe76d0e63a31df20cb226ba756d9939052e827010",
+    "native/DesktopAudio.swift": "aa63297105df2990628af6109f270f33bd6d6c3524f58d1a74b128867403688d",
     "native/DesktopLyrics.swift": "57165c5816374792b04af8f90ab4956dbc34e987868132e0ac063dd3651db413",
     "native/DesktopMain.swift": "97343730a379bc147b58160fcba2d957ba983c3122637013e20e082207f11574",
     "native/DesktopMedia.swift": "9e14e2d10faeadf425de534e34d0de894388ec2f5d32fbef2bdd75b8ab35c86d",
@@ -21,7 +21,7 @@
   },
   "files": {
     "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "a1bb966d42c5944fe79895ef70374fad3524f62d4bfa9a3b5021e04854db25d4",
+    "Contents/MacOS/Likeit Desktop": "c9b8511a19737c5e982c31aec5dcd04324fe144fd7212532ed33cef3109861c1",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter": "765d305bc480b5a08bffdc319856251efc27b0a536737a683bb181598b81113a",
