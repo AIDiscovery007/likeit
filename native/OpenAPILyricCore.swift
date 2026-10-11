@@ -92,6 +92,9 @@ private struct OpenAPIJSONValue: Decodable {
 }
 
 func decodeOpenAPIJSON(_ data: Data) throws -> Any {
+    guard !data.contains(0) else {
+        throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "OpenAPI JSON contains a raw NUL byte"))
+    }
     // Decimal may round longer mantissas. Ignore strings and exponent digits;
     // JSONDecoder below remains responsible for the complete JSON grammar.
     var inString = false, escaped = false, exponent = false
