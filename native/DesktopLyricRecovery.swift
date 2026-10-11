@@ -109,7 +109,9 @@ final class DesktopLyricRecovery {
         }
         deadline = timeout
         DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: timeout)
-        if matchedSongID(for: metadata, candidates: [SongCandidate(id: "1", metadata: metadata)]) == nil || LyricRequest.isCoolingDown("music.163.com") {
+        if matchedSongID(for: metadata, candidates: [SongCandidate(id: "1", metadata: metadata)]) == nil
+            || LyricRequest.isCoolingDown("music.163.com")
+            || (official != nil && LyricRequest.isCoolingDown("openapi.music.163.com")) {
             search(metadata); return
         }
         beginPhase(seconds: 4) { [weak self] in self?.search(metadata) }
@@ -212,9 +214,9 @@ final class DesktopLyricRecovery {
                 let artist = row["artistName"] as? String ?? ""
                 return (SongCandidate(id: id, metadata: TrackMetadata(title: title, artists: normalized(artist).isEmpty ? [] : [artist], album: row["albumName"] as? String ?? "", duration: jsonNumber(row["duration"]) ?? 0)), row)
             }
-            let documents: [(SongCandidate, CommunityLyricDocument)] = Self.ranked(records.map(\.0), for: track).compactMap { candidate in
-                guard let row = records.first(where: { $0.0.id == candidate.id })?.1,
-                      let document = CommunityLyrics.lrclibDocument(row, duration: max(0, candidate.metadata.duration)) else { return nil }
+            let matched = records.filter { Self.matches($0.0.metadata, track) }.sorted { Self.precedes($0.0, $1.0, for: track) }
+            let documents: [(SongCandidate, CommunityLyricDocument)] = matched.compactMap { candidate, row in
+                guard let document = CommunityLyrics.lrclibDocument(row, duration: max(0, candidate.metadata.duration)) else { return nil }
                 return (candidate, document)
             }
             for kind in 0...2 {
@@ -289,14 +291,16 @@ final class DesktopLyricRecovery {
         return known.isEmpty || Set(known) == Set(found) || (known.count == 1 && known[0] == found.joined(separator: " / ")) || (found.count == 1 && found[0] == known.joined(separator: " / "))
     }
 
-    private static func ranked(_ candidates: [SongCandidate], for track: TrackMetadata) -> [SongCandidate] {
+    private static func precedes(_ lhs: SongCandidate, _ rhs: SongCandidate, for track: TrackMetadata) -> Bool {
         func album(_ item: SongCandidate) -> Bool { !normalized(track.album).isEmpty && normalized(item.metadata.album) == normalized(track.album) }
         func distance(_ item: SongCandidate) -> Double { track.duration > 0 && item.metadata.duration > 0 ? abs(item.metadata.duration - track.duration) : .infinity }
+        if album(lhs) != album(rhs) { return album(lhs) }
+        if distance(lhs) != distance(rhs) { return distance(lhs) < distance(rhs) }
+        return (UInt64(lhs.id) ?? 0) < (UInt64(rhs.id) ?? 0)
+    }
+
+    private static func ranked(_ candidates: [SongCandidate], for track: TrackMetadata) -> [SongCandidate] {
         var seen = Set<String>()
-        return candidates.filter { matches($0.metadata, track) }.sorted {
-            if album($0) != album($1) { return album($0) }
-            if distance($0) != distance($1) { return distance($0) < distance($1) }
-            return (UInt64($0.id) ?? 0) < (UInt64($1.id) ?? 0)
-        }.filter { seen.insert($0.id).inserted }
+        return candidates.filter { matches($0.metadata, track) }.sorted { precedes($0, $1, for: track) }.filter { seen.insert($0.id).inserted }
     }
 }
