@@ -9,6 +9,7 @@ final class LyricRequest: NSObject, URLSessionDataDelegate {
     private var data = Data()
     private var rejected = false
     private var completion: ((Result<Data, Error>) -> Void)?
+    private var responseReceived: ((HTTPURLResponse) -> Void)?
 
     private let sessionConfiguration: URLSessionConfiguration
 
@@ -16,8 +17,9 @@ final class LyricRequest: NSObject, URLSessionDataDelegate {
         self.sessionConfiguration = sessionConfiguration.copy() as! URLSessionConfiguration
     }
 
-    func start(_ request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+    func start(_ request: URLRequest, responseReceived: ((HTTPURLResponse) -> Void)? = nil, completion: @escaping (Result<Data, Error>) -> Void) {
         self.completion = completion
+        self.responseReceived = responseReceived
         let config = sessionConfiguration.copy() as! URLSessionConfiguration
         config.httpShouldSetCookies = false
         config.httpCookieStorage = nil
@@ -33,6 +35,7 @@ final class LyricRequest: NSObject, URLSessionDataDelegate {
     func cancel() { task?.cancel() }
     func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) { completionHandler(nil) }
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        if let http = response as? HTTPURLResponse { responseReceived?(http) }
         let valid = (response as? HTTPURLResponse)?.statusCode == 200 && response.expectedContentLength <= 1_048_576
         rejected = !valid
         completionHandler(valid ? .allow : .cancel)
@@ -43,6 +46,7 @@ final class LyricRequest: NSObject, URLSessionDataDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         let callback = completion
         completion = nil
+        responseReceived = nil
         callback?(rejected ? .failure(URLError(.badServerResponse)) : error.map { .failure($0) } ?? .success(data))
         data.removeAll()
         session.invalidateAndCancel()

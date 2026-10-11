@@ -97,7 +97,7 @@ final class DesktopLyrics {
         }
     }
 
-    private static func candidate(_ data: [String: Any]) -> SongCandidate? {
+    static func candidate(_ data: [String: Any]) -> SongCandidate? {
         guard let id = jsonNumber(data["id"]), id > 0, id.rounded() == id, id <= 9_007_199_254_740_991,
               let title = data["name"] as? String, let artists = data["artists"] as? [[String: Any]], !artists.isEmpty,
               let album = (data["album"] as? [String: Any])?["name"] as? String,
