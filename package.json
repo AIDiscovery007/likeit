@@ -1,12 +1,11 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "likeit",
-  "title": "likeit",
-  "description": "when you like the music, like it",
+  "title": "Likeit",
+  "description": "Like the current NetEase Music track once its identity can be verified.",
   "icon": "extension-icon.png",
   "author": "cc_qq",
   "platforms": [
-    "Windows",
     "macOS"
   ],
   "categories": [
@@ -16,10 +15,15 @@
   "commands": [
     {
       "name": "likeit",
-      "title": "likeit",
-      "subtitle": "",
-      "description": "just say like it",
-      "mode": "view"
+      "title": "Like Current Track",
+      "description": "Check the current NetEase Music track. Collection is blocked until track identity is verified.",
+      "mode": "no-view",
+      "keywords": [
+        "like",
+        "netease",
+        "喜欢",
+        "网易云"
+      ]
     }
   ],
   "tools": [],
