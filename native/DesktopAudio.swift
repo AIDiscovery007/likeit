@@ -2,12 +2,20 @@ import AppKit
 import CoreAudio
 import AudioToolbox
 
-private enum CaptureError: Error { case unavailable(OSStatus), format }
+private enum CaptureError: Error { case unavailable(OSStatus), format, cancelled }
 
 final class DesktopAudio {
     private let queue = DispatchQueue(label: "com.likeit.desktop.capture", qos: .userInitiated)
     private let ioQueue = DispatchQueue(label: "com.likeit.desktop.pcm", qos: .userInteractive)
     private let bufferLock = NSLock()
+    // Shared intent and publication epoch; never hold this lock across HAL calls.
+    private let intentLock = NSLock()
+    private var desiredPID: pid_t?
+    private var stopped = false
+    private var intentReason = ""
+    private var intentRevision: UInt64 = 0
+    private var reconcileQueued = false
+    private var captureEpoch: UInt64 = 0
     private let buffer = UnsafeMutablePointer<Float>.allocate(capacity: 2048)
     private var cursor = 0
     private var filled = 0
@@ -19,9 +27,7 @@ final class DesktopAudio {
     private var timer: DispatchSourceTimer?
     private var sampleRate = 0.0
     private var currentPID: pid_t?
-    private var desiredPID: pid_t?
     private var failed = false
-    private var stopped = false
     private var lastRebuild = 0.0
     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
     var output: ((AudioFeatures, String) -> Void)?
@@ -29,22 +35,67 @@ final class DesktopAudio {
     init() { buffer.initialize(repeating: 0, count: 2048) }
     deinit { buffer.deinitialize(count: 2048); buffer.deallocate() }
 
+    // Record intent before dispatch: a blocking HAL call must not turn old UI events
+    // into a stop/start sequence after the UI has already returned to the same PID.
     func update(pid: pid_t?, reason: String) {
-        queue.async { [self] in
-            guard !stopped else { return }
-            desiredPID = pid
-            if pid == currentPID && pid != nil { return }
-            releaseCapture()
-            if let pid, !failed { start(pid) }
-            else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开" : reason) }
-        }
+        intentLock.lock()
+        guard !stopped else { intentLock.unlock(); return }
+        desiredPID = pid
+        intentReason = reason
+        intentRevision &+= 1
+        let enqueue = !reconcileQueued
+        reconcileQueued = true
+        intentLock.unlock()
+        if enqueue { queue.async { [self] in reconcile() } }
     }
 
     func stop(completion: @escaping () -> Void) {
+        intentLock.lock()
+        stopped = true
+        desiredPID = nil
+        intentRevision &+= 1
+        intentLock.unlock()
         queue.async { [self] in
-            stopped = true; desiredPID = nil; releaseCapture()
+            releaseCapture()
             DispatchQueue.main.async(execute: completion)
         }
+    }
+
+    private func intent() -> (pid: pid_t?, reason: String, revision: UInt64, stopped: Bool, epoch: UInt64) {
+        intentLock.lock(); defer { intentLock.unlock() }
+        return (desiredPID, intentReason, intentRevision, stopped, captureEpoch)
+    }
+
+    private func reconcile() {
+        while true {
+            let request = intent()
+            if !request.stopped {
+                if request.pid != currentPID {
+                    releaseCapture()
+                    if let pid = request.pid, !failed { start(pid) }
+                }
+                if request.pid == nil || failed {
+                    publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开" : request.reason)
+                }
+            }
+            intentLock.lock()
+            if stopped || request.revision == intentRevision {
+                reconcileQueued = false
+                intentLock.unlock()
+                return
+            }
+            intentLock.unlock()
+        }
+    }
+
+    private func checkIntent(_ pid: pid_t) throws {
+        let request = intent()
+        guard !request.stopped, request.pid == pid else { throw CaptureError.cancelled }
+    }
+
+    private func isCurrent(_ epoch: UInt64) -> Bool {
+        intentLock.lock(); defer { intentLock.unlock() }
+        return !stopped && captureEpoch == epoch
     }
 
     private func checked(_ status: OSStatus) throws { if status != noErr { throw CaptureError.unavailable(status) } }
@@ -61,25 +112,32 @@ final class DesktopAudio {
 
     private func start(_ pid: pid_t) {
         do {
+            try checkIntent(pid)
             guard neteasePID() == pid else { throw CaptureError.format }
             var process = AudioObjectID(kAudioObjectUnknown)
             var qualifier = pid
             var property = address(kAudioHardwarePropertyTranslatePIDToProcessObject)
             var size = UInt32(MemoryLayout<AudioObjectID>.size)
             try checked(AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &property, UInt32(MemoryLayout<pid_t>.size), &qualifier, &size, &process))
+            try checkIntent(pid)
             guard process != kAudioObjectUnknown else { throw CaptureError.format }
             var actualPID: pid_t = 0
             var bundle: CFString = "" as CFString
             try read(process, kAudioProcessPropertyPID, into: &actualPID)
+            try checkIntent(pid)
             try read(process, kAudioProcessPropertyBundleID, into: &bundle)
+            try checkIntent(pid)
             guard actualPID == pid, bundle as String == neteaseBundle else { throw CaptureError.format }
             let description = CATapDescription(stereoMixdownOfProcesses: [process])
             description.name = "Likeit NetEase visualization"
             description.isPrivate = true
             description.muteBehavior = .unmuted
             try checked(AudioHardwareCreateProcessTap(description, &tap))
+            try checkIntent(pid)
+            guard tap != kAudioObjectUnknown else { throw CaptureError.format }
             var format = AudioStreamBasicDescription()
             try read(tap, kAudioTapPropertyFormat, into: &format)
+            try checkIntent(pid)
             guard format.mFormatID == kAudioFormatLinearPCM, format.mFormatFlags & kAudioFormatFlagIsFloat != 0,
                   format.mFormatFlags & kAudioFormatFlagIsBigEndian == 0, format.mBitsPerChannel == 32,
                   format.mChannelsPerFrame > 0, format.mChannelsPerFrame <= 2, format.mSampleRate.isFinite, format.mSampleRate > 0,
@@ -93,25 +151,40 @@ final class DesktopAudio {
                 kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: description.uuid.uuidString, kAudioSubTapDriftCompensationKey: true]]
             ]
             try checked(AudioHardwareCreateAggregateDevice(composition as CFDictionary, &device))
+            try checkIntent(pid)
+            guard device != kAudioObjectUnknown else { throw CaptureError.format }
             try checked(AudioDeviceCreateIOProcIDWithBlock(&ioProc, device, ioQueue) { [weak self] _, input, _, _, _ in
                 self?.receive(input)
             })
+            try checkIntent(pid)
+            guard ioProc != nil else { throw CaptureError.format }
             currentPID = pid
             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 如有系统音频授权提示，请由你选择")
             try checked(AudioDeviceStart(device, ioProc))
+            try checkIntent(pid)
             for (object, selector) in [
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice),
                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyServiceRestarted),
                 (process, kAudioProcessPropertyDevices),
                 (tap, kAudioTapPropertyFormat),
                 (device, kAudioDevicePropertyDeviceIsAlive)
-            ] { try listen(object, selector) }
+            ] {
+                try listen(object, selector)
+                try checkIntent(pid)
+            }
+            let epoch = intent().epoch
             let timer = DispatchSource.makeTimerSource(queue: queue)
             timer.schedule(deadline: .now(), repeating: 1.0 / 30, leeway: .milliseconds(3))
-            timer.setEventHandler { [weak self] in self?.analyze() }
+            timer.setEventHandler { [weak self] in
+                guard let self, self.isCurrent(epoch) else { return }
+                self.analyze()
+            }
             self.timer = timer
             timer.resume()
+            try checkIntent(pid)
             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 首次使用请允许系统音频访问")
+        } catch CaptureError.cancelled {
+            releaseCapture()
         } catch {
             failed = true
             releaseCapture()
@@ -171,7 +244,11 @@ final class DesktopAudio {
 
     private func listen(_ object: AudioObjectID, _ selector: AudioObjectPropertySelector) throws {
         var property = address(selector)
-        let callback: AudioObjectPropertyListenerBlock = { [weak self] _, _ in self?.routeChanged() }
+        let epoch = intent().epoch
+        let callback: AudioObjectPropertyListenerBlock = { [weak self] _, _ in
+            guard let self, self.isCurrent(epoch) else { return }
+            self.routeChanged()
+        }
         try checked(AudioObjectAddPropertyListenerBlock(object, &property, queue, callback))
         listeners.append((object, property, callback))
     }
@@ -185,11 +262,16 @@ final class DesktopAudio {
         lastRebuild = now
         releaseCapture()
         publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备变化 · 正在重新核对")
-        if let pid = desiredPID, !failed, !stopped { start(pid) }
+        let request = intent()
+        if let pid = request.pid, !failed, !request.stopped { start(pid) }
         else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备不稳定 · 保持静态，退出后可重试") }
     }
 
     private func releaseCapture() {
+        // Invalidate callbacks before HAL teardown can enqueue late notifications.
+        intentLock.lock()
+        captureEpoch &+= 1
+        intentLock.unlock()
         timer?.cancel(); timer = nil
         if device != kAudioObjectUnknown, let ioProc {
             AudioDeviceStop(device, ioProc)
@@ -209,8 +291,9 @@ final class DesktopAudio {
     }
 
     private func publish(_ features: AudioFeatures, _ message: String) {
+        let epoch = intent().epoch
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
+            guard let self, self.isCurrent(epoch) else { return }
             // Main only consumes immutable features; all HAL state stays on capture queue.
             self.output?(features, message)
         }
