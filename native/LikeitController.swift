@@ -13,7 +13,7 @@ var mediaPID: pid_t = 0
 func terminateController(_ code: Int32) -> Never {
     childLock.lock()
     if mediaPID > 0 { kill(mediaPID, SIGKILL) }
-    childLock.unlock()
+    // Keep the lock until process exit so no reader can launch during termination.
     _exit(code)
 }
 
