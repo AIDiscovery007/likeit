@@ -47,3 +47,11 @@
 ## 集成后实机记录
 
 待最终重建与安装完成后补充。剩余需实际确认：主题 Cmd+1/2、四场景 AX 选择、普通重开记忆、同一进程反复切换、Esc/Cmd+Q/按钮退出。未改系统 Reduce Motion、未授予新权限、未控制音乐播放；若实机采集条件不满足，明确标为未验证。
+
+## 主分支统一构建与安装
+
+主协调者已从 `858f715` 快进合入 `87e62b0`。比对确认 native、src、acceptance、scripts 与 package.json 均与完成 533/533 回归的 `8582d04` 一致，因此引用上述原始回归证据，没有重复运行相同测试。30 份冻结清单的 541 条记录全部通过，原冻结清单及根目录用户 HTML 保持原样。
+
+按最终合并源码重新构建 arm64/x86_64 产物，保留 ad-hoc hardened runtime 策略；确认桌面进程不存在后执行 `npm run build` 更新 Raycast 安装。13 项源码及 10 项包文件摘要核验通过，安装 manifest 与仓库逐字节一致，安装包 strict deep codesign 与双架构检查通过。源码映射、manifest 和安装可执行文件摘要见 `review-evidence/transparent-speaker-v2/main-installation.json`。
+
+本轮没有启动桌面、操作网易云或改动签名身份/系统权限，安装后确认仍无桌面进程。实机验收继续由主题协调会话独占 UI 完成，安装成功不等同于实机动效、快捷键和退出全部通过。
