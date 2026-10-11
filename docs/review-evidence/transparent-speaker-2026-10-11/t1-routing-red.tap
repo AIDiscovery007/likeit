@@ -1,0 +1,111 @@
+▶ T05 regression: a theme-only URL preserves the active source and motion mode
+  ✖ omitted fields retain all selections (0.913583ms)
+  ✖ invalid host is ignored (0.170834ms)
+  ✖ theme-only preserves off without enabling capture (0.086667ms)
+  ✔ theme-only selects glass (0.116209ms)
+  ✖ theme-only preserves source without reloading (0.111208ms)
+  ✔ explicit fields apply once (0.1455ms)
+  ✔ same source never reloads (0.076333ms)
+✖ T05 regression: a theme-only URL preserves the active source and motion mode (3284.181542ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 3
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3336.36275
+
+✖ failing tests:
+
+test at acceptance/transparent-speaker-routing.test.mjs:70:67
+✖ omitted fields retain all selections (0.913583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:67)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/transparent-speaker-routing.test.mjs:70:67
+✖ invalid host is ignored (0.170834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:67)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/transparent-speaker-routing.test.mjs:70:67
+✖ theme-only preserves off without enabling capture (0.086667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:67)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/transparent-speaker-routing.test.mjs:70:67
+✖ theme-only preserves source without reloading (0.111208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:91)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-routing.test.mjs:70:67)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
