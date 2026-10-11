@@ -2,56 +2,30 @@ import Foundation
 
 private let lyricParsing = DispatchQueue(label: "com.likeit.desktop.lyric-parsing", qos: .userInitiated)
 
-// Lifecycle and delegate callbacks stay on main; parsing runs separately.
-// No credentials, cookies, cache, or cross-host redirects.
-private final class LyricRequest: NSObject, URLSessionDataDelegate {
-    private var session: URLSession?
-    private var task: URLSessionDataTask?
-    private var data = Data()
-    private var completion: ((Result<Data, Error>) -> Void)?
-
-    func start(_ url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
-        self.completion = completion
-        let config = URLSessionConfiguration.ephemeral
-        config.httpShouldSetCookies = false
-        config.httpCookieStorage = nil
-        config.urlCredentialStorage = nil
-        config.urlCache = nil
-        config.timeoutIntervalForRequest = 5
-        config.timeoutIntervalForResource = 5
-        session = URLSession(configuration: config, delegate: self, delegateQueue: .main)
-        task = session!.dataTask(with: url)
-        task!.resume()
-    }
-    func cancel() { task?.cancel() }
-    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) { completionHandler(nil) }
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        let valid = (response as? HTTPURLResponse)?.statusCode == 200 && response.expectedContentLength <= 1_048_576
-        completionHandler(valid ? .allow : .cancel)
-    }
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive chunk: Data) {
-        if data.count + chunk.count > 1_048_576 { dataTask.cancel() } else { data.append(chunk) }
-    }
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        let callback = completion
-        completion = nil
-        callback?(error.map { .failure($0) } ?? .success(data))
-        data.removeAll()
-        session.invalidateAndCancel()
-        self.session = nil
-        self.task = nil
-    }
-}
-
 final class DesktopLyrics {
     private var request: LyricRequest?
     private var deadline: DispatchWorkItem?
     private var generation = UUID()
     private var cache: [(String, [LyricLine])] = []
+    private let sessionConfiguration: URLSessionConfiguration
+    private let official: OpenAPILyrics?
+    private let configurationInvalid: Bool
+
+    init(sessionConfiguration: URLSessionConfiguration = .ephemeral, configurationURL: URL = OpenAPILyricConfiguration.defaultURL) {
+        self.sessionConfiguration = sessionConfiguration.copy() as! URLSessionConfiguration
+        do {
+            official = try OpenAPILyricConfiguration.load(from: configurationURL).map { OpenAPILyrics(configuration: $0, sessionConfiguration: sessionConfiguration) }
+            configurationInvalid = false
+        } catch {
+            official = nil
+            configurationInvalid = true
+        }
+    }
 
     func cancel() {
         generation = UUID()
         request?.cancel(); request = nil
+        official?.cancel()
         deadline?.cancel(); deadline = nil
     }
     func stop() { cancel(); cache.removeAll() }
@@ -63,8 +37,10 @@ final class DesktopLyrics {
         let finish: ([LyricLine], String) -> Void = { [weak self] lines, message in
             guard let self, self.generation == token else { return }
             self.cancel()
-            self.cache.append((key, lines))
-            if self.cache.count > 20 { self.cache.removeFirst() }
+            if self.official == nil && !self.configurationInvalid {
+                self.cache.append((key, lines))
+                if self.cache.count > 20 { self.cache.removeFirst() }
+            }
             completion(lines, message)
         }
         let timeout = DispatchWorkItem { finish([], "暂无可用歌词 · 请求超时") }
@@ -77,6 +53,17 @@ final class DesktopLyrics {
             guard candidates.count == songs.count, let id = matchedSongID(for: metadata, candidates: candidates) else { finish([], "暂无可用歌词 · 无唯一完整匹配"); return }
             self.fetch("/api/song/detail", ["ids": "[\(id)]"], token: token) { [weak self] json in
                 guard let self, let songs = json?["songs"] as? [[String: Any]], songs.count == 1, let candidate = Self.candidate(songs[0]), candidate.id == id, matchedSongID(for: metadata, candidates: [candidate]) == id else { finish([], "暂无可用歌词 · 详情未匹配"); return }
+                if self.configurationInvalid { finish([], "官方歌词配置不可用 · 请检查配置、私钥及文件权限"); return }
+                if let official = self.official {
+                    official.load(originalID: id, keyword: metadata.title + " " + metadata.artists.joined(separator: " / ")) { outcome in
+                        switch outcome {
+                        case .lines(let lines): finish(lines, "歌词按歌曲信息匹配")
+                        case .noSynchronizedLyrics: finish([], "暂无可用歌词 · 无同步歌词")
+                        case .unavailable(let message): finish([], message)
+                        }
+                    }
+                    return
+                }
                 self.fetch("/api/song/lyric", ["id": id, "lv": "-1", "kv": "-1", "tv": "-1"], token: token) { json in
                     guard let lrc = json?["lrc"] as? [String: Any], let text = lrc["lyric"] as? String else { finish([], "暂无可用歌词 · 空歌词或网络不可用"); return }
                     lyricParsing.async {
@@ -96,9 +83,9 @@ final class DesktopLyrics {
         url.scheme = "https"; url.host = "music.163.com"; url.path = path
         url.queryItems = query.sorted(by: { $0.key < $1.key }).map { URLQueryItem(name: $0.key, value: $0.value) }
         guard let address = url.url else { completion(nil); return }
-        let request = LyricRequest()
+        let request = LyricRequest(sessionConfiguration: sessionConfiguration)
         self.request = request
-        request.start(address) { [weak self] result in
+        request.start(URLRequest(url: address)) { [weak self] result in
             guard let self, self.generation == token else { return }
             lyricParsing.async {
                 let json = (try? result.get()).flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }

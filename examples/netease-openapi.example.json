@@ -1,0 +1,9 @@
+{
+  "appId": "YOUR_APP_ID",
+  "accessToken": "YOUR_ACCESS_TOKEN",
+  "privateKeyPath": "/absolute/private/path/netease-openapi-private.pem",
+  "device": {
+    "deviceId": "YOUR_OWN_DEVICE_ID",
+    "os": "YOUR_DEVICE_OS"
+  }
+}

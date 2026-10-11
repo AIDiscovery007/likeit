@@ -16,7 +16,7 @@ for name, expected in adapter["sha256"].items():
         if hashlib.sha256((ROOT / "assets/native" / name).read_bytes()).hexdigest() != expected:
             raise SystemExit(f"Bundled adapter checksum mismatch: {name}")
 sdk = subprocess.check_output(["xcrun", "--show-sdk-path"], text=True).strip()
-sources = sorted((ROOT / "native").glob("Desktop*.swift")) + [ROOT / "native/ImmersiveCore.swift"]
+sources = sorted((ROOT / "native").glob("Desktop*.swift")) + [ROOT / "native/ImmersiveCore.swift", ROOT / "native/OpenAPILyricCore.swift"]
 with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     stage = Path(directory)
     app = stage / "Likeit Desktop.app"
