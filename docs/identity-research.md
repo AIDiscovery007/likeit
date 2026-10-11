@@ -1,5 +1,7 @@
 # 歌曲身份只读评估
 
+本页保留各阶段的观察与决策时间顺序。后续协调者已批准“本次命令内播放条目一致性键”和固定依赖打包，具体规则见 `native-design.md`；下文早期的 `trackKey=null` 结论描述当时阶段，不是当前实现状态。
+
 2026-10-11。结论：现有证据不足以批准歌曲身份，继续返回 `null`。本机定向检查未发现 helper；本次仅下载源码文本，未安装、构建、运行 helper 或访问音乐 app，没有真实网易云元数据样本。
 
 - 来源：`bundleIdentifier` 由 MediaRemote 当前播放进程 PID 经 `NSRunningApplication` 取得；`playing` 来自系统布尔回调；元数据来自另一异步回调。因此 bundle 可用于筛选 `com.netease.163music`，但本机尚未确认，且各字段不是原子快照。[get.m:39–98][get]
