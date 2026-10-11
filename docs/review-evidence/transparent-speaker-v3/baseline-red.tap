@@ -1,0 +1,438 @@
+TAP version 13
+# Subtest: poster lyrics: real timed lines form stable four-line pages
+not ok 1 - poster lyrics: real timed lines form stable four-line pages
+  ---
+  duration_ms: 6804.257416
+  type: 'test'
+  location: '/Users/qiaochao/.codex/worktrees/transparent-speaker-review/likeit/acceptance/transparent-speaker-poster.test.mjs:20:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: xcrun swiftc native/ImmersiveCore.swift native/DesktopCommunityLyricsCore.swift native/DesktopView.swift /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift -o /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/acceptance
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:191:58: error: cannot find type 'DesktopGlassLyricLine' in scope
+    189 |                                words: [CommunityLyricWord(start: start, end: start + 1, text: text, utf16Range: NSRange(location: 0, length: text.utf16.count))])
+    190 |         }
+    191 |         func expected(_ indices: [Int], key: String) -> [DesktopGlassLyricLine] {
+        |                                                          `- error: cannot find type 'DesktopGlassLyricLine' in scope
+    192 |             indices.map { DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: key, index: $0, start: times[$0]), text: texts[$0]) }
+    193 |         }
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:207:62: error: value of type 'DesktopModel' has no member 'glassPage'
+    205 |         let document = CommunityLyricDocument(source: .amll, lines: community, plainText: nil, instrumental: false)
+    206 |         let pages = [(0, [0, 1, 2, 3]), (3, [0, 1, 2, 3]), (4, [4, 5, 6, 7]), (7, [4, 5, 6, 7]), (8, [8])]
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+        |                                                              `- error: value of type 'DesktopModel' has no member 'glassPage'
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:208:20: error: cannot find 'DesktopGlassLyricLine' in scope
+    206 |         let pages = [(0, [0, 1, 2, 3]), (3, [0, 1, 2, 3]), (4, [4, 5, 6, 7]), (7, [4, 5, 6, 7]), (8, [8])]
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+        |                    `- error: cannot find 'DesktopGlassLyricLine' in scope
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+    210 | 
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:209:93: error: cannot find 'DesktopGlassLyricLine' in scope
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+        |                                                                                             `- error: cannot find 'DesktopGlassLyricLine' in scope
+    210 | 
+    211 |         load(snapshot(1.2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:209:155: error: cannot find 'DesktopGlassLyricLine' in scope
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+        |                                                                                                                                                           `- error: cannot find 'DesktopGlassLyricLine' in scope
+    210 | 
+    211 |         load(snapshot(1.2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:209:217: error: cannot find 'DesktopGlassLyricLine' in scope
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+        |                                                                                                                                                                                                                         `- error: cannot find 'DesktopGlassLyricLine' in scope
+    210 | 
+    211 |         load(snapshot(1.2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:209:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    207 |         check("new model has no invented poster page", model.glassPage.isEmpty)
+    208 |         let item = DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "a", index: 0, start: 1), text: "Case")
+    209 |         check("poster line equality includes both cue identity and unchanged text", item == DesktopGlassLyricLine(cue: item.cue, text: "Case") && item != DesktopGlassLyricLine(cue: item.cue, text: "CASE") && item != DesktopGlassLyricLine(cue: DesktopLyricCue(trackKey: "b", index: 0, start: 1), text: "Case"))
+        |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    210 | 
+    211 |         load(snapshot(1.2))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:214:87: error: value of type 'DesktopModel' has no member 'glassPage'
+    212 |         for (index, indices) in pages {
+    213 |             render(times[index] + 0.2)
+    214 |             check("LRC active index \(index) exposes fixed indices \(indices)", model.glassPage == expected(indices, key: probe.snapshot!.key))
+        |                                                                                       `- error: value of type 'DesktopModel' has no member 'glassPage'
+    215 |         }
+    216 |         render(1.2)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:220:81: error: value of type 'DesktopModel' has no member 'glassPage'
+    218 |         let firstCue = model.lyricCue
+    219 |         render(1.3)
+    220 |         check("100ms within one LRC cue keeps the entire page unchanged", model.glassPage == firstPage && model.lyricCue == firstCue && model.lyricPosition == 1.3)
+        |                                                                                 `- error: value of type 'DesktopModel' has no member 'glassPage'
+    221 |         render(6.5)
+    222 |         check("seeking inside one page changes current cue without shifting poster rows", model.glassPage == firstPage && model.lyricCue?.index == 3 && model.lyricCue?.start == 6.25)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:222:97: error: value of type 'DesktopModel' has no member 'glassPage'
+    220 |         check("100ms within one LRC cue keeps the entire page unchanged", model.glassPage == firstPage && model.lyricCue == firstCue && model.lyricPosition == 1.3)
+    221 |         render(6.5)
+    222 |         check("seeking inside one page changes current cue without shifting poster rows", model.glassPage == firstPage && model.lyricCue?.index == 3 && model.lyricCue?.start == 6.25)
+        |                                                                                                 `- error: value of type 'DesktopModel' has no member 'glassPage'
+    223 |         check("poster data preserves classic previous current next and progress fields", model.previousLine == texts[2] && model.lyric == texts[3] && model.nextLine == texts[4] && model.progress == 6.5 / 120)
+    224 |         render(20.2)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:226:83: error: value of type 'DesktopModel' has no member 'glassPage'
+    224 |         render(20.2)
+    225 |         render(8.2)
+    226 |         check("backward seek from the tail restores the middle fixed page", model.glassPage == expected([4, 5, 6, 7], key: probe.snapshot!.key))
+        |                                                                                   `- error: value of type 'DesktopModel' has no member 'glassPage'
+    227 |         render(2.7)
+    228 |         check("backward seek across another boundary restores the first page", model.glassPage == firstPage && model.lyricCue?.index == 1)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:228:86: error: value of type 'DesktopModel' has no member 'glassPage'
+    226 |         check("backward seek from the tail restores the middle fixed page", model.glassPage == expected([4, 5, 6, 7], key: probe.snapshot!.key))
+    227 |         render(2.7)
+    228 |         check("backward seek across another boundary restores the first page", model.glassPage == firstPage && model.lyricCue?.index == 1)
+        |                                                                                      `- error: value of type 'DesktopModel' has no member 'glassPage'
+    229 |         load(snapshot(1.2, track: "track-b"))
+    230 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:231:90: error: value of type 'DesktopModel' has no member 'glassPage'
+    229 |         load(snapshot(1.2, track: "track-b"))
+    230 |         probe.refresh()
+    231 |         check("another track with identical lyrics replaces every poster cue key", model.glassPage == expected([0, 1, 2, 3], key: probe.snapshot!.key) && model.glassPage != firstPage)
+        |                                                                                          `- error: value of type 'DesktopModel' has no member 'glassPage'
+    232 | 
+    233 |         load(snapshot(1.2), communityDocument: document)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:231:161: error: value of type 'DesktopModel' has no member 'glassPage'
+    229 |         load(snapshot(1.2, track: "track-b"))
+    230 |         probe.refresh()
+    231 |         check("another track with identical lyrics replaces every poster cue key", model.glassPage == expected([0, 1, 2, 3], key: probe.snapshot!.key) && model.glassPage != firstPage)
+        |                                                                                                                                                                 `- error: value of type 'DesktopModel' has no member 'glassPage'
+    232 | 
+    233 |         load(snapshot(1.2), communityDocument: document)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:236:104: error: value of type 'DesktopModel' has no member 'glassPage'
+    234 |         for (index, indices) in pages {
+    235 |             render(times[index] + 0.2)
+    236 |             check("community active index \(index) preserves real indices and times \(indices)", model.glassPage == expected(indices, key: probe.snapshot!.key))
+        |                                                                                                        `- error: value of type 'DesktopModel' has no member 'glassPage'
+    237 |         }
+    238 |         render(1.2)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:241:39: error: value of type 'DesktopModel' has no member 'glassPage'
+    239 |         let timedBefore = model.timedLyric
+    240 |         render(1.3)
+    241 |         let originalFirstPage = model.glassPage
+        |                                       `- error: value of type 'DesktopModel' has no member 'glassPage'
+    242 |         check("100ms word highlighting changes while the community page stays fixed", model.glassPage == firstPage && model.timedLyric != timedBefore && model.lyricCue?.index == 0)
+    243 |         check("poster and community translation highlighting remain available together", model.lyric == texts[0] && model.translation == community[0].translation && model.timedLyric == communityHighlightedText(community[0], at: 1.3))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:242:93: error: value of type 'DesktopModel' has no member 'glassPage'
+    240 |         render(1.3)
+    241 |         let originalFirstPage = model.glassPage
+    242 |         check("100ms word highlighting changes while the community page stays fixed", model.glassPage == firstPage && model.timedLyric != timedBefore && model.lyricCue?.index == 0)
+        |                                                                                             `- error: value of type 'DesktopModel' has no member 'glassPage'
+    243 |         check("poster and community translation highlighting remain available together", model.lyric == texts[0] && model.translation == community[0].translation && model.timedLyric == communityHighlightedText(community[0], at: 1.3))
+    244 |         render(2.7)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:247:95: error: value of type 'DesktopModel' has no member 'glassPage'
+    245 |         let repeatedCue = model.lyricCue
+    246 |         render(4.2)
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+        |                                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:247:127: error: value of type 'DesktopModel' has no member 'glassPage'
+    245 |         let repeatedCue = model.lyricCue
+    246 |         render(4.2)
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+        |                                                                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:247:154: error: value of type 'DesktopModel' has no member 'glassPage'
+    245 |         let repeatedCue = model.lyricCue
+    246 |         render(4.2)
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+        |                                                                                                                                                          `- error: value of type 'DesktopModel' has no member 'glassPage'
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:247:181: error: value of type 'DesktopModel' has no member 'glassPage'
+    245 |         let repeatedCue = model.lyricCue
+    246 |         render(4.2)
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+        |                                                                                                                                                                                     `- error: value of type 'DesktopModel' has no member 'glassPage'
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:247:207: error: value of type 'DesktopModel' has no member 'glassPage'
+    245 |         let repeatedCue = model.lyricCue
+    246 |         render(4.2)
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+        |                                                                                                                                                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:249:193: error: value of type 'DesktopModel' has no member 'glassPage'
+    247 |         check("identical community words at different real times remain distinct rows", model.glassPage == firstPage && model.glassPage[1].text == model.glassPage[2].text && model.glassPage[1].cue != model.glassPage[2].cue && model.lyricCue != repeatedCue && model.lyricCue?.index == 2)
+    248 |         render(8.2)
+    249 |         check("poster preserves Unicode normalization emoji whitespace and embedded newlines", originalFirstPage.map { Array($0.text.utf8) } == texts.prefix(4).map { Array($0.utf8) } && model.glassPage.map { Array($0.text.utf8) } == texts[4...7].map { Array($0.utf8) })
+        |                                                                                                                                                                                                 `- error: value of type 'DesktopModel' has no member 'glassPage'
+    250 |         load(snapshot(1.2, track: "track-c"), communityDocument: document)
+    251 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:253:95: error: value of type 'DesktopModel' has no member 'glassPage'
+    251 |         probe.refresh()
+    252 |         let trackPage = expected([0, 1, 2, 3], key: probe.snapshot!.key)
+    253 |         check("community track changes replace page identity even for identical words", model.glassPage == trackPage && model.glassPage != firstPage)
+        |                                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    254 |         let savedCue = model.lyricCue, savedTimed = model.timedLyric, savedTranslation = model.translation
+    255 |         model.motionEnabled = true
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:253:127: error: value of type 'DesktopModel' has no member 'glassPage'
+    251 |         probe.refresh()
+    252 |         let trackPage = expected([0, 1, 2, 3], key: probe.snapshot!.key)
+    253 |         check("community track changes replace page identity even for identical words", model.glassPage == trackPage && model.glassPage != firstPage)
+        |                                                                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    254 |         let savedCue = model.lyricCue, savedTimed = model.timedLyric, savedTranslation = model.translation
+    255 |         model.motionEnabled = true
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:260:96: error: value of type 'DesktopModel' has no member 'glassPage'
+    258 |             model.selectTheme("classic"); model.selectGlassScene("paper")
+    259 |         }
+    260 |         check("theme and scene changes preserve poster and existing lyric presentation", model.glassPage == trackPage && model.lyricCue == savedCue && model.lyricPosition == 1.2 && model.timedLyric == savedTimed && model.translation == savedTranslation && model.motionEnabled)
+        |                                                                                                `- error: value of type 'DesktopModel' has no member 'glassPage'
+    261 | 
+    262 |         // Seed real-shaped stale data so clearing branches are independently observable.
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:263:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    261 | 
+    262 |         // Seed real-shaped stale data so clearing branches are independently observable.
+    263 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    264 |         render(nil, track: "track-c")
+    265 |         check("untrusted progress clears the poster but keeps static readable lyrics", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == nil && model.plainLyrics == probe.readableText)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:265:94: error: value of type 'DesktopModel' has no member 'glassPage'
+    263 |         model.glassPage = trackPage
+    264 |         render(nil, track: "track-c")
+    265 |         check("untrusted progress clears the poster but keeps static readable lyrics", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == nil && model.plainLyrics == probe.readableText)
+        |                                                                                              `- error: value of type 'DesktopModel' has no member 'glassPage'
+    266 |         load(snapshot(0.5))
+    267 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:267:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    265 |         check("untrusted progress clears the poster but keeps static readable lyrics", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == nil && model.plainLyrics == probe.readableText)
+    266 |         load(snapshot(0.5))
+    267 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    268 |         probe.refresh()
+    269 |         check("before the first LRC line has no visible or future poster page", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == 0.5)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:269:87: error: value of type 'DesktopModel' has no member 'glassPage'
+    267 |         model.glassPage = trackPage
+    268 |         probe.refresh()
+    269 |         check("before the first LRC line has no visible or future poster page", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == 0.5)
+        |                                                                                       `- error: value of type 'DesktopModel' has no member 'glassPage'
+    270 |         load(snapshot(0.5), communityDocument: document)
+    271 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:271:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    269 |         check("before the first LRC line has no visible or future poster page", model.glassPage.isEmpty && model.lyricCue == nil && model.lyricPosition == 0.5)
+    270 |         load(snapshot(0.5), communityDocument: document)
+    271 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    272 |         probe.refresh()
+    273 |         check("before the first community line clears its entire page", model.glassPage.isEmpty && model.lyricCue == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:273:79: error: value of type 'DesktopModel' has no member 'glassPage'
+    271 |         model.glassPage = trackPage
+    272 |         probe.refresh()
+    273 |         check("before the first community line clears its entire page", model.glassPage.isEmpty && model.lyricCue == nil)
+        |                                                                               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    274 |         load(snapshot(1.2), communityDocument: document)
+    275 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:275:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    273 |         check("before the first community line clears its entire page", model.glassPage.isEmpty && model.lyricCue == nil)
+    274 |         load(snapshot(1.2), communityDocument: document)
+    275 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    276 |         musicPID = nil
+    277 |         probe.refresh()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:278:75: error: value of type 'DesktopModel' has no member 'glassPage'
+    276 |         musicPID = nil
+    277 |         probe.refresh()
+    278 |         check("unknown music process clears all stale poster rows", model.glassPage.isEmpty && probe.snapshot == nil && model.lyricCue == nil)
+        |                                                                           `- error: value of type 'DesktopModel' has no member 'glassPage'
+    279 |         musicPID = 77
+    280 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .lrclib, lines: [], plainText: "静态\n全文", instrumental: false))
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:281:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    279 |         musicPID = 77
+    280 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .lrclib, lines: [], plainText: "静态\n全文", instrumental: false))
+    281 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    282 |         probe.refresh()
+    283 |         check("plain text retains its scrolling content without a timed poster", model.glassPage.isEmpty && model.plainLyrics == "静态\n全文" && model.lyricPosition == 4)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:283:88: error: value of type 'DesktopModel' has no member 'glassPage'
+    281 |         model.glassPage = trackPage
+    282 |         probe.refresh()
+    283 |         check("plain text retains its scrolling content without a timed poster", model.glassPage.isEmpty && model.plainLyrics == "静态\n全文" && model.lyricPosition == 4)
+        |                                                                                        `- error: value of type 'DesktopModel' has no member 'glassPage'
+    284 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true))
+    285 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:285:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    283 |         check("plain text retains its scrolling content without a timed poster", model.glassPage.isEmpty && model.plainLyrics == "静态\n全文" && model.lyricPosition == 4)
+    284 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .lrclib, lines: [], plainText: nil, instrumental: true))
+    285 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    286 |         probe.refresh()
+    287 |         check("instrumental content retains its label without invented poster rows", model.glassPage.isEmpty && model.lyric == "纯音乐" && model.lyricPosition == 4)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:287:92: error: value of type 'DesktopModel' has no member 'glassPage'
+    285 |         model.glassPage = trackPage
+    286 |         probe.refresh()
+    287 |         check("instrumental content retains its label without invented poster rows", model.glassPage.isEmpty && model.lyric == "纯音乐" && model.lyricPosition == 4)
+        |                                                                                            `- error: value of type 'DesktopModel' has no member 'glassPage'
+    288 |         load(snapshot(4))
+    289 |         probe.state.accept([], for: probe.snapshot!.key)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:290:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    288 |         load(snapshot(4))
+    289 |         probe.state.accept([], for: probe.snapshot!.key)
+    290 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    291 |         probe.refresh()
+    292 |         check("empty LRC clears a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:292:71: error: value of type 'DesktopModel' has no member 'glassPage'
+    290 |         model.glassPage = trackPage
+    291 |         probe.refresh()
+    292 |         check("empty LRC clears a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+        |                                                                       `- error: value of type 'DesktopModel' has no member 'glassPage'
+    293 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .amll, lines: [], plainText: nil, instrumental: false))
+    294 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:294:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    292 |         check("empty LRC clears a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+    293 |         load(snapshot(4), communityDocument: CommunityLyricDocument(source: .amll, lines: [], plainText: nil, instrumental: false))
+    294 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    295 |         probe.refresh()
+    296 |         check("empty community lyrics clear a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:296:83: error: value of type 'DesktopModel' has no member 'glassPage'
+    294 |         model.glassPage = trackPage
+    295 |         probe.refresh()
+    296 |         check("empty community lyrics clear a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+        |                                                                                   `- error: value of type 'DesktopModel' has no member 'glassPage'
+    297 |         model.glassPage = trackPage
+    298 |         probe.clearDisplay()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:297:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    295 |         probe.refresh()
+    296 |         check("empty community lyrics clear a previously populated poster", model.glassPage.isEmpty && model.lyricCue == nil)
+    297 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    298 |         probe.clearDisplay()
+    299 |         check("clearDisplayedLyrics clears all poster rows", model.glassPage.isEmpty)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:299:68: error: value of type 'DesktopModel' has no member 'glassPage'
+    297 |         model.glassPage = trackPage
+    298 |         probe.clearDisplay()
+    299 |         check("clearDisplayedLyrics clears all poster rows", model.glassPage.isEmpty)
+        |                                                                    `- error: value of type 'DesktopModel' has no member 'glassPage'
+    300 |         model.glassPage = trackPage
+    301 |         probe.resetForPoster()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:300:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    298 |         probe.clearDisplay()
+    299 |         check("clearDisplayedLyrics clears all poster rows", model.glassPage.isEmpty)
+    300 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    301 |         probe.resetForPoster()
+    302 |         check("resetLyrics clears poster rows along with acquired lyric state", model.glassPage.isEmpty && probe.communityDocument == nil && probe.state.lines.isEmpty)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:302:87: error: value of type 'DesktopModel' has no member 'glassPage'
+    300 |         model.glassPage = trackPage
+    301 |         probe.resetForPoster()
+    302 |         check("resetLyrics clears poster rows along with acquired lyric state", model.glassPage.isEmpty && probe.communityDocument == nil && probe.state.lines.isEmpty)
+        |                                                                                       `- error: value of type 'DesktopModel' has no member 'glassPage'
+    303 |         model.glassPage = trackPage
+    304 |         probe.clearAll()
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:303:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    301 |         probe.resetForPoster()
+    302 |         check("resetLyrics clears poster rows along with acquired lyric state", model.glassPage.isEmpty && probe.communityDocument == nil && probe.state.lines.isEmpty)
+    303 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    304 |         probe.clearAll()
+    305 |         check("source clearing removes the old poster page", model.glassPage.isEmpty && probe.snapshot == nil)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:305:68: error: value of type 'DesktopModel' has no member 'glassPage'
+    303 |         model.glassPage = trackPage
+    304 |         probe.clearAll()
+    305 |         check("source clearing removes the old poster page", model.glassPage.isEmpty && probe.snapshot == nil)
+        |                                                                    `- error: value of type 'DesktopModel' has no member 'glassPage'
+    306 |         load(snapshot(1.2))
+    307 |         model.glassPage = trackPage
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:307:15: error: value of type 'DesktopModel' has no member 'glassPage'
+    305 |         check("source clearing removes the old poster page", model.glassPage.isEmpty && probe.snapshot == nil)
+    306 |         load(snapshot(1.2))
+    307 |         model.glassPage = trackPage
+        |               `- error: value of type 'DesktopModel' has no member 'glassPage'
+    308 |         probe.stop()
+    309 |         check("session stop removes the poster before teardown completes", model.glassPage.isEmpty && !probe.running && probe.recovery.stops == 1)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:309:82: error: value of type 'DesktopModel' has no member 'glassPage'
+    307 |         model.glassPage = trackPage
+    308 |         probe.stop()
+    309 |         check("session stop removes the poster before teardown completes", model.glassPage.isEmpty && !probe.running && probe.recovery.stops == 1)
+        |                                                                                  `- error: value of type 'DesktopModel' has no member 'glassPage'
+    310 |         let reopened = DesktopModel(themeDefaults: defaults)
+    311 |         check("reopening restores display choices without persisting old poster rows", reopened.glassPage.isEmpty && reopened.theme == .classic && reopened.glassScene == .paper)
+    
+    /var/folders/0d/cgp0j7d54qx310xj_4nx5bz00000gn/T/likeit-glass-poster-Ie29Df/driver.swift:311:97: error: value of type 'DesktopModel' has no member 'glassPage'
+    309 |         check("session stop removes the poster before teardown completes", model.glassPage.isEmpty && !probe.running && probe.recovery.stops == 1)
+    310 |         let reopened = DesktopModel(themeDefaults: defaults)
+    311 |         check("reopening restores display choices without persisting old poster rows", reopened.glassPage.isEmpty && reopened.theme == .classic && reopened.glassScene == .paper)
+        |                                                                                                 `- error: value of type 'DesktopModel' has no member 'glassPage'
+    312 |         print(String(decoding: try! JSONSerialization.data(withJSONObject: results, options: [.sortedKeys]), as: UTF8.self))
+    313 |     }
+    
+  code: 1
+  stack: |-
+    genericNodeError (node:internal/errors:985:15)
+    wrappedFn (node:internal/errors:539:14)
+    ChildProcess.exithandler (node:child_process:417:12)
+    ChildProcess.emit (node:events:509:28)
+    maybeClose (node:internal/child_process:1141:16)
+    Socket.<anonymous> (node:internal/child_process:498:11)
+    Socket.emit (node:events:509:28)
+    Pipe.<anonymous> (node:net:355:12)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6869.85125

@@ -1,0 +1,618 @@
+{
+  "method": "Mathematical sampling of source CSS/JS, not browser or live audio frames",
+  "reference": "透明歌词音响.html",
+  "referenceSHA256": "31631be79a2edce789769b3e133ae097cb6043599400de8b7703c84c19e9e79f",
+  "fps": 60,
+  "frames": [
+    {
+      "frame": 0,
+      "ms": 0.0,
+      "opacity": 0.0,
+      "xFractionOfLine": -0.025,
+      "oldPageOpacity": 1.0,
+      "demoEnergy": 1.0,
+      "surroundScale": 1.012,
+      "domeScale": 1.06
+    },
+    {
+      "frame": 1,
+      "ms": 16.6667,
+      "opacity": 0.061019,
+      "xFractionOfLine": -0.021633,
+      "oldPageOpacity": 0.969244,
+      "demoEnergy": 0.9,
+      "surroundScale": 1.0108,
+      "domeScale": 1.054
+    },
+    {
+      "frame": 2,
+      "ms": 33.3333,
+      "opacity": 0.188576,
+      "xFractionOfLine": -0.018274,
+      "oldPageOpacity": 0.9124,
+      "demoEnergy": 0.81,
+      "surroundScale": 1.00972,
+      "domeScale": 1.0486
+    },
+    {
+      "frame": 3,
+      "ms": 50.0,
+      "opacity": 0.35753,
+      "xFractionOfLine": -0.015083,
+      "oldPageOpacity": 0.829,
+      "demoEnergy": 0.729,
+      "surroundScale": 1.008748,
+      "domeScale": 1.04374
+    },
+    {
+      "frame": 4,
+      "ms": 66.6667,
+      "opacity": 0.519258,
+      "xFractionOfLine": -0.012241,
+      "oldPageOpacity": 0.726416,
+      "demoEnergy": 0.6561,
+      "surroundScale": 1.007873,
+      "domeScale": 1.039366
+    },
+    {
+      "frame": 5,
+      "ms": 83.3333,
+      "opacity": 0.651169,
+      "xFractionOfLine": -0.009864,
+      "oldPageOpacity": 0.618013,
+      "demoEnergy": 0.59049,
+      "surroundScale": 1.007086,
+      "domeScale": 1.035429
+    },
+    {
+      "frame": 6,
+      "ms": 100.0,
+      "opacity": 0.753232,
+      "xFractionOfLine": -0.007955,
+      "oldPageOpacity": 0.515368,
+      "demoEnergy": 0.531441,
+      "surroundScale": 1.006377,
+      "domeScale": 1.031886
+    },
+    {
+      "frame": 7,
+      "ms": 116.6667,
+      "opacity": 0.830895,
+      "xFractionOfLine": -0.006448,
+      "oldPageOpacity": 0.424138,
+      "demoEnergy": 0.478297,
+      "surroundScale": 1.00574,
+      "domeScale": 1.028698
+    },
+    {
+      "frame": 8,
+      "ms": 133.3333,
+      "opacity": 0.889292,
+      "xFractionOfLine": -0.005257,
+      "oldPageOpacity": 0.345524,
+      "demoEnergy": 0.430467,
+      "surroundScale": 1.005166,
+      "domeScale": 1.025828
+    },
+    {
+      "frame": 9,
+      "ms": 150.0,
+      "opacity": 0.932365,
+      "xFractionOfLine": -0.004309,
+      "oldPageOpacity": 0.278722,
+      "demoEnergy": 0.38742,
+      "surroundScale": 1.004649,
+      "domeScale": 1.023245
+    },
+    {
+      "frame": 10,
+      "ms": 166.6667,
+      "opacity": 0.963034,
+      "xFractionOfLine": -0.003546,
+      "oldPageOpacity": 0.222334,
+      "demoEnergy": 0.348678,
+      "surroundScale": 1.004184,
+      "domeScale": 1.020921
+    },
+    {
+      "frame": 11,
+      "ms": 183.3333,
+      "opacity": 0.983474,
+      "xFractionOfLine": -0.002926,
+      "oldPageOpacity": 0.174942,
+      "demoEnergy": 0.313811,
+      "surroundScale": 1.003766,
+      "domeScale": 1.018829
+    },
+    {
+      "frame": 12,
+      "ms": 200.0,
+      "opacity": 0.995331,
+      "xFractionOfLine": -0.002416,
+      "oldPageOpacity": 0.135292,
+      "demoEnergy": 0.28243,
+      "surroundScale": 1.003389,
+      "domeScale": 1.016946
+    },
+    {
+      "frame": 13,
+      "ms": 216.6667,
+      "opacity": 0.999876,
+      "xFractionOfLine": -0.001994,
+      "oldPageOpacity": 0.102328,
+      "demoEnergy": 0.254187,
+      "surroundScale": 1.00305,
+      "domeScale": 1.015251
+    },
+    {
+      "frame": 14,
+      "ms": 233.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.001642,
+      "oldPageOpacity": 0.075176,
+      "demoEnergy": 0.228768,
+      "surroundScale": 1.002745,
+      "domeScale": 1.013726
+    },
+    {
+      "frame": 15,
+      "ms": 250.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.001348,
+      "oldPageOpacity": 0.053113,
+      "demoEnergy": 0.205891,
+      "surroundScale": 1.002471,
+      "domeScale": 1.012353
+    },
+    {
+      "frame": 16,
+      "ms": 266.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.001101,
+      "oldPageOpacity": 0.03554,
+      "demoEnergy": 0.185302,
+      "surroundScale": 1.002224,
+      "domeScale": 1.011118
+    },
+    {
+      "frame": 17,
+      "ms": 283.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000893,
+      "oldPageOpacity": 0.021956,
+      "demoEnergy": 0.166772,
+      "surroundScale": 1.002001,
+      "domeScale": 1.010006
+    },
+    {
+      "frame": 18,
+      "ms": 300.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000718,
+      "oldPageOpacity": 0.011941,
+      "demoEnergy": 0.150095,
+      "surroundScale": 1.001801,
+      "domeScale": 1.009006
+    },
+    {
+      "frame": 19,
+      "ms": 316.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000571,
+      "oldPageOpacity": 0.005139,
+      "demoEnergy": 0.135085,
+      "surroundScale": 1.001621,
+      "domeScale": 1.008105
+    },
+    {
+      "frame": 20,
+      "ms": 333.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000447,
+      "oldPageOpacity": 0.001246,
+      "demoEnergy": 0.121577,
+      "surroundScale": 1.001459,
+      "domeScale": 1.007295
+    },
+    {
+      "frame": 21,
+      "ms": 350.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000344,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.109419,
+      "surroundScale": 1.001313,
+      "domeScale": 1.006565
+    },
+    {
+      "frame": 22,
+      "ms": 366.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000259,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.098477,
+      "surroundScale": 1.001182,
+      "domeScale": 1.005909
+    },
+    {
+      "frame": 23,
+      "ms": 383.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000189,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.088629,
+      "surroundScale": 1.001064,
+      "domeScale": 1.005318
+    },
+    {
+      "frame": 24,
+      "ms": 400.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.000133,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.079766,
+      "surroundScale": 1.000957,
+      "domeScale": 1.004786
+    },
+    {
+      "frame": 25,
+      "ms": 416.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -8.8e-05,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.07179,
+      "surroundScale": 1.000861,
+      "domeScale": 1.004307
+    },
+    {
+      "frame": 26,
+      "ms": 433.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -5.4e-05,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.064611,
+      "surroundScale": 1.000775,
+      "domeScale": 1.003877
+    },
+    {
+      "frame": 27,
+      "ms": 450.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -2.9e-05,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.05815,
+      "surroundScale": 1.000698,
+      "domeScale": 1.003489
+    },
+    {
+      "frame": 28,
+      "ms": 466.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -1.2e-05,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.052335,
+      "surroundScale": 1.000628,
+      "domeScale": 1.00314
+    },
+    {
+      "frame": 29,
+      "ms": 483.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -3e-06,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.047101,
+      "surroundScale": 1.000565,
+      "domeScale": 1.002826
+    },
+    {
+      "frame": 30,
+      "ms": 500.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.042391,
+      "surroundScale": 1.000509,
+      "domeScale": 1.002543
+    },
+    {
+      "frame": 31,
+      "ms": 516.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.038152,
+      "surroundScale": 1.000458,
+      "domeScale": 1.002289
+    },
+    {
+      "frame": 32,
+      "ms": 533.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.034337,
+      "surroundScale": 1.000412,
+      "domeScale": 1.00206
+    },
+    {
+      "frame": 33,
+      "ms": 550.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.030903,
+      "surroundScale": 1.000371,
+      "domeScale": 1.001854
+    },
+    {
+      "frame": 34,
+      "ms": 566.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.027813,
+      "surroundScale": 1.000334,
+      "domeScale": 1.001669
+    },
+    {
+      "frame": 35,
+      "ms": 583.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.025032,
+      "surroundScale": 1.0003,
+      "domeScale": 1.001502
+    },
+    {
+      "frame": 36,
+      "ms": 600.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.022528,
+      "surroundScale": 1.00027,
+      "domeScale": 1.001352
+    },
+    {
+      "frame": 37,
+      "ms": 616.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.020276,
+      "surroundScale": 1.000243,
+      "domeScale": 1.001217
+    },
+    {
+      "frame": 38,
+      "ms": 633.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.018248,
+      "surroundScale": 1.000219,
+      "domeScale": 1.001095
+    },
+    {
+      "frame": 39,
+      "ms": 650.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.016423,
+      "surroundScale": 1.000197,
+      "domeScale": 1.000985
+    },
+    {
+      "frame": 40,
+      "ms": 666.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.357936,
+      "surroundScale": 1.004295,
+      "domeScale": 1.021476
+    },
+    {
+      "frame": 41,
+      "ms": 683.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.322142,
+      "surroundScale": 1.003866,
+      "domeScale": 1.019329
+    },
+    {
+      "frame": 42,
+      "ms": 700.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.289928,
+      "surroundScale": 1.003479,
+      "domeScale": 1.017396
+    },
+    {
+      "frame": 43,
+      "ms": 716.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.260935,
+      "surroundScale": 1.003131,
+      "domeScale": 1.015656
+    },
+    {
+      "frame": 44,
+      "ms": 733.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.234842,
+      "surroundScale": 1.002818,
+      "domeScale": 1.01409
+    },
+    {
+      "frame": 45,
+      "ms": 750.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.211357,
+      "surroundScale": 1.002536,
+      "domeScale": 1.012681
+    },
+    {
+      "frame": 46,
+      "ms": 766.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.190222,
+      "surroundScale": 1.002283,
+      "domeScale": 1.011413
+    },
+    {
+      "frame": 47,
+      "ms": 783.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.1712,
+      "surroundScale": 1.002054,
+      "domeScale": 1.010272
+    },
+    {
+      "frame": 48,
+      "ms": 800.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.15408,
+      "surroundScale": 1.001849,
+      "domeScale": 1.009245
+    },
+    {
+      "frame": 49,
+      "ms": 816.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.138672,
+      "surroundScale": 1.001664,
+      "domeScale": 1.00832
+    },
+    {
+      "frame": 50,
+      "ms": 833.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.124804,
+      "surroundScale": 1.001498,
+      "domeScale": 1.007488
+    },
+    {
+      "frame": 51,
+      "ms": 850.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.112324,
+      "surroundScale": 1.001348,
+      "domeScale": 1.006739
+    },
+    {
+      "frame": 52,
+      "ms": 866.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.101092,
+      "surroundScale": 1.001213,
+      "domeScale": 1.006065
+    },
+    {
+      "frame": 53,
+      "ms": 883.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.090982,
+      "surroundScale": 1.001092,
+      "domeScale": 1.005459
+    },
+    {
+      "frame": 54,
+      "ms": 900.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.081884,
+      "surroundScale": 1.000983,
+      "domeScale": 1.004913
+    },
+    {
+      "frame": 55,
+      "ms": 916.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.073696,
+      "surroundScale": 1.000884,
+      "domeScale": 1.004422
+    },
+    {
+      "frame": 56,
+      "ms": 933.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.066326,
+      "surroundScale": 1.000796,
+      "domeScale": 1.00398
+    },
+    {
+      "frame": 57,
+      "ms": 950.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.059694,
+      "surroundScale": 1.000716,
+      "domeScale": 1.003582
+    },
+    {
+      "frame": 58,
+      "ms": 966.6667,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.053724,
+      "surroundScale": 1.000645,
+      "domeScale": 1.003223
+    },
+    {
+      "frame": 59,
+      "ms": 983.3333,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.048352,
+      "surroundScale": 1.00058,
+      "domeScale": 1.002901
+    },
+    {
+      "frame": 60,
+      "ms": 1000.0,
+      "opacity": 1.0,
+      "xFractionOfLine": -0.0,
+      "oldPageOpacity": 0.0,
+      "demoEnergy": 0.043517,
+      "surroundScale": 1.000522,
+      "domeScale": 1.002611
+    }
+  ]
+}
