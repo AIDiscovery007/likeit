@@ -1,0 +1,131 @@
+▶ visible desktop capture is independent of application focus
+  ✔ visible foreground captures (0.780709ms)
+  ✖ visible inactive window keeps capture and lyric refresh (0.826375ms)
+  ✖ focus loss neither stops capture nor erases live features (0.101417ms)
+  ✔ fully occluded foreground stops (0.054417ms)
+  ✔ hidden inactive window stops (0.050875ms)
+  ✔ miniaturized window stops (0.082625ms)
+  ✖ becoming visible restores capture without focus (0.072542ms)
+  ✔ missing window never captures (0.052167ms)
+  ✖ motion off remains off while visible inactive (0.104584ms)
+  ✔ system reduce motion still prevents capture (0.078541ms)
+  ✔ paused source still prevents capture (0.0805ms)
+  ✔ stale source still prevents capture (0.065875ms)
+  ✔ missing source still prevents capture (0.048541ms)
+  ✔ terminating ignores late visibility changes (0.043667ms)
+✖ visible desktop capture is independent of application focus (3940.261458ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 10
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4016.881792
+
+✖ failing tests:
+
+test at acceptance/immersive-visibility.test.mjs:23:43
+✖ visible inactive window keeps capture and lyric refresh (0.826375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-visibility.test.mjs:23:43
+✖ focus loss neither stops capture nor erases live features (0.101417ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-visibility.test.mjs:23:43
+✖ becoming visible restores capture without focus (0.072542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-visibility.test.mjs:23:43
+✖ motion off remains off while visible inactive (0.104584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-visibility.test.mjs:8:1
+✖ visible desktop capture is independent of application focus (3940.261458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-visibility.test.mjs:24:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
