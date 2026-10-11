@@ -1,0 +1,35 @@
+{
+  "firstVisible" : 1.554166738060303e-05,
+  "frames" : [
+    "{\n    Height = 1440;\n    Width = 2560;\n    X = \"-277\";\n    Y = \"-1440\";\n}"
+  ],
+  "lastVisible" : 6.3650062083324883,
+  "observedPIDs" : [
+    24351
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        24351
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 1.554166738060303e-05
+    },
+    {
+      "desktopPIDs" : [
+        24351
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 6.461256416667311
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 6.623863666667603
+    }
+  ],
+  "visibleSamples" : 182
+}

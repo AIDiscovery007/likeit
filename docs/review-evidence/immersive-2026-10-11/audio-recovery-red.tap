@@ -1,0 +1,201 @@
+▶ audio lifecycle obeys latest intent and rejects stale resources
+  ✖ P-nil-P (1.825792ms)
+  ✔ P-nil-P cleanup (0.743833ms)
+  ✖ P-nil (0.418292ms)
+  ✔ P-nil cleanup (0.165708ms)
+  ✖ P-stop-P (0.149917ms)
+  ✔ P-stop-P cleanup (0.07925ms)
+  ✖ zero-tap (0.082458ms)
+  ✔ zero-tap cleanup (0.066458ms)
+  ✖ zero-device (0.120333ms)
+  ✔ zero-device cleanup (0.094583ms)
+  ✖ nil-io (0.078209ms)
+  ✔ nil-io cleanup (0.047375ms)
+  ✔ error (0.048542ms)
+  ✔ error cleanup (0.058083ms)
+  ✖ stale listener cannot rebuild new capture (0.133666ms)
+  ✔ stale listener cleanup (0.055042ms)
+✖ audio lifecycle obeys latest intent and rejects stale resources (6030.044583ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 9
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6101.26525
+
+✖ failing tests:
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ P-nil-P (1.825792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ P-nil (0.418292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ P-stop-P (0.149917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ zero-tap (0.082458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ zero-device (0.120333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ nil-io (0.078209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:23:43
+✖ stale listener cannot rebuild new capture (0.133666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at TestContext.test (node:internal/test_runner/test:394:20)
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:23:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at acceptance/immersive-audio-recovery.test.mjs:10:1
+✖ audio lifecycle obeys latest intent and rejects stale resources (6030.044583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiaochao/Development/extensions/likeit/acceptance/immersive-audio-recovery.test.mjs:24:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,202 @@
+Filtering the log data using "subsystem == "com.likeit.desktop" AND category == "diagnostics""
+Timestamp               Ty Process[PID:TID]
+2026-10-11 04:34:42.068 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=1 uptime=26969.454804 app-launch pid=38941
+2026-10-11 04:34:42.149 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=2 uptime=26969.536065 capture-decision mode=off reduceMotion=true active=true visible=false playing=nil desiredPID=nil
+2026-10-11 04:34:42.149 Df Likeit Desktop[38941:e3e94] [com.likeit.desktop:diagnostics] seq=3 uptime=26969.536136 capture-update desiredPID=nil currentPID=nil failed=false generation=0
+2026-10-11 04:34:42.149 Df Likeit Desktop[38941:e3e94] [com.likeit.desktop:diagnostics] seq=4 uptime=26969.536164 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.220 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=5 uptime=26969.606847 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.226 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=6 uptime=26969.613168 capture-decision mode=off reduceMotion=true active=false visible=false playing=nil desiredPID=nil
+2026-10-11 04:34:42.226 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=7 uptime=26969.613201 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.329 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=8 uptime=26969.716600 capture-decision mode=always reduceMotion=true active=true visible=false playing=nil desiredPID=nil
+2026-10-11 04:34:42.329 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=9 uptime=26969.716643 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.332 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=10 uptime=26969.719306 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.339 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=11 uptime=26969.726545 capture-decision mode=always reduceMotion=true active=true visible=true playing=nil desiredPID=nil
+2026-10-11 04:34:42.339 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=12 uptime=26969.726586 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.345 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=13 uptime=26969.731875 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.345 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=14 uptime=26969.731908 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.425 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=15 uptime=26969.812360 capture-decision mode=always reduceMotion=true active=true visible=true playing=true desiredPID=17055
+2026-10-11 04:34:42.425 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=16 uptime=26969.812454 capture-update desiredPID=17055 currentPID=nil failed=false generation=0
+2026-10-11 04:34:42.425 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=17 uptime=26969.812460 capture-release reason=desired-pid-change generation=0
+2026-10-11 04:34:42.425 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=18 uptime=26969.812466 capture-start pid=17055 generation=1
+2026-10-11 04:34:42.497 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=19 uptime=26969.884271 process-object id=144 generation=1
+2026-10-11 04:34:42.500 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=20 uptime=26969.887279 tap-format tap=149 rate=48000.0 id=1819304813 flags=9 bits=32 channels=2 bytesPerFrame=8 generation=1
+2026-10-11 04:34:42.647 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=21 uptime=26970.034233 capture-decision mode=always reduceMotion=true active=false visible=false playing=true desiredPID=nil
+2026-10-11 04:34:45.817 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=22 uptime=26973.203783 device-start begin device=150 tap=149 generation=1
+2026-10-11 04:34:45.857 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=23 uptime=26973.243748 capture-decision mode=always reduceMotion=true active=true visible=true playing=true desiredPID=17055
+2026-10-11 04:34:45.877 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=24 uptime=26973.264026 device-start success generation=1
+2026-10-11 04:34:45.877 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=25 uptime=26973.264347 capture-start ready generation=1
+2026-10-11 04:34:45.877 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=26 uptime=26973.264420 capture-update desiredPID=nil currentPID=17055 failed=false generation=1
+2026-10-11 04:34:45.877 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=27 uptime=26973.264444 capture-release reason=desired-pid-change generation=1
+2026-10-11 04:34:45.880 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=28 uptime=26973.266806 capture-release device=150 stop=status=0 hex=00000000 fourCC=nonprintable destroyIO=status=0 hex=00000000 fourCC=nonprintable generation=1
+2026-10-11 04:34:45.880 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=29 uptime=26973.266824 destroy-aggregate id=150 status=0 hex=00000000 fourCC=nonprintable generation=1
+2026-10-11 04:34:45.881 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=30 uptime=26973.268435 destroy-tap id=149 status=0 hex=00000000 fourCC=nonprintable generation=1
+2026-10-11 04:34:45.881 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=31 uptime=26973.268452 capture-update desiredPID=nil currentPID=nil failed=false generation=1
+2026-10-11 04:34:45.882 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=32 uptime=26973.268893 capture-release reason=desired-pid-change generation=1
+2026-10-11 04:34:45.884 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=33 uptime=26973.271111 capture-update desiredPID=17055 currentPID=nil failed=false generation=1
+2026-10-11 04:34:45.884 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=34 uptime=26973.271462 capture-release reason=desired-pid-change generation=1
+2026-10-11 04:34:45.884 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=35 uptime=26973.271521 capture-start pid=17055 generation=2
+2026-10-11 04:34:45.886 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=36 uptime=26973.272849 process-object id=144 generation=2
+2026-10-11 04:34:47.019 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=37 uptime=26974.405770 failure-latch source=start stage=read-tap-format status=560947818 hex=216F626A fourCC=!obj pid=17055 tap=0 device=0 generation=2
+2026-10-11 04:34:47.019 Df Likeit Desktop[38941:e3e8e] [com.likeit.desktop:diagnostics] seq=38 uptime=26974.405846 route-event object=150 selector=1818850926 generation=2
+2026-10-11 04:34:47.019 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=39 uptime=26974.406068 capture-update desiredPID=17055 currentPID=nil failed=true generation=2
+2026-10-11 04:34:47.019 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=40 uptime=26974.406083 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:48.277 Df Likeit Desktop[38941:e3e96] [com.likeit.desktop:diagnostics] seq=41 uptime=26975.663910 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:50.291 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=42 uptime=26977.677852 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:52.296 Df Likeit Desktop[38941:e3efd] [com.likeit.desktop:diagnostics] seq=43 uptime=26979.682778 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:54.285 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=44 uptime=26981.672273 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:56.280 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=45 uptime=26983.667213 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:34:58.282 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=46 uptime=26985.669665 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:00.281 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=47 uptime=26987.668028 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:01.856 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=48 uptime=26989.243674 capture-decision mode=always reduceMotion=true active=false visible=false playing=true desiredPID=nil
+2026-10-11 04:35:01.857 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=49 uptime=26989.243757 capture-update desiredPID=nil currentPID=nil failed=true generation=2
+2026-10-11 04:35:01.857 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=50 uptime=26989.243771 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:02.332 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=51 uptime=26989.718884 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:04.290 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=52 uptime=26991.677228 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:06.317 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=53 uptime=26993.704259 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:08.299 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=54 uptime=26995.686378 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:10.296 Df Likeit Desktop[38941:e3e95] [com.likeit.desktop:diagnostics] seq=55 uptime=26997.683575 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:12.295 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=56 uptime=26999.682265 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:14.501 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=57 uptime=27001.888614 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:16.288 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=58 uptime=27003.675679 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:18.294 Df Likeit Desktop[38941:e3e8f] [com.likeit.desktop:diagnostics] seq=59 uptime=27005.681033 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:20.291 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=60 uptime=27007.678072 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:22.305 Df Likeit Desktop[38941:e481a] [com.likeit.desktop:diagnostics] seq=61 uptime=27009.691763 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:24.293 Df Likeit Desktop[38941:e481a] [com.likeit.desktop:diagnostics] seq=62 uptime=27011.679944 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:26.294 Df Likeit Desktop[38941:e481a] [com.likeit.desktop:diagnostics] seq=63 uptime=27013.680900 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:28.295 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=64 uptime=27015.682264 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:30.298 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=65 uptime=27017.684888 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:32.290 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=66 uptime=27019.677532 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:34.288 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=67 uptime=27021.674705 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:36.293 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=68 uptime=27023.680681 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:38.581 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=69 uptime=27025.968453 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:40.356 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=70 uptime=27027.743584 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:42.981 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=71 uptime=27030.368519 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:44.307 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=72 uptime=27031.694301 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:47.035 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=73 uptime=27034.422069 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:48.324 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=74 uptime=27035.710823 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:50.306 Df Likeit Desktop[38941:e468c] [com.likeit.desktop:diagnostics] seq=75 uptime=27037.693698 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:52.295 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=76 uptime=27039.681926 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:54.294 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=77 uptime=27041.681228 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:56.296 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=78 uptime=27043.682762 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:35:58.302 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=79 uptime=27045.689423 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:00.296 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=80 uptime=27047.682773 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:02.414 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=81 uptime=27049.801479 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:04.297 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=82 uptime=27051.684422 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:06.297 Df Likeit Desktop[38941:e4add] [com.likeit.desktop:diagnostics] seq=83 uptime=27053.684123 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:08.320 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=84 uptime=27055.706903 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:10.294 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=85 uptime=27057.681053 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:10.480 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=86 uptime=27057.866880 capture-decision mode=always reduceMotion=true active=false visible=false playing=false desiredPID=nil
+2026-10-11 04:36:10.480 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=87 uptime=27057.866914 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:10.489 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=88 uptime=27057.875853 capture-decision mode=always reduceMotion=true active=false visible=false playing=nil desiredPID=nil
+2026-10-11 04:36:10.489 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=89 uptime=27057.875907 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:10.563 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=90 uptime=27057.950217 capture-decision mode=always reduceMotion=true active=false visible=false playing=false desiredPID=nil
+2026-10-11 04:36:10.563 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=91 uptime=27057.950236 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:11.054 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=92 uptime=27058.441271 capture-decision mode=always reduceMotion=true active=false visible=false playing=nil desiredPID=nil
+2026-10-11 04:36:11.054 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=93 uptime=27058.441302 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:11.129 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=94 uptime=27058.515784 capture-decision mode=always reduceMotion=true active=false visible=false playing=false desiredPID=nil
+2026-10-11 04:36:11.129 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=95 uptime=27058.515800 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:12.293 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=96 uptime=27059.680529 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:14.293 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=97 uptime=27061.680291 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:16.292 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=98 uptime=27063.679360 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:18.291 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=99 uptime=27065.678501 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:20.293 Df Likeit Desktop[38941:e528a] [com.likeit.desktop:diagnostics] seq=100 uptime=27067.680689 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:22.296 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=101 uptime=27069.682861 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:24.300 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=102 uptime=27071.687207 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:26.297 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=103 uptime=27073.683812 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:28.295 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=104 uptime=27075.682136 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:30.294 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=105 uptime=27077.680750 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:32.299 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=106 uptime=27079.686390 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:34.294 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=107 uptime=27081.681585 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:36.307 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=108 uptime=27083.694550 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:38.299 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=109 uptime=27085.686560 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:40.302 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=110 uptime=27087.689151 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:42.298 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=111 uptime=27089.685456 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:44.295 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=112 uptime=27091.682458 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:46.299 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=113 uptime=27093.685978 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:48.297 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=114 uptime=27095.683740 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:50.293 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=115 uptime=27097.680628 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:52.293 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=116 uptime=27099.680501 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:54.290 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=117 uptime=27101.677102 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:56.297 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=118 uptime=27103.684486 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:36:58.296 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=119 uptime=27105.682949 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:00.291 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=120 uptime=27107.678143 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:02.293 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=121 uptime=27109.679794 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:04.298 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=122 uptime=27111.685315 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:06.297 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=123 uptime=27113.684196 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:08.302 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=124 uptime=27115.689142 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:10.303 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=125 uptime=27117.690243 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:12.303 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=126 uptime=27119.690401 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:14.307 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=127 uptime=27121.694350 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:16.305 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=128 uptime=27123.691995 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:18.310 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=129 uptime=27125.697690 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:20.303 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=130 uptime=27127.690432 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:22.302 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=131 uptime=27129.689068 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:24.300 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=132 uptime=27131.686931 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:26.303 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=133 uptime=27133.690391 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:28.303 Df Likeit Desktop[38941:e615c] [com.likeit.desktop:diagnostics] seq=134 uptime=27135.690314 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:30.305 Df Likeit Desktop[38941:e615c] [com.likeit.desktop:diagnostics] seq=135 uptime=27137.692159 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:32.293 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=136 uptime=27139.680213 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:34.299 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=137 uptime=27141.686667 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:36.308 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=138 uptime=27143.695176 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:38.305 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=139 uptime=27145.691765 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:40.307 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=140 uptime=27147.694283 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:42.301 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=141 uptime=27149.688258 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:44.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=142 uptime=27151.690264 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:46.304 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=143 uptime=27153.691513 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:48.293 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=144 uptime=27155.680600 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:50.290 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=145 uptime=27157.676898 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:52.306 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=146 uptime=27159.692720 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:54.301 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=147 uptime=27161.688118 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:56.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=148 uptime=27163.689511 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:37:58.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=149 uptime=27165.689445 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:00.291 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=150 uptime=27167.677766 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:02.292 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=151 uptime=27169.679264 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:04.299 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=152 uptime=27171.685735 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:06.305 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=153 uptime=27173.692462 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:08.308 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=154 uptime=27175.694753 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:10.294 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=155 uptime=27177.681345 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:12.291 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=156 uptime=27179.678104 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:14.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=157 uptime=27181.689600 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:16.301 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=158 uptime=27183.688336 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:18.301 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=159 uptime=27185.688479 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:20.304 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=160 uptime=27187.691601 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:22.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=161 uptime=27189.689329 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:24.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=162 uptime=27191.689990 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:26.301 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=163 uptime=27193.688291 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:28.304 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=164 uptime=27195.690949 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:30.300 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=165 uptime=27197.686980 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:32.305 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=166 uptime=27199.692373 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:34.291 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=167 uptime=27201.677750 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:36.310 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=168 uptime=27203.697586 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:38.310 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=169 uptime=27205.697028 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:40.300 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=170 uptime=27207.687139 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:42.304 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=171 uptime=27209.691056 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:44.300 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=172 uptime=27211.687650 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:46.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=173 uptime=27213.689762 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:48.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=174 uptime=27215.689300 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:50.293 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=175 uptime=27217.680133 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:52.291 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=176 uptime=27219.678587 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:54.307 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=177 uptime=27221.694513 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:56.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=178 uptime=27223.689201 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:38:58.296 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=179 uptime=27225.682707 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:00.298 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=180 uptime=27227.684953 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:02.302 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=181 uptime=27229.689697 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:04.289 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=182 uptime=27231.676606 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:06.299 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=183 uptime=27233.686666 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:08.305 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=184 uptime=27235.692416 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:10.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=185 uptime=27237.689907 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:12.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=186 uptime=27239.690511 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:14.311 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=187 uptime=27241.698134 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:16.306 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=188 uptime=27243.693307 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:18.500 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=189 uptime=27245.887518 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:20.303 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=190 uptime=27247.690101 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:22.294 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=191 uptime=27249.681320 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:24.292 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=192 uptime=27251.679340 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:25.655 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=193 uptime=27253.042374 capture-decision mode=always reduceMotion=true active=true visible=true playing=false desiredPID=nil
+2026-10-11 04:39:25.655 Df Likeit Desktop[38941:e5ef6] [com.likeit.desktop:diagnostics] seq=194 uptime=27253.042452 capture-release reason=desired-pid-change generation=2
+2026-10-11 04:39:25.703 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=195 uptime=27253.090560 exit-request source=escape modifiers=0
+2026-10-11 04:39:25.707 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=196 uptime=27253.094193 exit-entry applicationShouldTerminate alreadyTerminating=false
+2026-10-11 04:39:25.752 Df Likeit Desktop[38941:e5501] [com.likeit.desktop:diagnostics] seq=197 uptime=27253.139195 capture-release reason=shutdown generation=2
+2026-10-11 04:39:25.757 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=198 uptime=27253.144272 exit-complete source=audio-stop
+2026-10-11 04:39:25.759 Df Likeit Desktop[38941:e3e3c] [com.likeit.desktop:diagnostics] seq=199 uptime=27253.145759 applicationWillTerminate
+

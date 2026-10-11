@@ -1,0 +1,21 @@
+{
+  "firstVisible" : 1.7083333659684286e-05,
+  "frames" : [
+    "{\n    Height = 1169;\n    Width = 1800;\n    X = 0;\n    Y = 0;\n}"
+  ],
+  "lastVisible" : 19.98401133333391,
+  "observedPIDs" : [
+    7006
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        7006
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 1.7083333659684286e-05
+    }
+  ],
+  "visibleSamples" : 627
+}

@@ -1,0 +1,18 @@
+{
+  "commit": "d17204889981eec8c59c6a2843d1ab10b9fda91a",
+  "installedFiles": {
+    "Contents/Info.plist": true,
+    "Contents/MacOS/Likeit Desktop": true,
+    "Contents/Resources/LICENSE-mediaremote-adapter": true,
+    "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": true,
+    "Contents/Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter": true,
+    "Contents/Resources/MediaRemoteAdapter.framework/Resources/Info.plist": true,
+    "Contents/Resources/MediaRemoteAdapter.framework/Resources/LICENSE": true,
+    "Contents/Resources/MediaRemoteAdapter.framework/_CodeSignature/CodeResources": true,
+    "Contents/Resources/mediaremote-adapter.pl": true,
+    "Contents/_CodeSignature/CodeResources": true
+  },
+  "symlinks": [],
+  "signatureExit": 0,
+  "signatureOutput": ""
+}

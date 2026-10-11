@@ -1,0 +1,340 @@
+--- a/native/DesktopMain.swift
++++ b/native/DesktopMain.swift
+@@ -6,7 +6,7 @@
+     override var canBecomeKey: Bool { true }
+     override var canBecomeMain: Bool { true }
+     override func keyDown(with event: NSEvent) {
+-        if event.keyCode == 53 { NSApp.terminate(nil) } else { super.keyDown(with: event) }
++        if event.keyCode == 53 { desktopDiagnostic("exit-request source=escape modifiers=\(event.modifierFlags.rawValue)"); NSApp.terminate(nil) } else { super.keyDown(with: event) }
+     }
+ }
+ 
+@@ -22,13 +22,16 @@
+     private var mode = "off"
+     private var motionObserver: NSObjectProtocol?
+     private var lock: Int32 = -1
++    private var diagnosticDecision = ""
+ 
+     func applicationDidFinishLaunching(_ notification: Notification) {
++        desktopDiagnostic("app-launch pid=\(getpid())")
+         let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("com.likeit.desktop")
+         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+         lock = Darwin.open(directory.appendingPathComponent("desktop.lock").path, O_CREAT | O_RDWR | O_CLOEXEC | O_NOFOLLOW, 0o600)
+         guard lock >= 0, flock(lock, LOCK_EX | LOCK_NB) == 0 else {
+             NSRunningApplication.runningApplications(withBundleIdentifier: "com.likeit.desktop").first(where: { $0.processIdentifier != getpid() })?.activate(options: [])
++            desktopDiagnostic("exit-request source=startup-lock errno=\(errno)")
+             NSApp.terminate(nil)
+             return
+         }
+@@ -69,13 +72,13 @@
+ 
+     private func showWindow() {
+         let pointer = NSEvent.mouseLocation
+-        guard let screen = NSScreen.screens.first(where: { NSMouseInRect(pointer, $0.frame, false) }) ?? NSScreen.main else { NSApp.terminate(nil); return }
++        guard let screen = NSScreen.screens.first(where: { NSMouseInRect(pointer, $0.frame, false) }) ?? NSScreen.main else { desktopDiagnostic("exit-request source=startup-no-screen"); NSApp.terminate(nil); return }
+         let window = DesktopWindow(contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+         window.isReleasedWhenClosed = false
+         window.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
+         window.backgroundColor = .black
+         window.delegate = self
+-        window.contentView = NSHostingView(rootView: DesktopView(model: model, exit: { NSApp.terminate(nil) }))
++        window.contentView = NSHostingView(rootView: DesktopView(model: model, exit: { desktopDiagnostic("exit-request source=exit-button"); NSApp.terminate(nil) }))
+         self.window = window
+         updateMotion()
+         activate()
+@@ -83,7 +86,8 @@
+ 
+     private func updateMotion() {
+         guard !terminating else { return }
+-        let enabled = desktopMotionEnabled(mode: mode, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
++        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
++        let enabled = desktopMotionEnabled(mode: mode, reduceMotion: reduceMotion)
+         let visible = NSApp.isActive && window?.occlusionState.contains(.visible) == true
+         session?.setVisible(visible)
+         allowAudio = enabled && visible && snapshot?.playing == true
+@@ -91,6 +95,12 @@
+         if !allowAudio {
+             model.low = 0; model.mid = 0; model.high = 0
+             model.audioStatus = reason
++        }
++        let diagnosticMode = ["system", "always", "off"].contains(mode) ? mode : "invalid"
++        let decision = "mode=\(diagnosticMode) reduceMotion=\(reduceMotion) active=\(NSApp.isActive) visible=\(visible) playing=\(snapshot?.playing.description ?? "nil") desiredPID=\(allowAudio ? snapshot?.pid.description ?? "nil" : "nil")"
++        if decision != diagnosticDecision {
++            diagnosticDecision = decision
++            desktopDiagnostic("capture-decision " + decision)
+         }
+         audio.update(pid: allowAudio ? snapshot?.pid : nil, reason: reason)
+     }
+@@ -106,8 +116,9 @@
+     }
+ 
+     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { activate(); return false }
+-    func windowShouldClose(_ sender: NSWindow) -> Bool { NSApp.terminate(nil); return false }
++    func windowShouldClose(_ sender: NSWindow) -> Bool { desktopDiagnostic("exit-request source=windowShouldClose"); NSApp.terminate(nil); return false }
+     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
++        desktopDiagnostic("exit-entry applicationShouldTerminate alreadyTerminating=\(terminating)")
+         guard !terminating else { return .terminateLater }
+         terminating = true
+         let restore = NSApp.isActive
+@@ -119,13 +130,14 @@
+         window = nil
+         if restore, let previousApp, !previousApp.isTerminated { previousApp.activate(options: []) }
+         // Hide immediately, allow orderly HAL teardown, and never let a pending system prompt trap exit.
+-        let deadline = DispatchWorkItem { sender.reply(toApplicationShouldTerminate: true) }
++        let deadline = DispatchWorkItem { desktopDiagnostic("exit-complete source=deadline"); sender.reply(toApplicationShouldTerminate: true) }
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: deadline)
+-        audio.stop { deadline.cancel(); sender.reply(toApplicationShouldTerminate: true) }
++        audio.stop { desktopDiagnostic("exit-complete source=audio-stop"); deadline.cancel(); sender.reply(toApplicationShouldTerminate: true) }
+         return .terminateLater
+     }
+ 
+     func applicationWillTerminate(_ notification: Notification) {
++        desktopDiagnostic("applicationWillTerminate")
+         if lock >= 0 { Darwin.close(lock); lock = -1 }
+     }
+ 
+--- a/native/DesktopAudio.swift
++++ b/native/DesktopAudio.swift
+@@ -23,6 +23,9 @@
+     private var failed = false
+     private var stopped = false
+     private var lastRebuild = 0.0
++    private var captureGeneration = 0
++    private var diagnosticFirstPCM = false
++    private var diagnosticUpdate = ""
+     private var smoothed = AudioFeatures(rms: 0, low: 0, mid: 0, high: 0)
+     var output: ((AudioFeatures, String) -> Void)?
+ 
+@@ -33,7 +36,13 @@
+         queue.async { [self] in
+             guard !stopped else { return }
+             desiredPID = pid
++            let update = "desiredPID=\(pid?.description ?? "nil") currentPID=\(currentPID?.description ?? "nil") failed=\(failed) generation=\(captureGeneration)"
++            if update != diagnosticUpdate {
++                diagnosticUpdate = update
++                desktopDiagnostic("capture-update " + update)
++            }
+             if pid == currentPID && pid != nil { return }
++            desktopDiagnostic("capture-release reason=desired-pid-change generation=\(captureGeneration)")
+             releaseCapture()
+             if let pid, !failed { start(pid) }
+             else { publish(.init(rms: 0, low: 0, mid: 0, high: 0), failed ? "实时律动不可用 · 请检查系统音频权限或输出设备，退出后重开" : reason) }
+@@ -42,6 +51,7 @@
+ 
+     func stop(completion: @escaping () -> Void) {
+         queue.async { [self] in
++            desktopDiagnostic("capture-release reason=shutdown generation=\(captureGeneration)")
+             stopped = true; desiredPID = nil; releaseCapture()
+             DispatchQueue.main.async(execute: completion)
+         }
+@@ -60,26 +70,40 @@
+     }
+ 
+     private func start(_ pid: pid_t) {
++        captureGeneration += 1
++        diagnosticFirstPCM = false
++        var stage = "validate-target-pid"
++        desktopDiagnostic("capture-start pid=\(pid) generation=\(captureGeneration)")
+         do {
+             guard neteasePID() == pid else { throw CaptureError.format }
+             var process = AudioObjectID(kAudioObjectUnknown)
+             var qualifier = pid
+             var property = address(kAudioHardwarePropertyTranslatePIDToProcessObject)
+             var size = UInt32(MemoryLayout<AudioObjectID>.size)
++            stage = "translate-pid-to-object"
+             try checked(AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &property, UInt32(MemoryLayout<pid_t>.size), &qualifier, &size, &process))
++            stage = "validate-process-object"
++            desktopDiagnostic("process-object id=\(process) generation=\(captureGeneration)")
+             guard process != kAudioObjectUnknown else { throw CaptureError.format }
+             var actualPID: pid_t = 0
+             var bundle: CFString = "" as CFString
++            stage = "read-process-pid"
+             try read(process, kAudioProcessPropertyPID, into: &actualPID)
++            stage = "read-process-bundle"
+             try read(process, kAudioProcessPropertyBundleID, into: &bundle)
++            stage = "validate-process-identity"
+             guard actualPID == pid, bundle as String == neteaseBundle else { throw CaptureError.format }
+             let description = CATapDescription(stereoMixdownOfProcesses: [process])
+             description.name = "Likeit NetEase visualization"
+             description.isPrivate = true
+             description.muteBehavior = .unmuted
++            stage = "create-tap"
+             try checked(AudioHardwareCreateProcessTap(description, &tap))
+             var format = AudioStreamBasicDescription()
++            stage = "read-tap-format"
+             try read(tap, kAudioTapPropertyFormat, into: &format)
++            stage = "validate-tap-format"
++            desktopDiagnostic("tap-format tap=\(tap) rate=\(format.mSampleRate) id=\(format.mFormatID) flags=\(format.mFormatFlags) bits=\(format.mBitsPerChannel) channels=\(format.mChannelsPerFrame) bytesPerFrame=\(format.mBytesPerFrame) generation=\(captureGeneration)")
+             guard format.mFormatID == kAudioFormatLinearPCM, format.mFormatFlags & kAudioFormatFlagIsFloat != 0,
+                   format.mFormatFlags & kAudioFormatFlagIsBigEndian == 0, format.mBitsPerChannel == 32,
+                   format.mChannelsPerFrame > 0, format.mChannelsPerFrame <= 2, format.mSampleRate.isFinite, format.mSampleRate > 0,
+@@ -92,27 +116,43 @@
+                 kAudioAggregateDeviceTapAutoStartKey: false,
+                 kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: description.uuid.uuidString, kAudioSubTapDriftCompensationKey: true]]
+             ]
++            stage = "create-aggregate"
+             try checked(AudioHardwareCreateAggregateDevice(composition as CFDictionary, &device))
++            stage = "create-io-proc"
+             try checked(AudioDeviceCreateIOProcIDWithBlock(&ioProc, device, ioQueue) { [weak self] _, input, _, _, _ in
+                 self?.receive(input)
+             })
+             currentPID = pid
+             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 如有系统音频授权提示，请由你选择")
++            stage = "device-start"
++            desktopDiagnostic("device-start begin device=\(device) tap=\(tap) generation=\(captureGeneration)")
+             try checked(AudioDeviceStart(device, ioProc))
++            desktopDiagnostic("device-start success generation=\(captureGeneration)")
+             for (object, selector) in [
+                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice),
+                 (AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyServiceRestarted),
+                 (process, kAudioProcessPropertyDevices),
+                 (tap, kAudioTapPropertyFormat),
+                 (device, kAudioDevicePropertyDeviceIsAlive)
+-            ] { try listen(object, selector) }
++            ] {
++                stage = "add-listener object=\(object) selector=\(selector)"
++                try listen(object, selector)
++            }
+             let timer = DispatchSource.makeTimerSource(queue: queue)
+             timer.schedule(deadline: .now(), repeating: 1.0 / 30, leeway: .milliseconds(3))
+             timer.setEventHandler { [weak self] in self?.analyze() }
+             self.timer = timer
+             timer.resume()
++            desktopDiagnostic("capture-start ready generation=\(captureGeneration)")
+             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云实时音频 · 首次使用请允许系统音频访问")
+         } catch {
++            let detail: String
++            switch error {
++            case CaptureError.unavailable(let status): detail = diagnosticStatus(status)
++            case CaptureError.format: detail = "guard-rejected"
++            default: detail = "unexpected-error"
++            }
++            desktopDiagnostic("failure-latch source=start stage=\(stage) \(detail) pid=\(pid) tap=\(tap) device=\(device) generation=\(captureGeneration)")
+             failed = true
+             releaseCapture()
+             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "实时律动不可用 · 系统音频访问或输出设备未就绪")
+@@ -146,18 +186,23 @@
+     }
+ 
+     private func analyze() {
+-        guard let pid = currentPID, neteasePID() == pid else { releaseCapture(); publish(.init(rms: 0, low: 0, mid: 0, high: 0), "网易云来源已变化"); return }
++        guard let pid = currentPID, neteasePID() == pid else { desktopDiagnostic("capture-release reason=target-pid-changed generation=\(captureGeneration)"); releaseCapture(); publish(.init(rms: 0, low: 0, mid: 0, high: 0), "网易云来源已变化"); return }
+         let now = ProcessInfo.processInfo.systemUptime
+         guard bufferLock.try() else { return }
+         let receivedPCM = lastPCM > 0
+         let age = now - lastPCM
+         let samples = filled == 2048 && age < 0.15 ? (0..<2048).map { buffer[(cursor + $0) % 2048] } : []
+         bufferLock.unlock()
++        if receivedPCM && !diagnosticFirstPCM {
++            diagnosticFirstPCM = true
++            desktopDiagnostic("first-pcm age=\(age) pid=\(pid) generation=\(captureGeneration)")
++        }
+         if !receivedPCM {
+             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "等待网易云音频 · 可检查系统音频权限或直接退出")
+             return
+         }
+         if age > 2 {
++            desktopDiagnostic("failure-latch source=pcm-gap age=\(age) pid=\(pid) generation=\(captureGeneration)")
+             failed = true
+             releaseCapture()
+             publish(.init(rms: 0, low: 0, mid: 0, high: 0), "未收到音频 · 可能未授权、静音或设备不可用；退出后可重试")
+@@ -171,7 +216,11 @@
+ 
+     private func listen(_ object: AudioObjectID, _ selector: AudioObjectPropertySelector) throws {
+         var property = address(selector)
+-        let callback: AudioObjectPropertyListenerBlock = { [weak self] _, _ in self?.routeChanged() }
++        let callback: AudioObjectPropertyListenerBlock = { [weak self] _, _ in
++            guard let self else { return }
++            desktopDiagnostic("route-event object=\(object) selector=\(selector) generation=\(self.captureGeneration)")
++            self.routeChanged()
++        }
+         try checked(AudioObjectAddPropertyListenerBlock(object, &property, queue, callback))
+         listeners.append((object, property, callback))
+     }
+@@ -181,8 +230,9 @@
+         let now = ProcessInfo.processInfo.systemUptime
+         // At most one reconstruction per second. start() latches an actual failure;
+         // successful route changes never exhaust a lifetime attempt budget.
+-        guard now - lastRebuild > 1 else { return }
++        guard now - lastRebuild > 1 else { desktopDiagnostic("route-suppressed reason=rate-limit generation=\(captureGeneration)"); return }
+         lastRebuild = now
++        desktopDiagnostic("capture-release reason=route-change generation=\(captureGeneration)")
+         releaseCapture()
+         publish(.init(rms: 0, low: 0, mid: 0, high: 0), "音频设备变化 · 正在重新核对")
+         if let pid = desiredPID, !failed, !stopped { start(pid) }
+@@ -192,14 +242,23 @@
+     private func releaseCapture() {
+         timer?.cancel(); timer = nil
+         if device != kAudioObjectUnknown, let ioProc {
+-            AudioDeviceStop(device, ioProc)
+-            AudioDeviceDestroyIOProcID(device, ioProc)
++            let stopStatus = AudioDeviceStop(device, ioProc)
++            let destroyStatus = AudioDeviceDestroyIOProcID(device, ioProc)
++            desktopDiagnostic("capture-release device=\(device) stop=\(diagnosticStatus(stopStatus)) destroyIO=\(diagnosticStatus(destroyStatus)) generation=\(captureGeneration)")
+         }
+         ioProc = nil
+         for (object, var property, callback) in listeners { AudioObjectRemovePropertyListenerBlock(object, &property, queue, callback) }
+         listeners.removeAll()
+-        if device != kAudioObjectUnknown { AudioHardwareDestroyAggregateDevice(device); device = AudioObjectID(kAudioObjectUnknown) }
+-        if tap != kAudioObjectUnknown { AudioHardwareDestroyProcessTap(tap); tap = AudioObjectID(kAudioObjectUnknown) }
++        if device != kAudioObjectUnknown {
++            let status = AudioHardwareDestroyAggregateDevice(device)
++            desktopDiagnostic("destroy-aggregate id=\(device) \(diagnosticStatus(status)) generation=\(captureGeneration)")
++            device = AudioObjectID(kAudioObjectUnknown)
++        }
++        if tap != kAudioObjectUnknown {
++            let status = AudioHardwareDestroyProcessTap(tap)
++            desktopDiagnostic("destroy-tap id=\(tap) \(diagnosticStatus(status)) generation=\(captureGeneration)")
++            tap = AudioObjectID(kAudioObjectUnknown)
++        }
+         currentPID = nil
+         bufferLock.lock()
+         cursor = 0; filled = 0; lastPCM = 0
+--- a/native/DesktopDiagnostics.swift
++++ b/native/DesktopDiagnostics.swift
+@@ -0,0 +1,26 @@
++import Foundation
++import OSLog
++
++private enum DesktopDiagnostics {
++    static let lock = NSLock()
++    static let logger = Logger(subsystem: "com.likeit.desktop", category: "diagnostics")
++    static var count = 0
++}
++
++func desktopDiagnostic(_ message: String) {
++#if LIKEIT_AUDIO_DIAGNOSTICS
++    DesktopDiagnostics.lock.lock()
++    defer { DesktopDiagnostics.lock.unlock() }
++    guard DesktopDiagnostics.count < 256 else { return }
++    DesktopDiagnostics.count += 1
++    let event = DesktopDiagnostics.count == 256 ? "diagnostics-truncated limit=256" : message
++    DesktopDiagnostics.logger.notice("seq=\(DesktopDiagnostics.count, privacy: .public) uptime=\(ProcessInfo.processInfo.systemUptime, privacy: .public) \(event, privacy: .public)")
++#endif
++}
++
++func diagnosticStatus(_ status: Int32) -> String {
++    let value = UInt32(bitPattern: status)
++    let bytes = [24, 16, 8, 0].map { UInt8((value >> $0) & 255) }
++    let fourCC = bytes.allSatisfy { (32...126).contains($0) } ? String(bytes: bytes, encoding: .ascii)! : "nonprintable"
++    return "status=\(status) hex=\(String(format: "%08X", value)) fourCC=\(fourCC)"
++}
+--- a/scripts/build-desktop.py
++++ b/scripts/build-desktop.py
+@@ -56,7 +56,7 @@
+             "CFBundleURLTypes": [{"CFBundleURLName": "com.likeit.desktop.open", "CFBundleURLSchemes": ["likeit-desktop"]}],
+         }, output)
+     for arch in ["arm64", "x86_64"]:
+-        subprocess.run(["xcrun", "swiftc", "-O", "-parse-as-library", "-target", arch + "-apple-macosx14.2", "-sdk", sdk, *map(str, sources), "-framework", "AppKit", "-framework", "SwiftUI", "-framework", "CoreAudio", "-framework", "Accelerate", "-o", str(stage / arch)], check=True)
++        subprocess.run(["xcrun", "swiftc", "-O", "-D", "LIKEIT_AUDIO_DIAGNOSTICS", "-parse-as-library", "-target", arch + "-apple-macosx14.2", "-sdk", sdk, *map(str, sources), "-framework", "AppKit", "-framework", "SwiftUI", "-framework", "CoreAudio", "-framework", "Accelerate", "-o", str(stage / arch)], check=True)
+     binary = contents / "MacOS/Likeit Desktop"
+     subprocess.run(["xcrun", "lipo", "-create", str(stage / "arm64"), str(stage / "x86_64"), "-output", str(binary)], check=True)
+     entitlements = stage / "desktop.entitlements"
+@@ -76,6 +76,6 @@
+     "buildCommand": "python3 scripts/build-desktop.py",
+     "adapterLayout": "flat framework, no symlinks; install name adjusted before signing",
+     "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": "ad-hoc, hardened runtime",
+-    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__)]},
++    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__).resolve()]},
+     "files": {str(p.relative_to(DESTINATION)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(DESTINATION.rglob("*")) if p.is_file() and not p.is_symlink()},
+ }, indent=2) + "\n")

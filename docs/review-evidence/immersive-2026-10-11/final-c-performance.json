@@ -1,0 +1,32 @@
+[
+  {
+    "seconds": 0.0,
+    "cpu": 40.6,
+    "rssKiB": 128560
+  },
+  {
+    "seconds": 5.02,
+    "cpu": 45.5,
+    "rssKiB": 145024
+  },
+  {
+    "seconds": 10.02,
+    "cpu": 39.3,
+    "rssKiB": 128512
+  },
+  {
+    "seconds": 15.03,
+    "cpu": 39.6,
+    "rssKiB": 128448
+  },
+  {
+    "seconds": 20.04,
+    "cpu": 0.7,
+    "rssKiB": 109008
+  },
+  {
+    "seconds": 25.04,
+    "cpu": 6.5,
+    "rssKiB": 109184
+  }
+]

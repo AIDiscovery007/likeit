@@ -1,0 +1,28 @@
+{
+  "firstVisible" : 1.8333332263864577e-05,
+  "frames" : [
+    "{\n    Height = 1169;\n    Width = 1800;\n    X = 0;\n    Y = 0;\n}"
+  ],
+  "lastVisible" : 2.9056706250012212,
+  "observedPIDs" : [
+    4640
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        4640
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 1.8333332263864577e-05
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 2.939208083334961
+    }
+  ],
+  "visibleSamples" : 87
+}

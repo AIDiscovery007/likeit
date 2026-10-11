@@ -1,0 +1,50 @@
+[
+  {
+    "case" : "valid",
+    "lines" : 2,
+    "passed" : true,
+    "requests" : [
+      "\/api\/search\/get",
+      "\/api\/song\/detail",
+      "\/api\/song\/lyric"
+    ]
+  },
+  {
+    "case" : "blank-title",
+    "lines" : 2,
+    "passed" : false,
+    "requests" : [
+      "\/api\/search\/get",
+      "\/api\/song\/detail",
+      "\/api\/song\/lyric"
+    ]
+  },
+  {
+    "case" : "blank-album",
+    "lines" : 2,
+    "passed" : false,
+    "requests" : [
+      "\/api\/search\/get",
+      "\/api\/song\/detail",
+      "\/api\/song\/lyric"
+    ]
+  },
+  {
+    "case" : "blank-artist",
+    "lines" : 2,
+    "passed" : false,
+    "requests" : [
+      "\/api\/search\/get",
+      "\/api\/song\/detail",
+      "\/api\/song\/lyric"
+    ]
+  },
+  {
+    "case" : "missing-artist",
+    "lines" : 0,
+    "passed" : true,
+    "requests" : [
+      "\/api\/search\/get"
+    ]
+  }
+]

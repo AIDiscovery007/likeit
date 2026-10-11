@@ -1,0 +1,66 @@
+[
+  {
+    "case" : "P-nil-P",
+    "passed" : false
+  },
+  {
+    "case" : "P-nil-P cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "P-nil",
+    "passed" : false
+  },
+  {
+    "case" : "P-nil cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "P-stop-P",
+    "passed" : false
+  },
+  {
+    "case" : "P-stop-P cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "zero-tap",
+    "passed" : false
+  },
+  {
+    "case" : "zero-tap cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "zero-device",
+    "passed" : false
+  },
+  {
+    "case" : "zero-device cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "nil-io",
+    "passed" : false
+  },
+  {
+    "case" : "nil-io cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "error",
+    "passed" : true
+  },
+  {
+    "case" : "error cleanup",
+    "passed" : true
+  },
+  {
+    "case" : "stale listener cannot rebuild new capture",
+    "passed" : false
+  },
+  {
+    "case" : "stale listener cleanup",
+    "passed" : true
+  }
+]

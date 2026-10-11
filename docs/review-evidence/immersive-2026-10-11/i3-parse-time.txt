@@ -1,0 +1,2 @@
+1000 lines, 19889 bytes, 0.03413620833453024 seconds, outputGroups=1
+8000 lines, 166889 bytes, 1.116893375001382 seconds, outputGroups=1

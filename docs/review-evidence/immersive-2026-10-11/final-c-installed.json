@@ -1,0 +1,11 @@
+{
+  "commit": "6dce422d059d69b1181d7e9f6be8ff965c841879",
+  "sourceHashes": 8,
+  "installedHashes": 10,
+  "symlinks": 0,
+  "installedDeepStrictSignature": true,
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "firstVisible" : 2.5624998670537025e-05,
+  "frames" : [
+    "{\n    Height = 1440;\n    Width = 2560;\n    X = \"-277\";\n    Y = \"-1440\";\n}",
+    "{\n    Height = 1440;\n    Width = 2560;\n    X = \"-277\";\n    Y = \"-2838\";\n}"
+  ],
+  "lastVisible" : 29.982032416664879,
+  "observedPIDs" : [
+    26733,
+    28516
+  ],
+  "reduceMotion" : true,
+  "transitions" : [
+    {
+      "desktopPIDs" : [
+        26733
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 2.5624998670537025e-05
+    },
+    {
+      "desktopPIDs" : [
+        26733
+      ],
+      "front" : "com.apple.finder",
+      "seconds" : 4.4526673333311919
+    },
+    {
+      "desktopPIDs" : [
+        26733
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 13.136484583334095
+    },
+    {
+      "desktopPIDs" : [
+        26733
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 13.294091166666476
+    },
+    {
+      "desktopPIDs" : [
+
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 13.413372833332687
+    },
+    {
+      "desktopPIDs" : [
+        28516
+      ],
+      "front" : "com.openai.codex",
+      "seconds" : 21.248194916664943
+    },
+    {
+      "desktopPIDs" : [
+        28516
+      ],
+      "front" : "com.likeit.desktop",
+      "seconds" : 21.414702208334347
+    }
+  ],
+  "visibleSamples" : 629
+}
