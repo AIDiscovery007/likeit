@@ -59,7 +59,7 @@
 
 ### 先体验音乐桌面
 
-1. 在 [Releases](https://github.com/AIDiscovery007/likeit/releases/latest) 下载 **Likeit-Desktop-v0.1.1-macos-universal.zip**。
+1. 在 [Releases](https://github.com/AIDiscovery007/likeit/releases/latest) 下载 **Likeit-Desktop-v0.1.2-macos-universal.zip**。
 2. 解压，把 **Likeit Desktop.app** 拖入“应用程序”，打开网易云并播放歌曲，再打开 Likeit Desktop。
 3. 在右上角选择“透明音响”和喜欢的场景。允许系统音频访问后，音响会随音乐律动。
 
@@ -67,7 +67,7 @@
 
 ### 加上 Raycast 一键喜欢
 
-需要 **Raycast、Node.js 和 npm**。下载 Release 中的 **Likeit-Raycast-v0.1.1.zip** 并解压，在项目目录运行：
+需要 **Raycast、Node.js 和 npm**。下载 Release 中的 **Likeit-Raycast-v0.1.2.zip** 并解压，在项目目录运行：
 
 ```sh
 npm ci

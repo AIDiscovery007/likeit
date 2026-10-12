@@ -12,8 +12,8 @@
   "signing": "ad-hoc, hardened runtime",
   "designatedRequirements": {
     "app": {
-      "arm64": "cdhash H\"044bf6d378246103067456b48a2db5a6d8e71e69\"",
-      "x86_64": "cdhash H\"c54fd91aab4fce6c7bb77510a61619f326173898\""
+      "arm64": "cdhash H\"32de00b579240695dc9fbc66b8b36a11ee3977bd\"",
+      "x86_64": "cdhash H\"ef22ceda960ea2526586f23acc520aaf4d1c2404\""
     },
     "framework": {
       "arm64": "cdhash H\"a7a5d506ef57bd15d5c22640f4f6fd05c54dd1cb\"",
@@ -30,15 +30,15 @@
     "native/DesktopMedia.swift": "33593ac7b553beac9e4943751e73963dfb39150e2f0c8e6432bb1782ab144f5c",
     "native/DesktopOpenAPILyrics.swift": "a210811bc74a3f8b6f009fabb6178155e6724205298567233acd12077f04cd93",
     "native/DesktopSession.swift": "b94529e34b2864c1788f31290e9b32a415218bda730aeebe9bbf4d2f1f2adea5",
-    "native/DesktopView.swift": "a433ff9c3d46b28c58dece059787cd1af74a0dd3c9f5268d40780af2057ac377",
+    "native/DesktopView.swift": "c6419a1dfb46170bb5e8eb596ce4ad5221a62b15d548f264ba51489d8f98e8f3",
     "native/ImmersiveCore.swift": "a55afb6efc7a277d09f2d4bb8aa1de3f5143da4d5f7bb6ea479593429984899d",
     "native/OpenAPILyricCore.swift": "fd41a47516ac1b59cce173e11ef9d0b3ad5f7a7dbdf6e8c54d4f06dfb9c7b845",
-    "scripts/build-desktop.py": "4d49caf8c7e37cbf034d27d70ffbac19ba84687b9bd27cddd4974c984f4c79ad",
+    "scripts/build-desktop.py": "7a80722eb391996aefc053d5476eedb54ea1098bd85ec15688496d98eb5e20b5",
     "assets/branding/likeit-logo-09.png": "4dfe77d1fa433694d6d1eea245e0ad81b34971b396351230e2fcea7713f2603f"
   },
   "files": {
     "Contents/Info.plist": "998a76c89787071564f550f6411e4de1487fac81e85697af378dc4243a5a8710",
-    "Contents/MacOS/Likeit Desktop": "9b05ad0e52dd2d7caa9fa5daa3f429a0c572c39778dcf39d900fd692a04f6d95",
+    "Contents/MacOS/Likeit Desktop": "2287886a0815ef26998170afb9c7c23eae8c1e8580bd015c18ce3e938eb057c5",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/Likeit.icns": "0694a7d624b5c5a6312165b535cb0017ee15513704c195e7983c14dfcdcf7887",
     "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",

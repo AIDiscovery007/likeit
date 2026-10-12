@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
+LOGO = ROOT / "assets/branding/likeit-logo-09.png"
 DESTINATION = ROOT / "assets/native/Likeit Desktop.app"
 identity = os.environ.get("LIKEIT_DESKTOP_SIGNING_IDENTITY")
 if identity is None:
@@ -36,6 +37,7 @@ for name, expected in adapter["sha256"].items():
             raise SystemExit(f"Bundled adapter checksum mismatch: {name}")
 sdk = subprocess.check_output(["xcrun", "--show-sdk-path"], text=True).strip()
 sources = sorted((ROOT / "native").glob("Desktop*.swift")) + [ROOT / "native/ImmersiveCore.swift", ROOT / "native/OpenAPILyricCore.swift"]
+subprocess.run(["sips", "-z", "512", "512", str(LOGO), "--out", str(ROOT / "assets/extension-icon.png")], check=True, stdout=subprocess.DEVNULL)
 with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     stage = Path(directory)
     app = stage / "Likeit Desktop.app"
@@ -48,7 +50,7 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     for size in [16, 32, 128, 256, 512]:
         for scale in [1, 2]:
             filename = f"icon_{size}x{size}{'@2x' if scale == 2 else ''}.png"
-            subprocess.run(["sips", "-z", str(size * scale), str(size * scale), str(ROOT / "assets/branding/likeit-logo-09.png"), "--out", str(iconset / filename)], check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(["sips", "-z", str(size * scale), str(size * scale), str(LOGO), "--out", str(iconset / filename)], check=True, stdout=subprocess.DEVNULL)
     subprocess.run(["iconutil", "-c", "icns", str(iconset), "-o", str(resources / "Likeit.icns")], check=True)
     # The app owns its read-only adapter and resolves it from Bundle.main.
     for name in ["MediaRemoteAdapter.framework", "mediaremote-adapter.pl", "LICENSE-mediaremote-adapter"]:
@@ -113,6 +115,6 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     "adapterLayout": "flat framework, no symlinks; install name adjusted before signing",
     "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": signing + ", hardened runtime",
     "designatedRequirements": requirements,
-    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__), ROOT / "assets/branding/likeit-logo-09.png"]},
+    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__), LOGO]},
     "files": {str(p.relative_to(DESTINATION)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(DESTINATION.rglob("*")) if p.is_file() and not p.is_symlink()},
 }, indent=2) + "\n")

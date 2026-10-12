@@ -47,12 +47,12 @@ export default function Command() {
       <List.Item
         title="沉浸模式"
         subtitle="全屏音乐桌面 · Esc 即可退出"
-        icon={Icon.Music}
+        icon="extension-icon.png"
         actions={
           <ActionPanel>
-            <Action title="打开沉浸模式" onAction={() => openDesktop()} />
-            <Action title="打开经典音响" onAction={() => openDesktop("classic")} />
-            <Action title="打开透明音响" onAction={() => openDesktop("glass")} />
+            <Action title="打开沉浸模式" icon="extension-icon.png" onAction={() => openDesktop()} />
+            <Action title="打开经典音响" icon="extension-icon.png" onAction={() => openDesktop("classic")} />
+            <Action title="打开透明音响" icon="extension-icon.png" onAction={() => openDesktop("glass")} />
           </ActionPanel>
         }
       />

@@ -94,6 +94,8 @@ npm run build
 npm run lint
 ```
 
+品牌图标统一来自 `assets/branding/likeit-logo-09.png`；桌面构建会同时生成 Raycast 的 `extension-icon.png` 和 macOS 的 `Likeit.icns`，桌面两种主题直接读取包内图标。
+
 原生脚本先核对已固定 adapter 的摘要，再编译桌面；版本、源码及包内文件摘要记录于 `assets/native/DESKTOP-BUILD.json`。app 自带只读 adapter 与许可证，通过实际 bundle 位置寻找资源，不依赖开发目录。桌面内的 framework 使用无符号链接的平铺布局，构建阶段调整库标识并签名，避免 Raycast 复制时把版本链接改成开发目录的绝对链接；安装后无需重签名。`npm run build` 会更新本机 Raycast 的扩展产物，应避免与另一个验收会话同时运行。GitHub 发布入口见[项目主页](../README.md)。当前二进制采用 ad-hoc 签名，尚未公证。
 
 歌词搜索会将曲名及已知艺人发送给 `music.163.com`；恢复路径忽略无关坏记录，最多取 100 条搜索结果并尝试排名最前的 3 个候选，先核对详情再取歌词。曲名及已知歌手必须相符，专辑和时长只用于排序，同分按 ID 稳定排序。不会拆分 AC/DC 或移除 Live / Remix 后缀，也不会把播放器 UUID 当成网易 ID。候选歌词会标注实际来源及匹配到的曲名、歌手，不承诺录音版本唯一。

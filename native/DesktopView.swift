@@ -82,9 +82,17 @@ final class DesktopModel: ObservableObject {
 }
 
 struct DesktopView: View {
+    private static let logo = Bundle.main.url(forResource: "Likeit", withExtension: "icns").flatMap(NSImage.init(contentsOf:))
     @ObservedObject var model: DesktopModel
     let retryAudio: () -> Void
     let exit: () -> Void
+
+    @ViewBuilder private var brandIcon: some View {
+        if let logo = Self.logo {
+            Image(nsImage: logo).resizable().scaledToFit().frame(width: 26, height: 26)
+                .clipShape(RoundedRectangle(cornerRadius: 6)).accessibilityHidden(true)
+        }
+    }
 
     var body: some View {
         if model.theme == .glass {
@@ -127,6 +135,7 @@ struct DesktopView: View {
                 }
                 VStack {
                     HStack {
+                        brandIcon
                         Text("LIKEIT / MUSIC ROOM").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(3).foregroundStyle(.white.opacity(0.55))
                         Spacer()
                         themeSelector
@@ -175,6 +184,7 @@ struct DesktopView: View {
                 glassPanel(size: size)
                 VStack(spacing: 20) {
                     HStack(spacing: 10) {
+                        brandIcon
                         Text("LIKEIT").font(.system(size: 12, weight: .medium, design: .monospaced)).tracking(2)
                             .foregroundStyle(palette.ink.opacity(0.65)).lineLimit(1).minimumScaleFactor(0.7)
                         Spacer(minLength: 16)
