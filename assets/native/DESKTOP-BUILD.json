@@ -12,8 +12,8 @@
   "signing": "ad-hoc, hardened runtime",
   "designatedRequirements": {
     "app": {
-      "arm64": "cdhash H\"a06bc50d7cf1e152f9cc09d49e3a1b36dc60c175\"",
-      "x86_64": "cdhash H\"b782c111ee3bd680315d0ec5a8cffbd38a20c954\""
+      "arm64": "cdhash H\"044bf6d378246103067456b48a2db5a6d8e71e69\"",
+      "x86_64": "cdhash H\"c54fd91aab4fce6c7bb77510a61619f326173898\""
     },
     "framework": {
       "arm64": "cdhash H\"a7a5d506ef57bd15d5c22640f4f6fd05c54dd1cb\"",
@@ -33,18 +33,20 @@
     "native/DesktopView.swift": "a433ff9c3d46b28c58dece059787cd1af74a0dd3c9f5268d40780af2057ac377",
     "native/ImmersiveCore.swift": "a55afb6efc7a277d09f2d4bb8aa1de3f5143da4d5f7bb6ea479593429984899d",
     "native/OpenAPILyricCore.swift": "fd41a47516ac1b59cce173e11ef9d0b3ad5f7a7dbdf6e8c54d4f06dfb9c7b845",
-    "scripts/build-desktop.py": "29239519f9d062a32508b64cd2bbfd42eae609fe59617f42d539f3af6e0942bb"
+    "scripts/build-desktop.py": "4d49caf8c7e37cbf034d27d70ffbac19ba84687b9bd27cddd4974c984f4c79ad",
+    "assets/branding/likeit-logo-09.png": "4dfe77d1fa433694d6d1eea245e0ad81b34971b396351230e2fcea7713f2603f"
   },
   "files": {
-    "Contents/Info.plist": "2313cf00a3199f5866080bbe1f775e133ee58479c8601e5558aae3a4ca060a4b",
-    "Contents/MacOS/Likeit Desktop": "15bf0ed78b4196efc26f7715b6986d65ae188d44dea6393ca9f7085ff0646dc7",
+    "Contents/Info.plist": "998a76c89787071564f550f6411e4de1487fac81e85697af378dc4243a5a8710",
+    "Contents/MacOS/Likeit Desktop": "9b05ad0e52dd2d7caa9fa5daa3f429a0c572c39778dcf39d900fd692a04f6d95",
     "Contents/Resources/LICENSE-mediaremote-adapter": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
+    "Contents/Resources/Likeit.icns": "0694a7d624b5c5a6312165b535cb0017ee15513704c195e7983c14dfcdcf7887",
     "Contents/Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h": "c0339a1f1ec71ff28df51fb239cd1e46580ebcafbdef4b2f32c8f49409da2b49",
     "Contents/Resources/MediaRemoteAdapter.framework/MediaRemoteAdapter": "18dccac5e74960c7bafd427b6329ec6480d471b910d788408655c4be8a037f22",
     "Contents/Resources/MediaRemoteAdapter.framework/Resources/Info.plist": "599acb89ed048dedc60d9257e7f320195d418a5494ca8c81e79fc03bedcd6b1e",
     "Contents/Resources/MediaRemoteAdapter.framework/Resources/LICENSE": "a489c16a6be195584fa0b35e28fca54abc8492eb0cc05d851dd24f522f4900a2",
     "Contents/Resources/MediaRemoteAdapter.framework/_CodeSignature/CodeResources": "5da1dac59eb6395e0e488df225718f360336a6a6da2f08dcd6c49a021bbe68ee",
     "Contents/Resources/mediaremote-adapter.pl": "d97802e46db9535e2549e178c105ebf417a0254b3929fc32f08ecfd14d49a85f",
-    "Contents/_CodeSignature/CodeResources": "9f23dac8157c02c9a17c89a40cd54b9d238b1356a93a06b97a85fa1dbc8c67f7"
+    "Contents/_CodeSignature/CodeResources": "25451c3543d5065b3b59051ef1657b6de996f257df17c814a6fb95a5dcaac27c"
   }
 }

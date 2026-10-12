@@ -6,6 +6,8 @@
 	<string>Likeit Desktop</string>
 	<key>CFBundleExecutable</key>
 	<string>Likeit Desktop</string>
+	<key>CFBundleIconFile</key>
+	<string>Likeit.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.likeit.desktop</string>
 	<key>CFBundleName</key>

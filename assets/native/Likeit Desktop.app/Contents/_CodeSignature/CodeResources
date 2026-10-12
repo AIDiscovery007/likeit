@@ -8,6 +8,10 @@
 		<data>
 		WYU9Pt+QSH0eqL6CYsCDpU3ca9k=
 		</data>
+		<key>Resources/Likeit.icns</key>
+		<data>
+		pIgk1yzuLY8jzkBm16dgzNqVh6I=
+		</data>
 		<key>Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h</key>
 		<data>
 		GnkSSw394Khe7u3RKlvPrVfF68Y=
@@ -40,6 +44,13 @@
 			<key>hash2</key>
 			<data>
 			pInBamvhlVhPoLNeKPylSryEkusMwF2FHdJPUi9JAKI=
+			</data>
+		</dict>
+		<key>Resources/Likeit.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BpSn1iS1xaYxIWW1NcsAF+4VUTcEwZXnmDwU383PeIc=
 			</data>
 		</dict>
 		<key>Resources/MediaRemoteAdapter.framework/Headers/MediaRemoteAdapter.h</key>

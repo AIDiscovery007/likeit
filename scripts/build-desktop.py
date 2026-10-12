@@ -43,6 +43,13 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     (contents / "MacOS").mkdir(parents=True)
     resources = contents / "Resources"
     resources.mkdir()
+    iconset = stage / "Likeit.iconset"
+    iconset.mkdir()
+    for size in [16, 32, 128, 256, 512]:
+        for scale in [1, 2]:
+            filename = f"icon_{size}x{size}{'@2x' if scale == 2 else ''}.png"
+            subprocess.run(["sips", "-z", str(size * scale), str(size * scale), str(ROOT / "assets/branding/likeit-logo-09.png"), "--out", str(iconset / filename)], check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["iconutil", "-c", "icns", str(iconset), "-o", str(resources / "Likeit.icns")], check=True)
     # The app owns its read-only adapter and resolves it from Bundle.main.
     for name in ["MediaRemoteAdapter.framework", "mediaremote-adapter.pl", "LICENSE-mediaremote-adapter"]:
         source = ROOT / "assets/native" / name
@@ -69,6 +76,7 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
         plistlib.dump({
             "CFBundleExecutable": "Likeit Desktop", "CFBundleIdentifier": "com.likeit.desktop",
             "CFBundleName": "Likeit Desktop", "CFBundleDisplayName": "Likeit Desktop",
+            "CFBundleIconFile": "Likeit.icns",
             "CFBundlePackageType": "APPL", "CFBundleVersion": "1", "CFBundleShortVersionString": "1.0",
             "LSMinimumSystemVersion": "14.2", "NSHighResolutionCapable": True,
             "NSAudioCaptureUsageDescription": "Likeit 仅分析网易云音乐的实时音频，让桌面音响随音乐律动。音频不录制、不保存、不上传。",
@@ -105,6 +113,6 @@ with tempfile.TemporaryDirectory(prefix="likeit-desktop-build-") as directory:
     "adapterLayout": "flat framework, no symlinks; install name adjusted before signing",
     "architectures": ["arm64", "x86_64"], "minimumMacOS": "14.2", "signing": signing + ", hardened runtime",
     "designatedRequirements": requirements,
-    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__)]},
+    "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources + [Path(__file__), ROOT / "assets/branding/likeit-logo-09.png"]},
     "files": {str(p.relative_to(DESTINATION)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(DESTINATION.rglob("*")) if p.is_file() and not p.is_symlink()},
 }, indent=2) + "\n")
